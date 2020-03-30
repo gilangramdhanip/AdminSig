@@ -28,7 +28,7 @@ interface DestinationService {
         @Field("desc_destination") description: String,
         @Field("category_destination") cat: String,
         @Field("img_destination") image: String,
-        @Field("id_kecamatan") id_kecamatan: String,
+        @Field("id_kecamatan") id_kec: String,
         @Field("id_admin") id_admin: String
     ): Call<DestinationResponse>
 

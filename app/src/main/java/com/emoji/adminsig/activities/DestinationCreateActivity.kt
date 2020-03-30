@@ -27,20 +27,20 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DestinationCreateActivity : AppCompatActivity(), LocationFormatter {
+class DestinationCreateActivity : AppCompatActivity() {
 
-    companion object {
-        private const val PERMISSION_REQUEST = 11
-    }
-
-    private var latitude: Double = 0.0
-    private var longitude: Double = 0.0
-    private var location: Location? = null
-    private var locationManager: LocationManager? = null
-
-    private val islocationAvailable: Boolean
-        get() = locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER)?:false
-
+//    companion object {
+//        private const val PERMISSION_REQUEST = 11
+//    }
+//
+//    private var latitude: Double = 0.0
+//    private var longitude: Double = 0.0
+//    private var location: Location? = null
+//    private var locationManager: LocationManager? = null
+//
+//    private val islocationAvailable: Boolean
+//        get() = locationManager?.isProviderEnabled(LocationManager.GPS_PROVIDER)?:false
+//
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -48,7 +48,6 @@ class DestinationCreateActivity : AppCompatActivity(), LocationFormatter {
         setContentView(R.layout.activity_destiny_create)
 
 //        setSupportActionBar(toolbar)
-        val context = this
 
         // Show the Up button in the action bar.
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -56,17 +55,17 @@ class DestinationCreateActivity : AppCompatActivity(), LocationFormatter {
         tambahdata()
 
 
-        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-        if(ActivityCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)==0){
-            location = locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-            latitude = location?.latitude ?:0.0
-            longitude = location?.longitude ?:0.0
-        }
-
-//        locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10f, locationListener)
-        setUpLayout()
+//        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+//
+//        if(ActivityCompat.checkSelfPermission(this,
+//                Manifest.permission.ACCESS_FINE_LOCATION)==0){
+//            location = locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
+//            latitude = location?.latitude ?:0.0
+//            longitude = location?.longitude ?:0.0
+//        }
+//
+////        locationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 2000, 10f, locationListener)
+//        setUpLayout()
 
 
     }
@@ -111,65 +110,65 @@ class DestinationCreateActivity : AppCompatActivity(), LocationFormatter {
     }
 
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        when(requestCode){
-            PERMISSION_REQUEST -> {
-                if(grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED){
-                    Toast.makeText(this@DestinationCreateActivity, "Nyalakan GPS", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-    }
-
-
-    private val locationListener = object : LocationListener {
-        override fun onLocationChanged(location: Location?){
-            if(location!=null){
-                latitude = location.latitude
-                longitude = location.longitude
-            }
-        }
-
-
-        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?){}
-
-        override fun onProviderEnabled(provider: String?) {
-            checkGPSLocation()
-        }
-
-
-        override fun onProviderDisabled(p0: String?) {
-            checkGPSLocation()
-        }
-    }
-
-    private fun setUpLayout(){
-
-        et_latitude.text = Editable.Factory.getInstance().newEditable(latitude.toString())
-        et_longitude.text = Editable.Factory.getInstance().newEditable(longitude.toString())
-        et_address.text = Editable.Factory.getInstance().newEditable(getLocation(this, latitude, longitude))
-    }
-
-    private fun checkGPSLocation(): Boolean{
-        if(!islocationAvailable) showNoGpsDialog()
-        return islocationAvailable
-    }
-
-    private fun showNoGpsDialog(){
-        AlertDialog.Builder(this)
-            .setMessage(getString(R.string.gps_belum_aktif))
-            .setCancelable(false)
-            .setPositiveButton("Aktifkan"){
-                    _, _ ->
-                startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
-            }
-            .setNegativeButton("Tidak"){
-                    dialog, _ -> dialog.cancel()
-            }
-            .create()
-            .show()
-    }
+//    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+//        when(requestCode){
+//            PERMISSION_REQUEST -> {
+//                if(grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED){
+//                    Toast.makeText(this@DestinationCreateActivity, "Nyalakan GPS", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//        }
+//    }
+//
+//
+//    private val locationListener = object : LocationListener {
+//        override fun onLocationChanged(location: Location?){
+//            if(location!=null){
+//                latitude = location.latitude
+//                longitude = location.longitude
+//            }
+//        }
+//
+//
+//        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?){}
+//
+//        override fun onProviderEnabled(provider: String?) {
+//            checkGPSLocation()
+//        }
+//
+//
+//        override fun onProviderDisabled(p0: String?) {
+//            checkGPSLocation()
+//        }
+//    }
+//
+//    private fun setUpLayout(){
+//
+//        et_latitude.text = Editable.Factory.getInstance().newEditable(latitude.toString())
+//        et_longitude.text = Editable.Factory.getInstance().newEditable(longitude.toString())
+//        et_address.text = Editable.Factory.getInstance().newEditable(getLocation(this, latitude, longitude))
+//    }
+//
+//    private fun checkGPSLocation(): Boolean{
+//        if(!islocationAvailable) showNoGpsDialog()
+//        return islocationAvailable
+//    }
+//
+//    private fun showNoGpsDialog(){
+//        AlertDialog.Builder(this)
+//            .setMessage(getString(R.string.gps_belum_aktif))
+//            .setCancelable(false)
+//            .setPositiveButton("Aktifkan"){
+//                    _, _ ->
+//                startActivity(Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS))
+//            }
+//            .setNegativeButton("Tidak"){
+//                    dialog, _ -> dialog.cancel()
+//            }
+//            .create()
+//            .show()
+//    }
 
 
 

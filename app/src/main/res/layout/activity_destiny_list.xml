@@ -24,37 +24,38 @@
 
 	</com.google.android.material.appbar.AppBarLayout>
 
-	<RelativeLayout
+	<FrameLayout
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-		<LinearLayout
-			android:layout_marginTop="16dp"
-			android:id="@+id/ll_spinner"
-			android:orientation="horizontal"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			>
+<!--		<LinearLayout-->
+<!--			android:layout_marginTop="16dp"-->
+<!--			android:id="@+id/ll_spinner"-->
+<!--			android:orientation="horizontal"-->
+<!--			android:layout_width="match_parent"-->
+<!--			android:layout_height="wrap_content"-->
+<!--			>-->
 
-			<Spinner
-				android:layout_weight="0.5"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"/>
+<!--			<Spinner-->
+<!--				android:layout_weight="0.5"-->
+<!--				android:layout_width="match_parent"-->
+<!--				android:layout_height="wrap_content"/>-->
 
 
-			<Spinner
-				android:layout_weight="0.5"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"/>
+<!--			<Spinner-->
+<!--				android:layout_weight="0.5"-->
+<!--				android:layout_width="match_parent"-->
+<!--				android:layout_height="wrap_content"/>-->
 
-		</LinearLayout>
+<!--		</LinearLayout>-->
 
 		<ProgressBar
 			android:id="@+id/progressbar"
 			style="?android:attr/progressBarStyle"
 			android:layout_width="wrap_content"
 			android:layout_gravity="center"
+			android:layout_below="@+id/destiny_recycler_view"
 			android:layout_height="wrap_content"
 			android:visibility="gone"/>
 
@@ -67,7 +68,7 @@
 				tools:context="com.emoji.adminsig.activities.DestinationListActivity"
 				tools:listitem="@layout/list_item"/>
 
-	</RelativeLayout>
+	</FrameLayout>
 
 	<com.google.android.material.floatingactionbutton.FloatingActionButton
 			android:id="@+id/fab"

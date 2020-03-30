@@ -38,8 +38,6 @@ class DestinationDetailActivity : AppCompatActivity() {
 
             loadDetails()
 
-
-
         btn_delete.setOnClickListener{
 
                     val destinationService = ServiceBuilder.create()
@@ -51,6 +49,7 @@ class DestinationDetailActivity : AppCompatActivity() {
                             if (response.isSuccessful) {
                                 finish() // Move back to DestinationListActivity
                                 Toast.makeText(this@DestinationDetailActivity, "Successfully Deleted", Toast.LENGTH_SHORT).show()
+                                Log.d("dihapus", response.toString())
                             } else {
                                 Toast.makeText(this@DestinationDetailActivity, "hayyooo to Delete", Toast.LENGTH_SHORT).show()
                                 Log.d("FailureLog", response.toString())
@@ -73,11 +72,11 @@ class DestinationDetailActivity : AppCompatActivity() {
                 val description = et_description.text.toString()
                 val cat = et_category.text.toString()
                 val img = et_image.text.toString()
-                val kecamata = et_kecamatan.text.toString()
+                val kec = et_kecamatan.text.toString()
                 val admin = et_admin.text.toString()
 
                 val destinationService = ServiceBuilder.create()
-                val requestCall = destinationService.updateDestination(destination.id_destination, name, lat, lng, address, description, cat,img, kecamata, admin)
+                val requestCall = destinationService.updateDestination(destination.id_destination, name, lat, lng, address, description, cat,img, kec, admin)
 
                 requestCall.enqueue(object: Callback<DestinationResponse> {
 
@@ -87,15 +86,18 @@ class DestinationDetailActivity : AppCompatActivity() {
                             var updatedDestination = response.body() // Use it or ignore It
                             Toast.makeText(this@DestinationDetailActivity,
                                 "Item Updated Successfully", Toast.LENGTH_SHORT).show()
+                            Log.d("onResponse", response.toString())
                         } else {
                             Toast.makeText(this@DestinationDetailActivity,
                                 "Failed to update item", Toast.LENGTH_SHORT).show()
+                            Log.d("respongagal", response.toString())
                         }
                     }
 
                     override fun onFailure(call: Call<DestinationResponse>, t: Throwable) {
                         Toast.makeText(this@DestinationDetailActivity,
                             "Failed to update item", Toast.LENGTH_SHORT).show()
+                        Log.d("respon gagagal", t.message)
                     }
                 })
             }

@@ -41,26 +41,6 @@ class DestinationListActivity : AppCompatActivity() {
 		setSupportActionBar(toolbar)
 		toolbar.title = title
 
-        destinationAdapter = DestinationAdapter(destination)
-        destinationAdapter.notifyDataSetChanged()
-
-        mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
-            MainViewModel::class.java
-        )
-
-        showLoading(true)
-
-        mainViewModel.setDestination()
-        destiny_recycler_view.setHasFixedSize(true)
-        destiny_recycler_view.layoutManager = LinearLayoutManager(applicationContext)
-        destiny_recycler_view.adapter = destinationAdapter
-
-        mainViewModel.getDestination().observe(this, Observer { destination ->
-            if(destination!=null){
-                destinationAdapter.setData(destination)
-                showLoading(false)
-            }
-        })
 
 		fab.setOnClickListener {
 			val intent = Intent(this@DestinationListActivity, DestinationCreateActivity::class.java)
@@ -101,6 +81,37 @@ class DestinationListActivity : AppCompatActivity() {
         else{
             progressbar.visibility= View.GONE
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        loadDestination()
+    }
+
+
+    private fun loadDestination(){
+
+        destinationAdapter = DestinationAdapter(destination)
+        destinationAdapter.notifyDataSetChanged()
+
+        mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
+            MainViewModel::class.java
+        )
+
+        showLoading(true)
+
+        mainViewModel.setDestination()
+        destiny_recycler_view.setHasFixedSize(true)
+        destiny_recycler_view.layoutManager = LinearLayoutManager(applicationContext)
+        destiny_recycler_view.adapter = destinationAdapter
+
+        mainViewModel.getDestination().observe(this, Observer { destination ->
+            if(destination!=null){
+                destinationAdapter.setData(destination)
+                showLoading(false)
+            }
+        })
     }
 
 }
