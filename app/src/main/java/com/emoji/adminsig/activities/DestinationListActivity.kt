@@ -26,10 +26,6 @@ import retrofit2.Response
 
 class DestinationListActivity : AppCompatActivity() {
 
-    companion object {
-        const val EXTRA_DESTINATION = "extra_destination"
-    }
-
     private lateinit var destinationAdapter: DestinationAdapter
     private lateinit var mainViewModel: MainViewModel
     private val destination = ArrayList<Destination>()

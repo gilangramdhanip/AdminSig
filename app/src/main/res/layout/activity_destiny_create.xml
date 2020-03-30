@@ -74,7 +74,7 @@
 					android:layout_height="wrap_content"
 					android:layout_marginTop="10dp">
 
-				<EditText
+				<com.google.android.material.textfield.TextInputEditText
 						android:id="@+id/et_latitude"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
@@ -89,7 +89,7 @@
 					android:layout_height="wrap_content"
 					android:layout_marginTop="10dp">
 
-				<EditText
+				<com.google.android.material.textfield.TextInputEditText
 						android:id="@+id/et_longitude"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginTop="10dp">
 
-				<EditText
+				<com.google.android.material.textfield.TextInputEditText
 					android:id="@+id/et_address"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -123,7 +123,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginTop="10dp">
 
-				<EditText
+				<com.google.android.material.textfield.TextInputEditText
 					android:id="@+id/et_description"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -139,7 +139,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginTop="10dp">
 
-				<EditText
+				<com.google.android.material.textfield.TextInputEditText
 					android:id="@+id/et_category"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -156,7 +156,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginTop="10dp">
 
-				<EditText
+				<com.google.android.material.textfield.TextInputEditText
 					android:id="@+id/et_image"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -172,7 +172,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginTop="10dp">
 
-				<EditText
+				<com.google.android.material.textfield.TextInputEditText
 					android:id="@+id/et_kecamatan"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
@@ -188,7 +188,7 @@
 				android:layout_height="wrap_content"
 				android:layout_marginTop="10dp">
 
-				<EditText
+				<com.google.android.material.textfield.TextInputEditText
 					android:id="@+id/et_admin"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"

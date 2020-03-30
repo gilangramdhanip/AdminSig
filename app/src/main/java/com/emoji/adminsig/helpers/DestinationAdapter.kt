@@ -18,7 +18,7 @@ class DestinationAdapter(private val destinationList: ArrayList<Destination>): R
 	internal var filterListResult: ArrayList<Destination>
 
 	init{
-		this.filterListResult = destinationList as ArrayList<Destination>
+		this.filterListResult = destinationList
 	}
 
 	fun setData(items: ArrayList<Destination>){

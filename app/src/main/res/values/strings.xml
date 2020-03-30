@@ -3,7 +3,6 @@
     <string name="description">description</string>
     <string name="Destination">Destiny</string>
     <string name="category">Cateogory</string>
-    <string name="gps_belum_aktif">GPS anda belum aktif</string>
     <string name="search_hint">Cari disini</string>
     <string name="search">Pencarian</string>
 </resources>
