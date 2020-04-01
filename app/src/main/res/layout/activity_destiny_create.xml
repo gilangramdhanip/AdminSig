@@ -112,7 +112,6 @@
 					android:layout_height="wrap_content"
 					android:hint="Address"
 					android:imeOptions="actionUnspecified"
-					android:inputType="textMultiLine"
 					android:maxLines="5"/>
 
 			</com.google.android.material.textfield.TextInputLayout>
@@ -129,7 +128,6 @@
 					android:layout_height="wrap_content"
 					android:hint="Description"
 					android:imeOptions="actionUnspecified"
-					android:inputType="textMultiLine"
 					android:maxLines="5"/>
 
 			</com.google.android.material.textfield.TextInputLayout>
@@ -139,15 +137,28 @@
 <!--				android:layout_height="wrap_content"-->
 <!--				android:layout_marginTop="10dp">-->
 
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:orientation="horizontal"
+				android:layout_height="wrap_content">
+
+				<TextView
+					android:padding="10dp"
+					android:text="@string/category"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"/>
+
 				<Spinner
 					android:id="@+id/et_category"
 					android:layout_width="match_parent"
-					android:layout_height="100dp"
-					android:padding="20dp"
+					android:layout_height="wrap_content"
+					android:padding="10dp"
 					android:entries="@array/cat"
 					android:spinnerMode="dropdown"
 					android:textColor="#000000"
 					android:hint="Category"/>
+
+			</LinearLayout>
 
 <!--					android:imeOptions="actionUnspecified"-->
 <!--					android:inputType="textMultiLine"-->
@@ -167,7 +178,6 @@
 					android:layout_height="wrap_content"
 					android:hint="Image"
 					android:imeOptions="actionUnspecified"
-					android:inputType="textMultiLine"
 					android:maxLines="5"/>
 
 			</com.google.android.material.textfield.TextInputLayout>
@@ -183,7 +193,6 @@
 					android:layout_height="wrap_content"
 					android:hint="Kecamatan"
 					android:imeOptions="actionUnspecified"
-					android:inputType="textMultiLine"
 					android:maxLines="5"/>
 
 			</com.google.android.material.textfield.TextInputLayout>
@@ -199,7 +208,6 @@
 					android:layout_height="wrap_content"
 					android:hint="Admin"
 					android:imeOptions="actionUnspecified"
-					android:inputType="textMultiLine"
 					android:maxLines="5"/>
 
 			</com.google.android.material.textfield.TextInputLayout>
