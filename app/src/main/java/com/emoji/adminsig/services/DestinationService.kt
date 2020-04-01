@@ -1,8 +1,6 @@
 package com.emoji.adminsig.services
 
-import com.emoji.adminsig.models.DeleteResponse
-import com.emoji.adminsig.models.Destination
-import com.emoji.adminsig.models.DestinationResponse
+import com.emoji.adminsig.models.*
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -16,6 +14,14 @@ interface DestinationService {
 
     @POST("destination")
     fun addDestination(@Body newDestination: Destination): Call<DestinationResponse>
+
+    @POST("kabupaten")
+    fun getKabupaten(): Call<Array<Kabupaten>>
+
+    @FormUrlEncoded
+    @POST("kecamatan")
+    fun getKecamatan(@Field("id_kabupaten") id_kabupaten: String): Call<Array<Kecamatan>>
+
 
     @FormUrlEncoded
     @PUT("destination")

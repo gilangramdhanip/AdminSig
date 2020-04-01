@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".AgungActivity">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:padding="5dp"
+            android:id="@+id/ln_top"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:text="Halo : "
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <TextView
+                android:id="@+id/tv_name_pembeli"
+                android:text="Nama Pembeli"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+            <LinearLayout
+                android:gravity="right"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:drawableEnd="@drawable/ic_keyboard_blue_24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+
+                <TextView
+                    android:drawableEnd="@drawable/ic_account_box_black_24dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"/>
+            </LinearLayout>
+
+        </LinearLayout>
+
+    <ImageView
+        android:layout_below="@+id/ln_top"
+        android:id="@+id/img_home"
+        android:background="@drawable/hamster"
+        android:layout_width="match_parent"
+        android:layout_height="250dp"/>
+
+    <TextView
+        android:layout_marginTop="10dp"
+        android:id="@+id/tv_home"
+        android:layout_marginLeft="10dp"
+        android:layout_below="@+id/img_home"
+        android:text="MENU UTAMA"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view1"
+        android:layout_margin="16dp"
+        android:background="@android:color/darker_gray"
+        app:cardCornerRadius="10dp"
+        android:layout_below="@+id/tv_home"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:backgroundTint="#80FFFFFF"
+            android:backgroundTintMode="src_over"
+            android:background="@drawable/b4duieonmk8wa2fwg3cv_13439"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <TextView
+                android:padding="10dp"
+                android:text="Hamster"
+                android:textSize="25sp"
+                android:textStyle="bold"
+                android:textColor="#000"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view2"
+        android:layout_margin="16dp"
+        android:background="@android:color/darker_gray"
+        app:cardCornerRadius="10dp"
+        android:layout_below="@+id/card_view1"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:backgroundTint="#80FFFFFF"
+            android:backgroundTintMode="src_over"
+            android:background="@drawable/b4duieonmk8wa2fwg3cv_13439"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+        <TextView
+            android:padding="10dp"
+            android:text="Pakan Hamster"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:textColor="#000"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view3"
+        android:layout_margin="16dp"
+        android:background="@android:color/darker_gray"
+        app:cardCornerRadius="10dp"
+        android:layout_below="@+id/card_view2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:backgroundTint="#80FFFFFF"
+            android:backgroundTintMode="src_over"
+            android:background="@drawable/b4duieonmk8wa2fwg3cv_13439"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <TextView
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:textColor="#000"
+                android:padding="10dp"
+                android:text="Kelengkapan Hamster"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view4"
+        android:layout_margin="16dp"
+        android:background="@android:color/darker_gray"
+        app:cardCornerRadius="10dp"
+        android:layout_below="@+id/card_view3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:backgroundTint="#80FFFFFF"
+            android:backgroundTintMode="src_over"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/b4duieonmk8wa2fwg3cv_13439"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <TextView
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:textColor="#000"
+                android:padding="10dp"
+                android:text="Konsultasi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view5"
+        android:layout_margin="16dp"
+        android:background="@android:color/darker_gray"
+        app:cardCornerRadius="10dp"
+        android:layout_below="@+id/card_view4"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:backgroundTint="#80FFFFFF"
+            android:backgroundTintMode="src_over"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/b4duieonmk8wa2fwg3cv_13439"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <TextView
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:textColor="#000"
+                android:padding="10dp"
+                android:text="FAQ"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/card_view6"
+        android:layout_margin="16dp"
+        android:background="@android:color/darker_gray"
+        app:cardCornerRadius="10dp"
+        android:layout_below="@+id/card_view5"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:backgroundTint="#80FFFFFF"
+            android:backgroundTintMode="src_over"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/b4duieonmk8wa2fwg3cv_13439"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="100dp">
+
+            <TextView
+                android:textStyle="bold"
+                android:textSize="25sp"
+                android:textColor="#000"
+                android:padding="10dp"
+                android:text="Tentang Kami"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+    </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
+</ScrollView>

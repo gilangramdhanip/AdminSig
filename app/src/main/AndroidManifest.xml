@@ -4,8 +4,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET"/>
-
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -14,43 +13,40 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
+        <activity android:name=".AgungActivity"></activity>
         <activity
-            android:name="com.emoji.adminsig.activities.DestinationListActivity"
-            android:label="Daftar Wisata Alam"
-            android:theme="@style/AppTheme.NoActionBar" />
-
-        <activity
-            android:name="com.emoji.adminsig.activities.DestinationDetailActivity"
-            android:label="Destination Detail"
-            android:parentActivityName="com.emoji.adminsig.activities.DestinationListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.emoji.adminsig.activities.DestinationListActivity" />
-        </activity>
-
-        <activity
-            android:name="com.emoji.adminsig.activities.DestinationCreateActivity"
-            android:label="New Destination"
-            android:parentActivityName="com.emoji.adminsig.activities.DestinationListActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.emoji.adminsig.activities.DestinationListActivity" />
-        </activity>
-
-        <activity
-            android:name="com.emoji.adminsig.activities.WelcomeActivity"
+            android:name=".activities.LoginActivity"
             android:label="Admin Sigwam"
             android:theme="@style/AppTheme.NoActionBar">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
+        <activity
+            android:name=".activities.DestinationListActivity"
+            android:label="Daftar Wisata Alam"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".activities.DestinationDetailActivity"
+            android:label="Destination Detail"
+            android:parentActivityName=".activities.DestinationListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.emoji.adminsig.activities.DestinationListActivity" />
+        </activity>
+        <activity
+            android:name=".activities.DestinationCreateActivity"
+            android:label="New Destination"
+            android:parentActivityName=".activities.DestinationListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.emoji.adminsig.activities.DestinationListActivity" />
+        </activity>
+        <activity android:name=".activities.WelcomeActivity"></activity>
     </application>
 
 </manifest>

@@ -1,40 +1,34 @@
 package com.emoji.adminsig.activities
 
 import android.Manifest
-import android.annotation.SuppressLint
-import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
 import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
-import android.media.MediaScannerConnection
 import android.os.Bundle
-import android.os.Handler
-import android.provider.Settings
 import android.text.Editable
 import android.util.Log
-import android.widget.EditText
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
+import android.view.View
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.view.get
 import com.emoji.adminsig.R
-import com.emoji.adminsig.helpers.LocationFormatter
 import com.emoji.adminsig.models.Destination
 import com.emoji.adminsig.models.DestinationResponse
 import com.emoji.adminsig.services.ServiceBuilder
-import com.google.android.gms.common.ConnectionResult
-import com.google.android.gms.common.api.GoogleApiClient
 import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationRequest
 import com.google.android.gms.location.LocationServices
 import kotlinx.android.synthetic.main.activity_destiny_create.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class DestinationCreateActivity : AppCompatActivity() {
+
+class DestinationCreateActivity : AppCompatActivity(){
+
+    private var spinner: Spinner? = null
+    private lateinit var simpan : String
+
+
     val RequestPermissionCode = 1
     var mLocation: Location? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
@@ -46,6 +40,8 @@ class DestinationCreateActivity : AppCompatActivity() {
 
 //        setSupportActionBar(toolbar)
 
+        spinner = findViewById(R.id.et_category)
+
         // Show the Up button in the action bar.
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
@@ -54,9 +50,31 @@ class DestinationCreateActivity : AppCompatActivity() {
 
         tambahdata()
 
+        et_category.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+
+            var spinCat = resources.getStringArray(R.array.cat)
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+               simpan = if(position == 0){
+                    ""
+                }else{
+                   spinCat[position]
+                }
+                }
+        }
     }
 
     private fun tambahdata(){
+
         btn_add.setOnClickListener {
             val newDestination = Destination(taskId)
             newDestination.name_destination = et_name.text.toString()
@@ -64,8 +82,8 @@ class DestinationCreateActivity : AppCompatActivity() {
             newDestination.lng_destination = et_longitude.text.toString()
             newDestination.address_destination = et_address.text.toString()
             newDestination.desc_destination = et_description.text.toString()
+            newDestination.category_destination = simpan
             newDestination.img_destination = et_image.text.toString()
-            newDestination.category_destination = et_category.text.toString()
             newDestination.id_admin = et_admin.text.toString()
             newDestination.id_kecamatan = et_kecamatan.text.toString()
 
@@ -79,11 +97,11 @@ class DestinationCreateActivity : AppCompatActivity() {
                     if (response.isSuccessful) {
                         finish() // Move back to DestinationListActivity
                         var newlyCreatedDestination = response.body() // Use it or ignore it
-                        Toast.makeText(applicationContext, "Successfully Added", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@DestinationCreateActivity, "Successfully Added", Toast.LENGTH_SHORT).show()
                         Log.d("ResponseLog", response.toString())
                     } else {
-                        Toast.makeText(applicationContext, "Failed to add item", Toast.LENGTH_SHORT).show()
-                        Log.d("FailureLog", response.toString())
+                        Toast.makeText(this@DestinationCreateActivity, "Gagal di tambahkan", Toast.LENGTH_SHORT).show()
+                        Log.d("gagalLog", response.toString())
                     }
                 }
 

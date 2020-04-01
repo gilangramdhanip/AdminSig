@@ -36,7 +36,7 @@ class DestinationDetailActivity : AppCompatActivity() {
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
 
-            loadDetails()
+        loadDetails()
 
         btn_delete.setOnClickListener{
 
@@ -101,6 +101,8 @@ class DestinationDetailActivity : AppCompatActivity() {
                     }
                 })
             }
+
+
     }
 
     private fun loadDetails() {

@@ -24,31 +24,61 @@
 
 	</com.google.android.material.appbar.AppBarLayout>
 
-	<FrameLayout
+	<RelativeLayout
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
 			app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-<!--		<LinearLayout-->
-<!--			android:layout_marginTop="16dp"-->
-<!--			android:id="@+id/ll_spinner"-->
-<!--			android:orientation="horizontal"-->
-<!--			android:layout_width="match_parent"-->
-<!--			android:layout_height="wrap_content"-->
-<!--			>-->
+		<LinearLayout
+			android:layout_marginTop="16dp"
+			android:id="@+id/ll_spinner"
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			>
 
-<!--			<Spinner-->
-<!--				android:layout_weight="0.5"-->
-<!--				android:layout_width="match_parent"-->
-<!--				android:layout_height="wrap_content"/>-->
+			<com.toptoche.searchablespinnerlibrary.SearchableSpinner
+				android:id="@+id/spin_kabupaten"
+				android:layout_weight="0.5"
+				android:visibility="visible"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"/>
 
 
-<!--			<Spinner-->
-<!--				android:layout_weight="0.5"-->
-<!--				android:layout_width="match_parent"-->
-<!--				android:layout_height="wrap_content"/>-->
+			<com.toptoche.searchablespinnerlibrary.SearchableSpinner
+				android:id="@+id/spin_kecamatan"
+				android:layout_weight="0.5"
+				android:visibility="visible"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"/>
 
-<!--		</LinearLayout>-->
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_marginStart="10dp"
+			android:layout_marginTop="10dp"
+			android:id="@+id/ll_tv"
+			android:layout_below="@+id/ll_spinner"
+			android:layout_width="match_parent"
+			android:orientation="horizontal"
+			android:layout_height="wrap_content">
+
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			tools:text="Jumlah destinasi : "
+			android:text="@string/jumlah_destinasi"
+			/>
+
+		<TextView
+			android:text="@string/value_destination"
+			android:id="@+id/txv_jumlah_destinasi"
+			tools:text="200"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			/>
+
+		</LinearLayout>
 
 		<ProgressBar
 			android:id="@+id/progressbar"
@@ -60,7 +90,7 @@
 			android:visibility="gone"/>
 
 		<androidx.recyclerview.widget.RecyclerView
-			android:layout_below="@+id/ll_spinner"
+			android:layout_below="@+id/ll_tv"
 				android:id="@+id/destiny_recycler_view"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
@@ -68,7 +98,7 @@
 				tools:context="com.emoji.adminsig.activities.DestinationListActivity"
 				tools:listitem="@layout/list_item"/>
 
-	</FrameLayout>
+	</RelativeLayout>
 
 	<com.google.android.material.floatingactionbutton.FloatingActionButton
 			android:id="@+id/fab"
@@ -79,5 +109,67 @@
 			android:tint="@android:color/white"
 			app:srcCompat="@android:drawable/ic_input_add"
 		tools:ignore="MissingConstraints" />
+
+
+	<LinearLayout
+		android:visibility="gone"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:orientation="vertical">
+		<TextView
+			android:id="@+id/textProvinsi"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<TextView
+			android:id="@+id/textKota"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<TextView
+			android:id="@+id/textKecamatan"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<TextView
+			android:id="@+id/textDesa"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+
+		<TextView
+			android:id="@+id/textMerk"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<TextView
+			android:id="@+id/textJenis"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<TextView
+			android:id="@+id/textModel"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<TextView
+			android:id="@+id/textWarna"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<TextView
+			android:id="@+id/textBahanBakar"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<TextView
+			android:id="@+id/textWarnaTNKB"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<TextView
+			android:id="@+id/textJenisDaftaran"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<TextView
+			android:id="@+id/textPeruntukan"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+		<TextView
+			android:id="@+id/textCaraImpor"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content" />
+	</LinearLayout>
+
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

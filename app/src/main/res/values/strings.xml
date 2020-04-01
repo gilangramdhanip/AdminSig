@@ -2,7 +2,19 @@
     <string name="app_name">Admin Sigwam</string>
     <string name="description">description</string>
     <string name="Destination">Destiny</string>
-    <string name="category">Cateogory</string>
+    <string name="category">Category</string>
     <string name="search_hint">Cari disini</string>
     <string name="search">Pencarian</string>
+    <string name="jumlah_destinasi">Jumlah Destinasi :</string>
+    <string name="value_destination">200</string>
+
+
+    <string-array name="cat">
+        <item>Pilih Kategori</item>
+        <item>Pantai</item>
+        <item>Bukit</item>
+        <item>Air Terjun</item>
+        <item>Gunung</item>
+
+    </string-array>
 </resources>
