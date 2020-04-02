@@ -1,19 +1,21 @@
 package com.emoji.adminsig.activities
 
 import android.Manifest
+import android.content.Context
 import android.content.pm.PackageManager
 import android.location.Location
 import android.os.Bundle
 import android.text.Editable
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.view.get
+import androidx.lifecycle.MutableLiveData
 import com.emoji.adminsig.R
-import com.emoji.adminsig.models.Destination
-import com.emoji.adminsig.models.DestinationResponse
+import com.emoji.adminsig.models.*
 import com.emoji.adminsig.services.ServiceBuilder
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -25,9 +27,16 @@ import retrofit2.Response
 
 class DestinationCreateActivity : AppCompatActivity(){
 
-    private var spinner: Spinner? = null
     private lateinit var simpan : String
+    private lateinit var kabupaten : String
+    private lateinit var kecamatan : String
 
+    private lateinit var spinnerKab : Array<Kabupaten>
+    private lateinit var spinnerKec : Array<Kecamatan>
+
+    lateinit var mContext : Context
+
+    private val apiService = ServiceBuilder.create()
 
     val RequestPermissionCode = 1
     var mLocation: Location? = null
@@ -38,9 +47,44 @@ class DestinationCreateActivity : AppCompatActivity(){
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_destiny_create)
 
-//        setSupportActionBar(toolbar)
+        initSpinnerKabupaten()
 
-        spinner = findViewById(R.id.et_category)
+        et_kabupaten.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                kabupaten = spinnerKab[position].id_kabupaten
+                setKecamatanSpinner(kabupaten)
+                Toast.makeText(this@DestinationCreateActivity, " Kamu memilih spinner "+kabupaten, Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
+        et_kecamatan.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                kecamatan = spinnerKec[position].id_kecamatan
+                Toast.makeText(this@DestinationCreateActivity, " Kamu memilih spinner "+kecamatan, Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
+        val cate = resources.getStringArray(R.array.cat)
 
         // Show the Up button in the action bar.
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -50,9 +94,10 @@ class DestinationCreateActivity : AppCompatActivity(){
 
         tambahdata()
 
-        et_category.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
 
-            var spinCat = resources.getStringArray(R.array.cat)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, cate)
+        et_category.adapter = adapter
+        et_category.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -67,11 +112,81 @@ class DestinationCreateActivity : AppCompatActivity(){
                simpan = if(position == 0){
                     ""
                 }else{
-                   spinCat[position]
+                   cate[position]
                 }
                 }
         }
+
     }
+
+    private fun initSpinnerKabupaten(){
+
+        apiService.getKabupaten().enqueue(object : Callback<KabupatenResponse>{
+            override fun onFailure(call: Call<KabupatenResponse>, t: Throwable) {
+                Toast.makeText(this@DestinationCreateActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show();
+            }
+
+            override fun onResponse(
+                call: Call<KabupatenResponse>,
+                response: Response<KabupatenResponse>
+            ) {
+                if(response.isSuccessful){
+                    spinnerKab = response.body()!!.data
+                    val listSpinner = ArrayList<String>(spinnerKab.size)
+
+                    spinnerKab.forEach {
+                        listSpinner.add(it.name_kabupaten)
+                    }
+
+                    val adapter = ArrayAdapter(this@DestinationCreateActivity, android.R.layout.simple_spinner_item, listSpinner)
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    et_kabupaten.adapter = adapter
+                    Log.d("KabupatenResponse", response.toString())
+                }
+
+                else{
+                    Log.d("gagalresponse", response.toString())
+                    Toast.makeText(this@DestinationCreateActivity, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        })
+    }
+
+
+    private fun setKecamatanSpinner(idkabupaten: String){
+        apiService.getKecamatan(idkabupaten).enqueue(object : Callback<KecamatanResponse>{
+            override fun onFailure(call: Call<KecamatanResponse>, t: Throwable) {
+                Toast.makeText(this@DestinationCreateActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show();
+            }
+
+            override fun onResponse(
+                call: Call<KecamatanResponse>,
+                response: Response<KecamatanResponse>
+            ) {
+                if(response.isSuccessful){
+                    spinnerKec = response.body()!!.data
+                    val listSpinner = ArrayList<String>(spinnerKec.size)
+
+                    spinnerKec.forEach {
+                        listSpinner.add(it.name_kecamatan)
+                    }
+
+                    val adapter = ArrayAdapter(this@DestinationCreateActivity, android.R.layout.simple_spinner_item, listSpinner)
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    et_kecamatan.adapter = adapter
+                    Log.d("berhasilResponse", response.toString())
+                }
+
+                else{
+                    Log.d("gagalresponse", response.toString())
+                    Toast.makeText(this@DestinationCreateActivity, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        })
+        }
+
 
     private fun tambahdata(){
 
@@ -84,8 +199,8 @@ class DestinationCreateActivity : AppCompatActivity(){
             newDestination.desc_destination = et_description.text.toString()
             newDestination.category_destination = simpan
             newDestination.img_destination = et_image.text.toString()
-            newDestination.id_admin = et_admin.text.toString()
-            newDestination.id_kecamatan = et_kecamatan.text.toString()
+            newDestination.id_kabupaten = kabupaten
+            newDestination.id_kecamatan = kecamatan
 
 
             val destinationService = ServiceBuilder.create()

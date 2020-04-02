@@ -20,6 +20,7 @@ import com.emoji.adminsig.helpers.DestinationAdapter
 import com.emoji.adminsig.models.*
 import com.emoji.adminsig.services.DestinationService
 import com.emoji.adminsig.services.ServiceBuilder
+import kotlinx.android.synthetic.main.activity_destiny_create.*
 import kotlinx.android.synthetic.main.activity_destiny_list.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -33,6 +34,12 @@ class DestinationListActivity : AppCompatActivity() {
     private lateinit var mainViewModel: MainViewModel
     private val destination = ArrayList<Destination>()
 
+    private lateinit var kabupaten : String
+    private lateinit var kecamatan : String
+
+    private lateinit var spinnerKab : Array<Kabupaten>
+    private lateinit var spinnerKec : Array<Kecamatan>
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_destiny_list)
@@ -40,8 +47,42 @@ class DestinationListActivity : AppCompatActivity() {
 		setSupportActionBar(toolbar)
 		toolbar.title = title
 
-        setAllSpinner()
+        initSpinnerKabupaten()
 
+        spin_kabupaten.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                kabupaten = spinnerKab[position].id_kabupaten
+                setKecamatanSpinner(kabupaten)
+                Toast.makeText(this@DestinationListActivity, " Kamu memilih spinner "+kabupaten, Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
+        spin_kecamatan.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                kecamatan = spinnerKec[position].id_kecamatan
+                Toast.makeText(this@DestinationListActivity, " Kamu memilih spinner "+kecamatan, Toast.LENGTH_SHORT).show()
+            }
+
+        }
 
 		fab.setOnClickListener {
 			val intent = Intent(this@DestinationListActivity, DestinationCreateActivity::class.java)
@@ -115,93 +156,71 @@ class DestinationListActivity : AppCompatActivity() {
         })
     }
 
-    private fun setAllSpinner() {
-        setKabupatenSpinner()
-//        setMerkSpinner()
-//        setJenisSpinner()
-//        setModelSpinner()
-//        setWarnaSpinner()
-//        setBahanBakarSpinner()
-//        setWarnaTNKBSpinner()
-//        setJenisDaftaranSpinner()
-//        setPeruntukanSpinner()
-//        setCaraImporSpinner()
-    }
+    private fun initSpinnerKabupaten(){
 
+        apiService.getKabupaten().enqueue(object : Callback<KabupatenResponse>{
+            override fun onFailure(call: Call<KabupatenResponse>, t: Throwable) {
+                Toast.makeText(this@DestinationListActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show();
+            }
 
+            override fun onResponse(
+                call: Call<KabupatenResponse>,
+                response: Response<KabupatenResponse>
+            ) {
+                if(response.isSuccessful){
+                    spinnerKab = response.body()!!.data
+                    val listSpinner = ArrayList<String>(spinnerKab.size)
 
-    private fun setKabupatenSpinner() {
-        apiService.getKabupaten().enqueue(object : Callback<Array<Kabupaten>>{
-            override fun onResponse(call: Call<Array<Kabupaten>>, response: Response<Array<Kabupaten>>) {
-                if (response.isSuccessful){
-                    val data = response.body()
-                    val arrayKabupaten = arrayOfNulls<String>(data!!.size)
-                    var index = 0
-                    data.map {
-                        arrayKabupaten[index] = it.name_kabupaten
-                        index++
-
+                    spinnerKab.forEach {
+                        listSpinner.add(it.name_kabupaten)
                     }
-                    val aa = ArrayAdapter(this@DestinationListActivity, R.layout.spinner_dropdown_item, arrayKabupaten)
 
-                    aa.setDropDownViewResource(R.layout.spinner_dropdown_item)
-                    spin_kabupaten.adapter = aa
-                    spin_kabupaten.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-                        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                            val index = data[position].id_kabupaten
-                            textProvinsi.text=index
-                            setKecamatanSpinner(index)
-                            Log.d("success", response.toString())
-                        }
+                    val adapter = ArrayAdapter(this@DestinationListActivity, android.R.layout.simple_spinner_item, listSpinner)
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    spin_kabupaten.adapter = adapter
+                    Log.d("KabupatenResponse", response.toString())
+                }
 
-                        override fun onNothingSelected(parent: AdapterView<*>?) {
-                            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                        }
-                    }
+                else{
+                    Log.d("gagalresponse", response.toString())
+                    Toast.makeText(this@DestinationListActivity, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<Array<Kabupaten>>, t: Throwable) {
-                Log.d("error", "${t.message}")
-            }
         })
     }
 
 
     private fun setKecamatanSpinner(idkabupaten: String){
-        apiService.getKecamatan(idkabupaten).enqueue(object : Callback<Array<Kecamatan>>{
-            override fun onResponse(call: Call<Array<Kecamatan>>, response: Response<Array<Kecamatan>>) {
-                if (response.isSuccessful){
-                    val data = response.body()
-                    val arrayKecamatan = arrayOfNulls<String>(data!!.size)
-                    var index = 0
-                    data.map {
-                        arrayKecamatan[index] = it.name_kecamatan
-                        index++
-                        Log.d("success", response.toString())
+        apiService.getKecamatan(idkabupaten).enqueue(object : Callback<KecamatanResponse>{
+            override fun onFailure(call: Call<KecamatanResponse>, t: Throwable) {
+                Toast.makeText(this@DestinationListActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show();
+            }
 
+            override fun onResponse(
+                call: Call<KecamatanResponse>,
+                response: Response<KecamatanResponse>
+            ) {
+                if(response.isSuccessful){
+                    spinnerKec = response.body()!!.data
+                    val listSpinner = ArrayList<String>(spinnerKec.size)
+
+                    spinnerKec.forEach {
+                        listSpinner.add(it.name_kecamatan)
                     }
 
-                    val aa = ArrayAdapter(this@DestinationListActivity, R.layout.spinner_dropdown_item, arrayKecamatan)
+                    val adapter = ArrayAdapter(this@DestinationListActivity, android.R.layout.simple_spinner_item, listSpinner)
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    spin_kecamatan.adapter = adapter
+                    Log.d("berhasilResponse", response.toString())
+                }
 
-                    aa.setDropDownViewResource(R.layout.spinner_dropdown_item)
-                    spin_kecamatan.adapter = aa
-                    spin_kecamatan.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-                        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                            val index = data[position].id_kecamatan
-                            textKecamatan.text=index
-                        }
-
-                        override fun onNothingSelected(parent: AdapterView<*>?) {
-                            TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-                        }
-                    }
+                else{
+                    Log.d("gagalresponse", response.toString())
+                    Toast.makeText(this@DestinationListActivity, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
                 }
             }
 
-            override fun onFailure(call: Call<Array<Kecamatan>>, t: Throwable) {
-                Log.d("error", "${t.message}")
-            }
         })
     }
 

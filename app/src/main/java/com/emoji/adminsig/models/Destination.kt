@@ -13,8 +13,8 @@ data class Destination(
 	var desc_destination: String? = null,
 	var category_destination: String? = null,
 	var img_destination: String? = null,
-	var id_kecamatan: String? = null,
-	var id_admin: String? = null
+	var id_kabupaten: String? = null,
+	var id_kecamatan: String? = null
 ) :Parcelable
 
 

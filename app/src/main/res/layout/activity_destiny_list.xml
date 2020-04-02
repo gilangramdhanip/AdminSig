@@ -37,7 +37,7 @@
 			android:layout_height="wrap_content"
 			>
 
-			<com.toptoche.searchablespinnerlibrary.SearchableSpinner
+			<Spinner
 				android:id="@+id/spin_kabupaten"
 				android:layout_weight="0.5"
 				android:visibility="visible"

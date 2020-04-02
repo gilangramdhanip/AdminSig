@@ -125,35 +125,44 @@
 
 			</com.google.android.material.textfield.TextInputLayout>
 
-			<com.google.android.material.textfield.TextInputLayout
+			<LinearLayout
+				android:orientation="horizontal"
 				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="10dp">
+				android:layout_height="wrap_content">
 
-				<com.google.android.material.textfield.TextInputEditText
-					android:id="@+id/et_kecamatan"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:hint="Kecamatan"
-					android:imeOptions="actionUnspecified"
-					android:maxLines="5"/>
+				<LinearLayout
+					android:layout_width="wrap_content"
+					android:orientation="horizontal"
+					android:layout_height="wrap_content">
 
-			</com.google.android.material.textfield.TextInputLayout>
+					<Spinner
+						android:id="@+id/spin_kab"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:padding="10dp"
+						android:spinnerMode="dropdown"
+						android:textColor="#000000"
+						android:hint="Category"/>
 
-			<com.google.android.material.textfield.TextInputLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="10dp">
+				</LinearLayout>
 
-				<com.google.android.material.textfield.TextInputEditText
-					android:id="@+id/et_admin"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:hint="Admin"
-					android:imeOptions="actionUnspecified"
-					android:maxLines="5"/>
+				<LinearLayout
+					android:layout_width="wrap_content"
+					android:orientation="horizontal"
+					android:layout_height="wrap_content">
 
-			</com.google.android.material.textfield.TextInputLayout>
+					<com.toptoche.searchablespinnerlibrary.SearchableSpinner
+						android:id="@+id/spin_kec"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:padding="10dp"
+						android:spinnerMode="dropdown"
+						android:textColor="#000000"
+						android:hint="Category"/>
+
+				</LinearLayout>
+
+			</LinearLayout>
 
 			<LinearLayout
 					android:layout_width="match_parent"

@@ -11,17 +11,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.get
 import com.emoji.adminsig.R
-import com.emoji.adminsig.models.DeleteResponse
-import com.emoji.adminsig.models.Destination
-import com.emoji.adminsig.models.DestinationResponse
+import com.emoji.adminsig.models.*
 import com.emoji.adminsig.services.ServiceBuilder
 import kotlinx.android.synthetic.main.activity_destiny_create.*
 import kotlinx.android.synthetic.main.activity_destiny_detail.*
 import kotlinx.android.synthetic.main.activity_destiny_detail.et_address
-import kotlinx.android.synthetic.main.activity_destiny_detail.et_admin
 import kotlinx.android.synthetic.main.activity_destiny_detail.et_description
 import kotlinx.android.synthetic.main.activity_destiny_detail.et_image
-import kotlinx.android.synthetic.main.activity_destiny_detail.et_kecamatan
 import kotlinx.android.synthetic.main.activity_destiny_detail.et_latitude
 import kotlinx.android.synthetic.main.activity_destiny_detail.et_longitude
 import kotlinx.android.synthetic.main.activity_destiny_detail.et_name
@@ -40,15 +36,58 @@ class DestinationDetailActivity : AppCompatActivity() {
     }
 
     private lateinit var simpan : String
+    lateinit var kabupaten : String
+    lateinit var kecamatan : String
+
+    lateinit var spinnerKab: Array<Kabupaten>
+    lateinit var spinnerKec : Array<Kecamatan>
     private var ambil :Int = 0
 
     private lateinit var destination : Destination
+    private val apiService = ServiceBuilder.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_destiny_detail)
 
         destination = intent.getParcelableExtra(EXTRA_DETAIl) as Destination
+
+        initSpinnerKabupaten()
+
+        spin_kab.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                kabupaten = spinnerKab[position].id_kabupaten
+                setKecamatanSpinner(kabupaten)
+                Toast.makeText(this@DestinationDetailActivity, " Kamu memilih spinner "+kabupaten, Toast.LENGTH_SHORT).show()
+            }
+
+        }
+
+        spin_kec.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                kecamatan = spinnerKec[position].id_kecamatan
+                Toast.makeText(this@DestinationDetailActivity, " Kamu memilih spinner "+kecamatan, Toast.LENGTH_SHORT).show()
+            }
+
+        }
 
 
         //Load Destination
@@ -62,10 +101,7 @@ class DestinationDetailActivity : AppCompatActivity() {
         et_address.setText(destination.address_destination)
         et_description.setText(destination.desc_destination)
         et_image.setText(destination.img_destination)
-        et_category.setSelection(spinCat.indexOf(destination.category_destination))
-        et_kecamatan.setText(destination.id_kecamatan)
-        et_admin.setText(destination.id_admin)
-
+        et_category.setSelection(spinCat.indexOf(destination.category_destination.toString()))
 
 
 //        setSupportActionBar(detail_toolbar)
@@ -124,13 +160,14 @@ class DestinationDetailActivity : AppCompatActivity() {
                 val lng = et_longitude.text.toString()
                 val address = et_address.text.toString()
                 val description = et_description.text.toString()
-                val cat = simpan
                 val img = et_image.text.toString()
-                val kec = et_kecamatan.text.toString()
-                val admin = et_admin.text.toString()
+                val cat = simpan
+                val kab = kabupaten
+                val kec = kecamatan
+
 
                 val destinationService = ServiceBuilder.create()
-                val requestCall = destinationService.updateDestination(destination.id_destination, name, lat, lng, address, description, cat,img, kec, admin)
+                val requestCall = destinationService.updateDestination(destination.id_destination, name, lat, lng, address, description,img,cat, kab, kec )
 
                 requestCall.enqueue(object: Callback<DestinationResponse> {
 
@@ -166,6 +203,81 @@ class DestinationDetailActivity : AppCompatActivity() {
             return true
         }
         return super.onOptionsItemSelected(item)
+    }
+
+
+
+    private fun initSpinnerKabupaten(){
+
+        apiService.getKabupaten().enqueue(object : Callback<KabupatenResponse>{
+            override fun onFailure(call: Call<KabupatenResponse>, t: Throwable) {
+                Toast.makeText(this@DestinationDetailActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show();
+            }
+
+            override fun onResponse(
+                call: Call<KabupatenResponse>,
+                response: Response<KabupatenResponse>
+            ) {
+                if(response.isSuccessful){
+                    spinnerKab = response.body()!!.data
+                    val listSpinner = ArrayList<String>(spinnerKab.size)
+
+                    spinnerKab.forEach {
+                        listSpinner.add(it.name_kabupaten)
+                    }
+
+                    val adapter = ArrayAdapter(this@DestinationDetailActivity, android.R.layout.simple_spinner_item, listSpinner)
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    spin_kab.adapter = adapter
+                    val kabupatenN = spinnerKab.firstOrNull { it.id_kabupaten == destination.id_kabupaten }
+                    spin_kab.setSelection(spinnerKab.indexOf(kabupatenN))
+                    Log.d("KabupatenResponse", response.toString())
+                }
+
+                else{
+                    Log.d("gagalresponse", response.toString())
+                    Toast.makeText(this@DestinationDetailActivity, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        })
+    }
+
+
+    private fun setKecamatanSpinner(idkabupaten: String){
+        apiService.getKecamatan(idkabupaten).enqueue(object : Callback<KecamatanResponse>{
+            override fun onFailure(call: Call<KecamatanResponse>, t: Throwable) {
+                Toast.makeText(this@DestinationDetailActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show();
+            }
+
+            override fun onResponse(
+                call: Call<KecamatanResponse>,
+                response: Response<KecamatanResponse>
+            ) {
+                if(response.isSuccessful){
+                    spinnerKec = response.body()!!.data
+                    val listSpinner = ArrayList<String>(spinnerKec.size)
+
+                    spinnerKec.forEach {
+                        listSpinner.add(it.name_kecamatan)
+                    }
+
+                    val adapter = ArrayAdapter(this@DestinationDetailActivity, android.R.layout.simple_spinner_item, listSpinner)
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    spin_kec.adapter = adapter
+
+                    val kecamatanN = spinnerKec.firstOrNull { it.id_kecamatan == destination.id_kecamatan }
+                    spin_kec.setSelection(spinnerKec.indexOf(kecamatanN))
+                    Log.d("berhasilResponse", response.toString())
+                }
+
+                else{
+                    Log.d("gagalresponse", response.toString())
+                    Toast.makeText(this@DestinationDetailActivity, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        })
     }
 
 }

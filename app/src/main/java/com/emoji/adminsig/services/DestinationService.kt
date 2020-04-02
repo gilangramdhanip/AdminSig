@@ -15,12 +15,12 @@ interface DestinationService {
     @POST("destination")
     fun addDestination(@Body newDestination: Destination): Call<DestinationResponse>
 
-    @POST("kabupaten")
-    fun getKabupaten(): Call<Array<Kabupaten>>
+    @GET("kabupaten")
+    fun getKabupaten(): Call<KabupatenResponse>
 
-    @FormUrlEncoded
-    @POST("kecamatan")
-    fun getKecamatan(@Field("id_kabupaten") id_kabupaten: String): Call<Array<Kecamatan>>
+
+    @GET("kecamatan")
+    fun getKecamatan(@Query("id_kabupaten") id_kabupaten: String): Call<KecamatanResponse>
 
 
     @FormUrlEncoded
@@ -32,10 +32,11 @@ interface DestinationService {
         @Field("lng_destination") lng: String,
         @Field("address_destination") address: String,
         @Field("desc_destination") description: String,
-        @Field("category_destination") cat: String,
         @Field("img_destination") image: String,
-        @Field("id_kecamatan") id_kec: String,
-        @Field("id_admin") id_admin: String
+        @Field("category_destination") cat: String,
+        @Field("id_kabupaten") id_kab: String,
+        @Field("id_kecamatan") id_kec: String
+
     ): Call<DestinationResponse>
 
     @FormUrlEncoded
