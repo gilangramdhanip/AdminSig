@@ -11,10 +11,6 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
-import com.emoji.adminsig.models.Destination
-import com.emoji.adminsig.models.DestinationResponse
-import com.emoji.adminsig.services.DestinationService
-import com.emoji.adminsig.services.ServiceBuilder
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -30,6 +26,9 @@ import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
+import com.skripsi.sigwam.model.Destination
+import com.skripsi.sigwam.model.DestinationResponse
+import com.skripsi.sigwam.service.ServiceBuilder
 import java.io.IOException
 import java.util.*
 

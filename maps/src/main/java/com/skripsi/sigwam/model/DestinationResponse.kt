@@ -1,4 +1,4 @@
-package com.emoji.adminsig.models
+package com.skripsi.sigwam.model
 
 data class DestinationResponse(
     var status: Boolean,

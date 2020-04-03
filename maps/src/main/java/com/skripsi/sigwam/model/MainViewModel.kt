@@ -5,9 +5,7 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.emoji.adminsig.models.Destination
-import com.emoji.adminsig.models.DestinationResponse
-import com.emoji.adminsig.services.ServiceBuilder
+import com.skripsi.sigwam.service.ServiceBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

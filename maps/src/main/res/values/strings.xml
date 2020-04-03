@@ -1,0 +1,23 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <string name="app_name">Sigwam</string>
+    <string name="title_activity_maps">Peta Wisata Alam</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="heroes_name" tools:ignore="ExtraTranslation">nama_destinasi</string>
+    <string name="description" tools:ignore="ExtraTranslation">deskripsi_destinati</string>
+    <string name="jumlah_destinasi">Jumlah Destinasi : </string>
+    <string name="value_destinasi">200</string>
+    <string name="name_destination">Destinasi</string>
+    <string name="category_destination">Category</string>
+    <string name="nama_destinasi">Nama Destinasi</string>
+    <string name="nilai">Nilai</string>
+    <string name="pantai">pantai</string>
+    <string name="address_destination">address_destination</string>
+    <string name="alamat">Alamat</string>
+    <string name="description_destination">description_destination</string>
+    <string name="kabupaten">Kabupaten</string>
+    <string name="kabupaten_value">Mataram</string>
+    <string name="kecamatan">Kecamatan</string>
+    <string name="kecamatan_value">Ampenan</string>
+</resources>

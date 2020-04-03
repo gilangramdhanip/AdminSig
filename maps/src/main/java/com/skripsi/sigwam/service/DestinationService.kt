@@ -1,6 +1,9 @@
-package com.emoji.adminsig.services
+package com.skripsi.sigwam.service
 
-import com.emoji.adminsig.models.*
+import com.skripsi.sigwam.model.Destination
+import com.skripsi.sigwam.model.DestinationResponse
+import com.skripsi.sigwam.model.KabupatenResponse
+import com.skripsi.sigwam.model.KecamatanResponse
 import retrofit2.Call
 import retrofit2.http.*
 
