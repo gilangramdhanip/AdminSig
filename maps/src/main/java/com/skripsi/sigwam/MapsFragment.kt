@@ -4,32 +4,40 @@ import android.app.Activity
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.fragment.app.Fragment
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
-import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
+import com.skripsi.sigwam.adapter.DestinationAdapter
 import com.skripsi.sigwam.model.Destination
 import com.skripsi.sigwam.model.DestinationResponse
-import com.skripsi.sigwam.model.MainViewModel
 import com.skripsi.sigwam.service.ServiceBuilder
+import kotlinx.android.synthetic.main.fragment_maps.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -46,13 +54,18 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener {
         const val REQUEST_CHECK_SETTINGS = 43
         private const val TAG = "MapsFragment"
         var EXTRA_NAME = "extra_name"
+
+        const val EXTRA_LAT = "extra_lat"
+        const val EXTRA_LONG = "extra_lng"
     }
 
+    lateinit var lat : String
+    lateinit var lng : String
+    lateinit var title : String
     private lateinit var googleMap: GoogleMap
+    private lateinit var destinationAdapter: DestinationAdapter
     private val apiService = ServiceBuilder.create()
-    private lateinit var destination : Array<Destination>
-    private lateinit var mainViewModel : MainViewModel
-    private lateinit var location : Destination
+    lateinit var destination : List<Destination>
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     override fun onCreateView(
@@ -60,7 +73,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
         return inflater.inflate(R.layout.fragment_maps, container, false)
 
 
@@ -69,21 +81,23 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val mapFragment = childFragmentManager?.findFragmentById(R.id.map) as? SupportMapFragment
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
         fusedLocationProviderClient = FusedLocationProviderClient(requireActivity())
+
     }
 
     override fun onMapReady(map: GoogleMap?) {
         googleMap = map?: return
-
-        loadDestination()
 
         if (isPermissionGiven()){
             googleMap.isMyLocationEnabled = true
             googleMap.uiSettings.isMyLocationButtonEnabled = true
             googleMap.uiSettings.isZoomControlsEnabled = true
             getCurrentLocation()
+
+            loadDestination()
+
         } else {
             givePermission()
         }
@@ -206,7 +220,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener {
     private fun loadDestination(){
         apiService.getDestinationList().enqueue(object : Callback<DestinationResponse> {
             override fun onFailure(call: Call<DestinationResponse>, t: Throwable) {
-                Toast.makeText(context, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -215,19 +229,48 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener {
             ) {
                 if(response.isSuccessful){
                     destination = response.body()!!.data
-                    val litdes = ArrayList<Destination>(destination.size)
 
                     destination.forEach {
-//                        litdes.add(it.id_destination)
+
+                        val lat = it.lat_destination!!.toDouble()
+                        val lng = it.lng_destination!!.toDouble()
+
+                        val latlng : LatLng = LatLng(lat,lng)
+
                         googleMap.addMarker(MarkerOptions()
-                            .position(LatLng(it.lat_destination!!.toDouble(), it.lng_destination!!.toDouble()))
+                            .position(latlng)
                             .title(it.name_destination)
                             .snippet(it.address_destination)
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
                         )
 
-                        googleMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
+                        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, destination)
+
+                        search_view.threshold=0
+                        search_view.setAdapter(adapter)
                     }
+
+                    search_view.setOnItemClickListener { parent: AdapterView<*>?, view: View?, position: Int, id: Long ->
+
+                        val a = search_view.adapter.getItem(position) as Destination
+                        val b = a.lat_destination!!.toDouble()
+                        val c = a.lng_destination!!.toDouble()
+
+
+                                val cameraPosition = CameraPosition.Builder()
+                                    .target(LatLng(b,c))
+                                    .zoom(15f)
+                                    .build()
+
+                                Toast.makeText(requireContext(), " $c , $b", Toast.LENGTH_LONG).show()
+
+                        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+
+                        }
+
+
+                        googleMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
+
 
                     Log.d("onResponse", response.toString())
                 }
@@ -240,7 +283,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener {
 
         })
     }
-
 
 
 }

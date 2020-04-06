@@ -20,4 +20,5 @@
     <string name="kabupaten_value">Mataram</string>
     <string name="kecamatan">Kecamatan</string>
     <string name="kecamatan_value">Ampenan</string>
+    <string name="search_hint">Cari disini....</string>
 </resources>

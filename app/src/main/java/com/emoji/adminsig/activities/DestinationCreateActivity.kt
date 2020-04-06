@@ -3,6 +3,8 @@ package com.emoji.adminsig.activities
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.location.Location
 import android.os.Bundle
 import android.text.Editable
@@ -23,6 +25,8 @@ import kotlinx.android.synthetic.main.activity_destiny_create.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class DestinationCreateActivity : AppCompatActivity(){
@@ -30,6 +34,9 @@ class DestinationCreateActivity : AppCompatActivity(){
     private lateinit var simpan : String
     private lateinit var kabupaten : String
     private lateinit var kecamatan : String
+
+    lateinit var simpanNamaKab : String
+    lateinit var simpanNamaKec : String
 
     private lateinit var spinnerKab : Array<Kabupaten>
     private lateinit var spinnerKec : Array<Kecamatan>
@@ -60,9 +67,11 @@ class DestinationCreateActivity : AppCompatActivity(){
                 position: Int,
                 id: Long
             ) {
-                kabupaten = spinnerKab[position].id_kabupaten
-                setKecamatanSpinner(kabupaten)
-                Toast.makeText(this@DestinationCreateActivity, " Kamu memilih spinner "+kabupaten, Toast.LENGTH_SHORT).show()
+
+                kabupaten = et_kabupaten.selectedItem.toString()
+                simpanNamaKab = spinnerKab[position].id_kabupaten
+                setKecamatanSpinner(simpanNamaKab)
+//                Toast.makeText(this@DestinationCreateActivity, " Kamu memilih spinner "+kabupaten, Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -78,8 +87,9 @@ class DestinationCreateActivity : AppCompatActivity(){
                 position: Int,
                 id: Long
             ) {
-                kecamatan = spinnerKec[position].id_kecamatan
-                Toast.makeText(this@DestinationCreateActivity, " Kamu memilih spinner "+kecamatan, Toast.LENGTH_SHORT).show()
+                kecamatan = et_kecamatan.selectedItem.toString()
+                simpanNamaKec = spinnerKec[position].name_kecamatan
+//                Toast.makeText(this@DestinationCreateActivity, " Kamu memilih spinner "+kecamatan, Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -238,10 +248,15 @@ class DestinationCreateActivity : AppCompatActivity(){
         } else {
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location: Location? ->
+
+                    val gcd = Geocoder(this, Locale.getDefault())
+                    val addresses: List<Address>
+                    addresses = gcd.getFromLocation(location!!.latitude, location.longitude, 1)
                     mLocation = location
                     if (location != null) {
                         et_latitude.text =  Editable.Factory.getInstance().newEditable(location.latitude.toString())
                         et_longitude.text = Editable.Factory.getInstance().newEditable(location.longitude.toString())
+                        et_address.text = Editable.Factory.getInstance().newEditable(addresses[0].getAddressLine(0))
                     }
                 }
         }

@@ -193,7 +193,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback, PermissionListener
                 response: Response<DestinationResponse>
             ) {
                 if(response.isSuccessful){
-                    destination = response.body()!!.data
+//                    destination = response.body()!!.data
                     val listSpinner = ArrayList<String>(destination.size)
 
                     destination.forEach {

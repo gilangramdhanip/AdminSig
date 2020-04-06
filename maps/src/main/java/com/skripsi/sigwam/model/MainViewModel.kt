@@ -9,6 +9,8 @@ import com.skripsi.sigwam.service.ServiceBuilder
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.util.*
+import kotlin.collections.ArrayList
 
 class MainViewModel : AndroidViewModel(Application()) {
 

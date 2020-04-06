@@ -4,11 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.LinearLayout
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
@@ -18,13 +17,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.emoji.adminsig.R
 import com.emoji.adminsig.helpers.DestinationAdapter
 import com.emoji.adminsig.models.*
-import com.emoji.adminsig.services.DestinationService
 import com.emoji.adminsig.services.ServiceBuilder
-import kotlinx.android.synthetic.main.activity_destiny_create.*
 import kotlinx.android.synthetic.main.activity_destiny_list.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+
 
 class DestinationListActivity : AppCompatActivity() {
 
@@ -37,6 +35,7 @@ class DestinationListActivity : AppCompatActivity() {
     private lateinit var kabupaten : String
     private lateinit var kecamatan : String
 
+    private lateinit var spinner: Spinner
     private lateinit var spinnerKab : Array<Kabupaten>
     private lateinit var spinnerKec : Array<Kecamatan>
 
@@ -50,6 +49,8 @@ class DestinationListActivity : AppCompatActivity() {
         initSpinnerKabupaten()
 
         spin_kabupaten.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+
+
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
@@ -61,6 +62,7 @@ class DestinationListActivity : AppCompatActivity() {
                 id: Long
             ) {
                 kabupaten = spinnerKab[position].id_kabupaten
+
                 setKecamatanSpinner(kabupaten)
                 Toast.makeText(this@DestinationListActivity, " Kamu memilih spinner "+kabupaten, Toast.LENGTH_SHORT).show()
             }

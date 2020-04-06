@@ -38,6 +38,8 @@ class DestinationDetailActivity : AppCompatActivity() {
     private lateinit var simpan : String
     lateinit var kabupaten : String
     lateinit var kecamatan : String
+    lateinit var simpanNamaKab : String
+    lateinit var simpanNamaKec : String
 
     lateinit var spinnerKab: Array<Kabupaten>
     lateinit var spinnerKec : Array<Kecamatan>
@@ -65,9 +67,10 @@ class DestinationDetailActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                kabupaten = spinnerKab[position].id_kabupaten
-                setKecamatanSpinner(kabupaten)
-                Toast.makeText(this@DestinationDetailActivity, " Kamu memilih spinner "+kabupaten, Toast.LENGTH_SHORT).show()
+                kabupaten = spin_kab.selectedItem.toString()
+                simpanNamaKab = spinnerKab[position].id_kabupaten
+                setKecamatanSpinner(simpanNamaKab)
+                Toast.makeText(this@DestinationDetailActivity, " Kamu memilih spinner "+spinnerKab[position].name_kabupaten, Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -83,8 +86,9 @@ class DestinationDetailActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                kecamatan = spinnerKec[position].id_kecamatan
-                Toast.makeText(this@DestinationDetailActivity, " Kamu memilih spinner "+kecamatan, Toast.LENGTH_SHORT).show()
+                kecamatan = spin_kec.selectedItem.toString()
+                simpanNamaKec = spinnerKec[position].name_kecamatan
+                //Toast.makeText(this@DestinationDetailActivity, " Kamu memilih spinner "+spinnerKec[position].name_kecamatan, Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -221,7 +225,6 @@ class DestinationDetailActivity : AppCompatActivity() {
                 if(response.isSuccessful){
                     spinnerKab = response.body()!!.data
                     val listSpinner = ArrayList<String>(spinnerKab.size)
-
                     spinnerKab.forEach {
                         listSpinner.add(it.name_kabupaten)
                     }
@@ -229,7 +232,7 @@ class DestinationDetailActivity : AppCompatActivity() {
                     val adapter = ArrayAdapter(this@DestinationDetailActivity, android.R.layout.simple_spinner_item, listSpinner)
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spin_kab.adapter = adapter
-                    val kabupatenN = spinnerKab.firstOrNull { it.id_kabupaten == destination.id_kabupaten }
+                    val kabupatenN = spinnerKab.firstOrNull { it.name_kabupaten == destination.id_kabupaten }
                     spin_kab.setSelection(spinnerKab.indexOf(kabupatenN))
                     Log.d("KabupatenResponse", response.toString())
                 }
@@ -266,7 +269,7 @@ class DestinationDetailActivity : AppCompatActivity() {
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spin_kec.adapter = adapter
 
-                    val kecamatanN = spinnerKec.firstOrNull { it.id_kecamatan == destination.id_kecamatan }
+                    val kecamatanN = spinnerKec.firstOrNull { it.name_kecamatan == destination.id_kecamatan }
                     spin_kec.setSelection(spinnerKec.indexOf(kecamatanN))
                     Log.d("berhasilResponse", response.toString())
                 }

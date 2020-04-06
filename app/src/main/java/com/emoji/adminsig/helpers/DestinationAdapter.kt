@@ -6,9 +6,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.emoji.adminsig.R
 import com.emoji.adminsig.activities.DestinationDetailActivity
+import com.emoji.adminsig.activities.DestinationListActivity
 import com.emoji.adminsig.models.Destination
 import kotlinx.android.synthetic.main.list_item.view.*
 
@@ -55,6 +57,7 @@ class DestinationAdapter(private val destinationList: ArrayList<Destination>): R
 					val intent = Intent(context, DestinationDetailActivity::class.java)
 					intent.putExtra(DestinationDetailActivity.EXTRA_DETAIl, destination)
 					context.startActivity(intent)
+//					(context as DestinationListActivity).finish()
 				}
 
 			}

@@ -11,6 +11,8 @@ import com.skripsi.sigwam.DestinationDetailActivity
 import com.skripsi.sigwam.R
 import com.skripsi.sigwam.model.Destination
 import kotlinx.android.synthetic.main.list_item.view.*
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class DestinationAdapter(private val destinationList: ArrayList<Destination>): RecyclerView.Adapter<DestinationAdapter.ListViewHolder>(), Filterable {
@@ -21,9 +23,15 @@ class DestinationAdapter(private val destinationList: ArrayList<Destination>): R
         this.filterListResult = destinationList
     }
 
-    fun setData(items: ArrayList<Destination>){
+    fun setData(items: ArrayList<Destination>) {
+
         filterListResult.clear()
         filterListResult.addAll(items)
+        filterListResult.sortWith(Comparator { o1, o2 ->
+
+            return@Comparator o1.name_destination.compareTo(o2.name_destination)
+        })
+
         notifyDataSetChanged()
     }
 
