@@ -55,6 +55,32 @@
 				android:orientation="vertical"
 				android:layout_margin="24dp">
 
+<!--			<androidx.constraintlayout.widget.ConstraintLayout-->
+<!--				android:layout_width="match_parent"-->
+<!--				android:layout_height="wrap_content">-->
+
+<!--				<ImageView-->
+<!--					android:id="@+id/iv_image"-->
+<!--					android:layout_width="150dp"-->
+<!--					android:layout_height="150dp"-->
+<!--					android:src="@drawable/hamster"-->
+<!--					app:layout_constraintBottom_toBottomOf="parent"-->
+<!--					app:layout_constraintEnd_toEndOf="parent"-->
+<!--					app:layout_constraintStart_toStartOf="parent"-->
+<!--					app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--				<ImageButton-->
+<!--					android:id="@+id/ib_img"-->
+<!--					android:layout_width="53dp"-->
+<!--					android:layout_height="47dp"-->
+<!--					android:src="@drawable/ic_account_box_black_24dp"-->
+<!--					app:layout_constraintBottom_toBottomOf="parent"-->
+<!--					app:layout_constraintEnd_toEndOf="parent"-->
+<!--					app:layout_constraintHorizontal_bias="0.732"-->
+<!--					app:layout_constraintStart_toStartOf="parent" />-->
+
+<!--			</androidx.constraintlayout.widget.ConstraintLayout>-->
+
 			<com.google.android.material.textfield.TextInputLayout
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content">
@@ -159,27 +185,24 @@
 
 			</LinearLayout>
 
-<!--					android:imeOptions="actionUnspecified"-->
-<!--					android:inputType="textMultiLine"-->
-<!--					android:maxLines="5"/>-->
-
-<!--			</com.google.android.material.textfield.TextInputLayout>-->
-
-
 			<com.google.android.material.textfield.TextInputLayout
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginTop="10dp">
 
 				<com.google.android.material.textfield.TextInputEditText
-					android:id="@+id/et_image"
+					android:id="@+id/et_image_c"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:hint="Image"
-					android:imeOptions="actionUnspecified"
-					android:maxLines="5"/>
+					android:hint="Image" />
 
 			</com.google.android.material.textfield.TextInputLayout>
+
+<!--					android:imeOptions="actionUnspecified"-->
+<!--					android:inputType="textMultiLine"-->
+<!--					android:maxLines="5"/>-->
+
+<!--			</com.google.android.material.textfield.TextInputLayout>-->
 
 
 			<LinearLayout

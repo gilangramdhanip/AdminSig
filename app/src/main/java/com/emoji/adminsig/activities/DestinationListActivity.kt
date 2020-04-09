@@ -19,6 +19,7 @@ import com.emoji.adminsig.helpers.DestinationAdapter
 import com.emoji.adminsig.models.*
 import com.emoji.adminsig.services.ServiceBuilder
 import kotlinx.android.synthetic.main.activity_destiny_list.*
+import kotlinx.android.synthetic.main.activity_destiny_list.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -35,6 +36,7 @@ class DestinationListActivity : AppCompatActivity() {
     private lateinit var kabupaten : String
     private lateinit var kecamatan : String
 
+    private val des :Destination? = null
     private lateinit var spinner: Spinner
     private lateinit var spinnerKab : Array<Kabupaten>
     private lateinit var spinnerKec : Array<Kecamatan>
@@ -153,6 +155,7 @@ class DestinationListActivity : AppCompatActivity() {
         mainViewModel.getDestination().observe(this, Observer { destination ->
             if(destination!=null){
                 destinationAdapter.setData(destination)
+                txv_jumlah_destinasi.text = destination.size.toString()
                 showLoading(false)
             }
         })

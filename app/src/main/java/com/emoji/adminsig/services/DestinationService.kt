@@ -1,6 +1,7 @@
 package com.emoji.adminsig.services
 
 import com.emoji.adminsig.models.*
+import com.skripsi.sigwam.model.KategoriResponse
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -18,6 +19,9 @@ interface DestinationService {
     @GET("kabupaten")
     fun getKabupaten(): Call<KabupatenResponse>
 
+    @GET("kategori")
+    fun getKategori(): Call<KategoriResponse>
+
 
     @GET("kecamatan")
     fun getKecamatan(@Query("id_kabupaten") id_kabupaten: String): Call<KecamatanResponse>
@@ -33,7 +37,7 @@ interface DestinationService {
         @Field("address_destination") address: String,
         @Field("desc_destination") description: String,
         @Field("img_destination") image: String,
-        @Field("category_destination") cat: String,
+        @Field("id_kategori") cat: String,
         @Field("id_kabupaten") id_kab: String,
         @Field("id_kecamatan") id_kec: String
 

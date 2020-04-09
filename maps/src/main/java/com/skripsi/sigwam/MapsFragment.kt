@@ -16,6 +16,8 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -27,16 +29,21 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.PermissionRequest
 import com.karumi.dexter.listener.single.PermissionListener
-import com.skripsi.sigwam.adapter.DestinationAdapter
+import com.skripsi.sigwam.adapter.KategoriAdapter
 import com.skripsi.sigwam.model.Destination
 import com.skripsi.sigwam.model.DestinationResponse
+import com.skripsi.sigwam.model.Kategori
+import com.skripsi.sigwam.model.MainViewModelKategori
 import com.skripsi.sigwam.service.ServiceBuilder
+import kotlinx.android.synthetic.main.bottom_sheet_category.view.*
 import kotlinx.android.synthetic.main.fragment_maps.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -48,7 +55,7 @@ import kotlin.collections.ArrayList
 /**
  * A simple [Fragment] subclass.
  */
-class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener {
+class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
 
     companion object {
         const val REQUEST_CHECK_SETTINGS = 43
@@ -58,14 +65,15 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener {
         const val EXTRA_LAT = "extra_lat"
         const val EXTRA_LONG = "extra_lng"
     }
-
-    lateinit var lat : String
-    lateinit var lng : String
-    lateinit var title : String
+    private lateinit var dialog: BottomSheetDialog
     private lateinit var googleMap: GoogleMap
-    private lateinit var destinationAdapter: DestinationAdapter
     private val apiService = ServiceBuilder.create()
     lateinit var destination : List<Destination>
+    lateinit var cat : List<Kategori>
+    lateinit var mainViewModelKategori: MainViewModelKategori
+    lateinit var kategoriAdapter: KategoriAdapter
+    private val kategori = ArrayList<Kategori>()
+    private lateinit var category : Kategori
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     override fun onCreateView(
@@ -83,6 +91,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener {
 
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as? SupportMapFragment
         mapFragment?.getMapAsync(this)
+
         fusedLocationProviderClient = FusedLocationProviderClient(requireActivity())
 
     }
@@ -91,12 +100,14 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener {
         googleMap = map?: return
 
         if (isPermissionGiven()){
+            googleMap.setPadding(0,130,0,0)
             googleMap.isMyLocationEnabled = true
             googleMap.uiSettings.isMyLocationButtonEnabled = true
             googleMap.uiSettings.isZoomControlsEnabled = true
             getCurrentLocation()
 
             loadDestination()
+            loadKategoriMenu()
 
         } else {
             givePermission()
@@ -264,7 +275,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener {
 
                                 Toast.makeText(requireContext(), " $c , $b", Toast.LENGTH_LONG).show()
 
-                        googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+                        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
 
                         }
 
@@ -284,5 +295,107 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener {
         })
     }
 
+    private fun loadKategoriMenu(){
+
+        filter_cat.setOnClickListener {
+
+            val view = layoutInflater.inflate(R.layout.bottom_sheet_category, null)
+
+            dialog = BottomSheetDialog(requireContext())
+            dialog.setContentView(view)
+            dialog.show()
+
+            kategoriAdapter = KategoriAdapter(kategori,requireContext(), onKategoriClicked())
+            kategoriAdapter.notifyDataSetChanged()
+
+            mainViewModelKategori = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
+                MainViewModelKategori::class.java
+            )
+
+            mainViewModelKategori.setKategori()
+            view.recycle_category.layoutManager = LinearLayoutManager(requireContext())
+            view.recycle_category.adapter = kategoriAdapter
+
+            mainViewModelKategori.getKategori().observe(this, androidx.lifecycle.Observer { kategori->
+                if(kategori!=null){
+                    kategoriAdapter.setData(kategori)
+                }
+            })
+        }
+        }
+
+    private fun onKategoriClicked(): (Int) -> Unit {
+        return {
+            val simpanKategori = kategoriAdapter.getItem(it).name_kategori
+            googleMap.clear()
+            filterCategory(simpanKategori)
+            dialog.dismiss()
+        }
+    }
+
+    private fun filterCategory(simpanKategori: String) {
+        apiService.getFilterKategori(simpanKategori).enqueue(object : Callback<DestinationResponse> {
+            override fun onFailure(call: Call<DestinationResponse>, t: Throwable) {
+                Toast.makeText(context, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(
+                call: Call<DestinationResponse>,
+                response: Response<DestinationResponse>
+            ) {
+                if(response.isSuccessful){
+                    destination = response.body()!!.data
+                    getCurrentLocation()
+
+                    destination.forEach {
+                        val lat = it.lat_destination!!.toDouble()
+                        val lng = it.lng_destination!!.toDouble()
+
+                        val latlng : LatLng = LatLng(lat,lng)
+
+                        googleMap.addMarker(MarkerOptions()
+                            .position(latlng)
+                            .title(it.name_destination)
+                            .snippet(it.address_destination)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                        )
+
+                        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, destination)
+
+                        search_view.threshold=0
+                        search_view.setAdapter(adapter)
+                    }
+
+                    search_view.setOnItemClickListener { parent: AdapterView<*>?, view: View?, position: Int, id: Long ->
+
+                        val a = search_view.adapter.getItem(position) as Destination
+                        val b = a.lat_destination!!.toDouble()
+                        val c = a.lng_destination!!.toDouble()
+
+
+                        val cameraPosition = CameraPosition.Builder()
+                            .target(LatLng(b,c))
+                            .zoom(15f)
+                            .build()
+
+                        Toast.makeText(requireContext(), " $c , $b", Toast.LENGTH_LONG).show()
+
+                        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+
+                    }
+                    googleMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
+
+
+                    Log.d("onResponse", response.toString())
+                }
+
+                else{
+                    Log.d("gagalresponse", response.toString())
+                    Toast.makeText(context, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        })
+    }
 
 }

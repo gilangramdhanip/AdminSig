@@ -11,7 +11,7 @@ data class Destination(
 	var lng_destination: String? = null,
 	var address_destination: String? = null,
 	var desc_destination: String? = null,
-	var category_destination: String? = null,
+	var id_kategori: String? = null,
 	var img_destination: String? = null,
 	var id_kabupaten: String? = null,
 	var id_kecamatan: String? = null

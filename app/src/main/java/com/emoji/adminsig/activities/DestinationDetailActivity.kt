@@ -13,6 +13,8 @@ import androidx.core.view.get
 import com.emoji.adminsig.R
 import com.emoji.adminsig.models.*
 import com.emoji.adminsig.services.ServiceBuilder
+import com.skripsi.sigwam.model.Kategori
+import com.skripsi.sigwam.model.KategoriResponse
 import kotlinx.android.synthetic.main.activity_destiny_create.*
 import kotlinx.android.synthetic.main.activity_destiny_detail.*
 import kotlinx.android.synthetic.main.activity_destiny_detail.et_address
@@ -26,7 +28,6 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlinx.android.synthetic.main.activity_destiny_detail.et_category as et_category1
 
 
 class DestinationDetailActivity : AppCompatActivity() {
@@ -35,14 +36,14 @@ class DestinationDetailActivity : AppCompatActivity() {
         const val EXTRA_DETAIl = "extra_detail"
     }
 
-    private lateinit var simpan : String
+    lateinit var simpan : String
     lateinit var kabupaten : String
     lateinit var kecamatan : String
     lateinit var simpanNamaKab : String
-    lateinit var simpanNamaKec : String
 
     lateinit var spinnerKab: Array<Kabupaten>
     lateinit var spinnerKec : Array<Kecamatan>
+    lateinit var spinnerCat : Array<Kategori>
     private var ambil :Int = 0
 
     private lateinit var destination : Destination
@@ -55,6 +56,7 @@ class DestinationDetailActivity : AppCompatActivity() {
         destination = intent.getParcelableExtra(EXTRA_DETAIl) as Destination
 
         initSpinnerKabupaten()
+        initSpinnerCategory()
 
         spin_kab.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -87,34 +89,14 @@ class DestinationDetailActivity : AppCompatActivity() {
                 id: Long
             ) {
                 kecamatan = spin_kec.selectedItem.toString()
-                simpanNamaKec = spinnerKec[position].name_kecamatan
                 //Toast.makeText(this@DestinationDetailActivity, " Kamu memilih spinner "+spinnerKec[position].name_kecamatan, Toast.LENGTH_SHORT).show()
             }
 
         }
 
-
-        //Load Destination
-
-        val spinCat = resources.getStringArray(R.array.cat)
-
-        destination.id_destination
-        et_name.setText(destination.name_destination)
-        et_latitude.setText(destination.lat_destination)
-        et_longitude.setText(destination.lng_destination)
-        et_address.setText(destination.address_destination)
-        et_description.setText(destination.desc_destination)
-        et_image.setText(destination.img_destination)
-        et_category.setSelection(spinCat.indexOf(destination.category_destination.toString()))
-
-
-//        setSupportActionBar(detail_toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        et_category.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
-
+        spin_cat.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
-
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
 
             override fun onItemSelected(
@@ -123,14 +105,26 @@ class DestinationDetailActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-
-                simpan = if(position == 0){
-                    "Pilih Kategori"
-                }else{
-                    spinCat[position]
-                }
+                simpan = spin_cat.selectedItem.toString()
+                //Toast.makeText(this@DestinationDetailActivity, " Kamu memilih spinner "+spinnerKec[position].name_kecamatan, Toast.LENGTH_SHORT).show()
             }
+
         }
+
+
+        //Load Destination
+
+        destination.id_destination
+        et_name.setText(destination.name_destination)
+        et_latitude.setText(destination.lat_destination)
+        et_longitude.setText(destination.lng_destination)
+        et_address.setText(destination.address_destination)
+        et_description.setText(destination.desc_destination)
+        et_image.setText(destination.img_destination)
+
+
+//        setSupportActionBar(detail_toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         btn_delete.setOnClickListener{
 
@@ -272,6 +266,40 @@ class DestinationDetailActivity : AppCompatActivity() {
                     val kecamatanN = spinnerKec.firstOrNull { it.name_kecamatan == destination.id_kecamatan }
                     spin_kec.setSelection(spinnerKec.indexOf(kecamatanN))
                     Log.d("berhasilResponse", response.toString())
+                }
+
+                else{
+                    Log.d("gagalresponse", response.toString())
+                    Toast.makeText(this@DestinationDetailActivity, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        })
+    }
+
+    private fun initSpinnerCategory(){
+        apiService.getKategori().enqueue(object : Callback<KategoriResponse>{
+            override fun onFailure(call: Call<KategoriResponse>, t: Throwable) {
+                Toast.makeText(this@DestinationDetailActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show();
+            }
+
+            override fun onResponse(
+                call: Call<KategoriResponse>,
+                response: Response<KategoriResponse>
+            ) {
+                if(response.isSuccessful){
+                    spinnerCat = response.body()!!.data
+                    val listSpinner = ArrayList<String>(spinnerCat.size)
+                    spinnerCat.forEach {
+                        listSpinner.add(it.name_kategori)
+                    }
+
+                    val adapter = ArrayAdapter(this@DestinationDetailActivity, android.R.layout.simple_spinner_item, listSpinner)
+                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    spin_cat.adapter = adapter
+                    val kategori = spinnerCat.firstOrNull { it.name_kategori == destination.id_kategori }
+                    spin_cat.setSelection(spinnerCat.indexOf(kategori))
+                    Log.d("KabupatenResponse", response.toString())
                 }
 
                 else{

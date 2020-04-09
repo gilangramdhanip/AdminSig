@@ -57,7 +57,7 @@ class DestinationAdapter(private val destinationList: ArrayList<Destination>): R
             with(itemView){
                 txv_destination.text = destination.name_destination
                 txv_dest_desc.text = destination.desc_destination
-                txv_cat.text = destination.category_destination
+                txv_cat.text = destination.id_kategori
 
                 itemView.setOnClickListener {
                     val intent = Intent(context, DestinationDetailActivity::class.java)

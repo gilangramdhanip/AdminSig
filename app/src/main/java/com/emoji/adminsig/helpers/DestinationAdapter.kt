@@ -12,6 +12,8 @@ import com.emoji.adminsig.R
 import com.emoji.adminsig.activities.DestinationDetailActivity
 import com.emoji.adminsig.activities.DestinationListActivity
 import com.emoji.adminsig.models.Destination
+import kotlinx.android.synthetic.main.activity_destiny_list.*
+import kotlinx.android.synthetic.main.activity_destiny_list.view.*
 import kotlinx.android.synthetic.main.list_item.view.*
 
 
@@ -51,7 +53,7 @@ class DestinationAdapter(private val destinationList: ArrayList<Destination>): R
 			with(itemView){
 				txv_destination.text = destination.name_destination
 				txv_dest_desc.text = destination.desc_destination
-				txv_cat.text = destination.category_destination
+				txv_cat.text = destination.id_kategori
 
 				itemView.setOnClickListener {
 					val intent = Intent(context, DestinationDetailActivity::class.java)

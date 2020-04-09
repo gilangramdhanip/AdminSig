@@ -34,7 +34,7 @@ class DestinationDetailActivity : AppCompatActivity(), View.OnClickListener {
         txv_address.text = destination.address_destination
         txv_desc.text = destination.desc_destination
 //        et_image.setText(destination.img_destination)
-        txv_cat.text = destination.category_destination
+        txv_cat.text = destination.id_kategori
         txv_kabupaten.text = destination.id_kabupaten
         txv_kecamatan.text = destination.id_kecamatan
 
