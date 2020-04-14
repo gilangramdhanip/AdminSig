@@ -55,31 +55,31 @@
 				android:orientation="vertical"
 				android:layout_margin="24dp">
 
-			<androidx.constraintlayout.widget.ConstraintLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content">
+<!--			<androidx.constraintlayout.widget.ConstraintLayout-->
+<!--				android:layout_width="match_parent"-->
+<!--				android:layout_height="wrap_content">-->
 
-				<ImageView
-					android:id="@+id/iv_image"
-					android:layout_width="150dp"
-					android:layout_height="150dp"
-					android:src="@drawable/hamster"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintStart_toStartOf="parent"
-					app:layout_constraintTop_toTopOf="parent" />
+<!--				<ImageView-->
+<!--					android:id="@+id/iv_image"-->
+<!--					android:layout_width="150dp"-->
+<!--					android:layout_height="150dp"-->
+<!--					android:src="@drawable/hamster"-->
+<!--					app:layout_constraintBottom_toBottomOf="parent"-->
+<!--					app:layout_constraintEnd_toEndOf="parent"-->
+<!--					app:layout_constraintStart_toStartOf="parent"-->
+<!--					app:layout_constraintTop_toTopOf="parent" />-->
 
-				<ImageButton
-					android:id="@+id/ib_img"
-					android:layout_width="53dp"
-					android:layout_height="47dp"
-					android:src="@drawable/ic_account_box_black_24dp"
-					app:layout_constraintBottom_toBottomOf="parent"
-					app:layout_constraintEnd_toEndOf="parent"
-					app:layout_constraintHorizontal_bias="0.732"
-					app:layout_constraintStart_toStartOf="parent" />
+<!--				<ImageButton-->
+<!--					android:id="@+id/ib_img"-->
+<!--					android:layout_width="53dp"-->
+<!--					android:layout_height="47dp"-->
+<!--					android:src="@drawable/ic_account_box_black_24dp"-->
+<!--					app:layout_constraintBottom_toBottomOf="parent"-->
+<!--					app:layout_constraintEnd_toEndOf="parent"-->
+<!--					app:layout_constraintHorizontal_bias="0.732"-->
+<!--					app:layout_constraintStart_toStartOf="parent" />-->
 
-			</androidx.constraintlayout.widget.ConstraintLayout>
+<!--			</androidx.constraintlayout.widget.ConstraintLayout>-->
 
 			<com.google.android.material.textfield.TextInputLayout
 					android:layout_width="match_parent"
@@ -185,18 +185,18 @@
 
 			</LinearLayout>
 
-<!--			<com.google.android.material.textfield.TextInputLayout-->
-<!--				android:layout_width="match_parent"-->
-<!--				android:layout_height="wrap_content"-->
-<!--				android:layout_marginTop="10dp">-->
+			<com.google.android.material.textfield.TextInputLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="10dp">
 
-<!--				<com.google.android.material.textfield.TextInputEditText-->
-<!--					android:id="@+id/et_image_c"-->
-<!--					android:layout_width="match_parent"-->
-<!--					android:layout_height="wrap_content"-->
-<!--					android:hint="Image" />-->
+				<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/et_image_c"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:hint="Image" />
 
-<!--			</com.google.android.material.textfield.TextInputLayout>-->
+			</com.google.android.material.textfield.TextInputLayout>
 
 <!--					android:imeOptions="actionUnspecified"-->
 <!--					android:inputType="textMultiLine"-->
@@ -220,6 +220,7 @@
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:padding="10dp"
+					android:tooltipText="Kabupaten"
 					android:spinnerMode="dropdown"
 					android:textColor="#000000"
 					android:hint="Category"/>
@@ -237,7 +238,6 @@
 					android:layout_height="wrap_content"
 					android:padding="10dp"
 					android:spinnerMode="dropdown"
-					android:visibility="gone"
 					android:textColor="#000000"
 					android:hint="Category"/>
 

@@ -18,6 +18,7 @@ import com.emoji.adminsig.R
 import com.emoji.adminsig.helpers.DestinationAdapter
 import com.emoji.adminsig.models.*
 import com.emoji.adminsig.services.ServiceBuilder
+import kotlinx.android.synthetic.main.activity_destiny_create.*
 import kotlinx.android.synthetic.main.activity_destiny_list.*
 import kotlinx.android.synthetic.main.activity_destiny_list.view.*
 import retrofit2.Call
@@ -35,6 +36,8 @@ class DestinationListActivity : AppCompatActivity() {
 
     private lateinit var kabupaten : String
     private lateinit var kecamatan : String
+
+    lateinit var simpanNamaKab : String
 
     private val des :Destination? = null
     private lateinit var spinner: Spinner
@@ -63,9 +66,16 @@ class DestinationListActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                kabupaten = spinnerKab[position].id_kabupaten
 
-                setKecamatanSpinner(kabupaten)
+                if(position == 0){
+                    spin_kecamatan.visibility = View.GONE
+                    kabupaten = ""
+                }else{
+                    spin_kecamatan.visibility = View.VISIBLE
+                    kabupaten = spin_kabupaten.selectedItem.toString()
+                    simpanNamaKab = spinnerKab[position-1].id_kabupaten
+                    setKecamatanSpinner(simpanNamaKab)
+                }
                 Toast.makeText(this@DestinationListActivity, " Kamu memilih spinner "+kabupaten, Toast.LENGTH_SHORT).show()
             }
 
@@ -82,7 +92,12 @@ class DestinationListActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                kecamatan = spinnerKec[position].id_kecamatan
+
+                if(parent!!.selectedItem == "Pilih Kecamatan"){
+                    kecamatan = ""
+                }else{
+                    kecamatan = spin_kecamatan.selectedItem.toString()
+                }
                 Toast.makeText(this@DestinationListActivity, " Kamu memilih spinner "+kecamatan, Toast.LENGTH_SHORT).show()
             }
 
@@ -175,7 +190,7 @@ class DestinationListActivity : AppCompatActivity() {
                 if(response.isSuccessful){
                     spinnerKab = response.body()!!.data
                     val listSpinner = ArrayList<String>(spinnerKab.size)
-
+                    listSpinner.add("Pilih Kabupaten")
                     spinnerKab.forEach {
                         listSpinner.add(it.name_kabupaten)
                     }
@@ -209,7 +224,7 @@ class DestinationListActivity : AppCompatActivity() {
                 if(response.isSuccessful){
                     spinnerKec = response.body()!!.data
                     val listSpinner = ArrayList<String>(spinnerKec.size)
-
+                    listSpinner.add("Pilih Kecamatan")
                     spinnerKec.forEach {
                         listSpinner.add(it.name_kecamatan)
                     }

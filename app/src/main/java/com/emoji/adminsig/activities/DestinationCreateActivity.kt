@@ -1,20 +1,12 @@
 package com.emoji.adminsig.activities
 
 import android.Manifest
-import android.app.Activity
-import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.Bitmap
 import android.location.Address
 import android.location.Geocoder
 import android.location.Location
-import android.media.Image
-import android.media.tv.TvContract
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import android.text.Editable
 import android.util.Log
 import android.view.View
@@ -24,7 +16,6 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.lifecycle.MutableLiveData
 import com.emoji.adminsig.R
 import com.emoji.adminsig.models.*
 import com.emoji.adminsig.services.ServiceBuilder
@@ -33,21 +24,12 @@ import com.google.android.gms.location.LocationServices
 import com.skripsi.sigwam.model.Kategori
 import com.skripsi.sigwam.model.KategoriResponse
 import kotlinx.android.synthetic.main.activity_destiny_create.*
-import kotlinx.android.synthetic.main.activity_destiny_create.et_address
-import kotlinx.android.synthetic.main.activity_destiny_create.et_category
-import kotlinx.android.synthetic.main.activity_destiny_create.et_description
-import kotlinx.android.synthetic.main.activity_destiny_create.et_latitude
-import kotlinx.android.synthetic.main.activity_destiny_create.et_longitude
-import kotlinx.android.synthetic.main.activity_destiny_create.et_name
-import kotlinx.android.synthetic.main.activity_destiny_detail.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import java.io.ByteArrayOutputStream
-import java.io.IOException
+
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.random.Random
 
 
 class DestinationCreateActivity : AppCompatActivity(){
@@ -57,17 +39,13 @@ class DestinationCreateActivity : AppCompatActivity(){
     private lateinit var kecamatan : String
 
     lateinit var simpanNamaKab : String
-    lateinit var simpanNamaKec : String
 
     private lateinit var spinnerCat : Array<Kategori>
     private lateinit var spinnerKab : Array<Kabupaten>
     private lateinit var spinnerKec : Array<Kecamatan>
 
     private val apiService = ServiceBuilder.create()
-
-    private val IMAGE = 777
-
-    private var bitmap: Bitmap? = null
+    private val PICK_IMAGE_REQUEST = 1
 
     val RequestPermissionCode = 1
     var mLocation: Location? = null
@@ -82,6 +60,8 @@ class DestinationCreateActivity : AppCompatActivity(){
         initSpinnerKabupaten()
         initSpinnerCategory()
 
+
+
         et_kabupaten.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
             override fun onNothingSelected(parent: AdapterView<*>?) {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
@@ -94,9 +74,16 @@ class DestinationCreateActivity : AppCompatActivity(){
                 id: Long
             ) {
 
-                kabupaten = et_kabupaten.selectedItem.toString()
-                simpanNamaKab = spinnerKab[position].id_kabupaten
-                setKecamatanSpinner(simpanNamaKab)
+                if(position == 0){
+                    et_kecamatan.visibility = View.GONE
+                    kecamatan = ""
+                    kabupaten = ""
+                }else{
+                    et_kecamatan.visibility = View.VISIBLE
+                    kabupaten = et_kabupaten.selectedItem.toString()
+                    simpanNamaKab = spinnerKab[position-1].id_kabupaten
+                    setKecamatanSpinner(simpanNamaKab)
+                }
 //                Toast.makeText(this@DestinationCreateActivity, " Kamu memilih spinner "+kabupaten, Toast.LENGTH_SHORT).show()
             }
 
@@ -113,14 +100,17 @@ class DestinationCreateActivity : AppCompatActivity(){
                 position: Int,
                 id: Long
             ) {
-                kecamatan = et_kecamatan.selectedItem.toString()
+                if(parent!!.selectedItem == "Pilih Kecamatan"){
+                    kecamatan = ""
+                }else{
+                    kecamatan = et_kecamatan.selectedItem.toString()
+                }
+
 //                simpanNamaKec = spinnerKec[position].name_kecamatan
 //                Toast.makeText(this@DestinationCreateActivity, " Kamu memilih spinner "+kecamatan, Toast.LENGTH_SHORT).show()
             }
 
         }
-
-        val cate = resources.getStringArray(R.array.cat)
 
         // Show the Up button in the action bar.
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -141,14 +131,16 @@ class DestinationCreateActivity : AppCompatActivity(){
                 position: Int,
                 id: Long
             ) {
+
+                if(parent!!.selectedItem == "Pilih Kategori"){
+                    simpan = ""
+                }else{
                 simpan = et_category.selectedItem.toString()
+                }
 //                Toast.makeText(this@DestinationCreateActivity, " Kamu memilih spinner "+kecamatan, Toast.LENGTH_SHORT).show()
             }
 
         }
-
-//
-//        ib_img.setOnClickListener(this)
 
     }
 
@@ -166,6 +158,8 @@ class DestinationCreateActivity : AppCompatActivity(){
                 if(response.isSuccessful){
                     spinnerKab = response.body()!!.data
                     val listSpinner = ArrayList<String>(spinnerKab.size)
+
+                    listSpinner.add("Pilih Kabupaten")
 
                     spinnerKab.forEach {
                         listSpinner.add(it.name_kabupaten)
@@ -201,6 +195,8 @@ class DestinationCreateActivity : AppCompatActivity(){
                     spinnerKec = response.body()!!.data
                     val listSpinner = ArrayList<String>(spinnerKec.size)
 
+                    listSpinner.add("Pilih Kecamatan")
+
                     spinnerKec.forEach {
                         listSpinner.add(it.name_kecamatan)
                     }
@@ -235,6 +231,7 @@ class DestinationCreateActivity : AppCompatActivity(){
                 if(response.isSuccessful){
                     spinnerCat = response.body()!!.data
                     val listSpinner = ArrayList<String>(spinnerCat.size)
+                    listSpinner.add("Pilih Kategori")
 
                     spinnerCat.forEach {
                         listSpinner.add(it.name_kategori)
@@ -255,47 +252,12 @@ class DestinationCreateActivity : AppCompatActivity(){
         })
     }
 
-//    private fun selectImage(){
-//
-//        val intent = Intent()
-//        intent.type = "image/*"
-//        intent.action = Intent.ACTION_GET_CONTENT
-//         startActivityForResult(intent, IMAGE)
-//    }
-//
-//    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-//        super.onActivityResult(requestCode, resultCode, data)
-//
-//        if(requestCode==IMAGE && resultCode== Activity.RESULT_OK && data!=null){
-//            val path = data.data
-//
-//            try {
-//                bitmap = MediaStore.Images.Media.getBitmap(contentResolver,path)
-//                iv_image.setImageBitmap(bitmap)
-//                iv_image.visibility = View.VISIBLE
-//            }catch (e : IOException){
-//                e.printStackTrace()
-//            }
-//        }
-//    }
-//
-//    @RequiresApi(Build.VERSION_CODES.O)
-//    private fun imgToString(): String? {
-//        val byteArrayOutputStream = ByteArrayOutputStream()
-//        bitmap?.compress(Bitmap.CompressFormat.JPEG,100,byteArrayOutputStream)
-//        val imgByte = byteArrayOutputStream.toByteArray()
-//
-//           return Base64.getEncoder().encodeToString(imgByte)
-//    }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun tambahdata(){
 
-//        val imge = imgToString()
-
-
         btn_add.setOnClickListener {
+
             val newDestination = Destination(taskId)
             newDestination.name_destination = et_name.text.toString()
             newDestination.lat_destination = et_latitude.text.toString()
@@ -303,7 +265,7 @@ class DestinationCreateActivity : AppCompatActivity(){
             newDestination.address_destination = et_address.text.toString()
             newDestination.desc_destination = et_description.text.toString()
             newDestination.id_kategori = simpan
-            newDestination.img_destination = et_image_c.text.toString()
+//            newDestination.img_destination = getPath(file)
             newDestination.id_kabupaten = kabupaten
             newDestination.id_kecamatan = kecamatan
 
@@ -365,11 +327,5 @@ class DestinationCreateActivity : AppCompatActivity(){
         )
         this.recreate()
     }
-
-//    override fun onClick(v: View?) {
-//        if(v!!.id == R.id.ib_img){
-//            selectImage()
-//        }
-//    }
 }
 

@@ -13,6 +13,7 @@ interface DestinationService {
     @GET("destination")
     fun getDestination(@Path("id_destination") id_destination: Int): Call<DestinationResponse>
 
+    @Multipart
     @POST("destination")
     fun addDestination(@Body newDestination: Destination): Call<DestinationResponse>
 

@@ -202,6 +202,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                             .position(LatLng(mLastLocation!!.latitude, mLastLocation.longitude))
                             .title("Lokasi terkini")
                             .snippet(address)
+                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                     )
 
                     val cameraPosition = CameraPosition.Builder()
