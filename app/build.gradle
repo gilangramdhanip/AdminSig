@@ -56,4 +56,11 @@ dependencies {
     //implement
 
     implementation 'com.facebook.stetho:stetho:1.5.1'
+
+    //easypermission
+    implementation 'pub.devrel:easypermissions:1.2.0'
+    implementation 'com.github.bumptech.glide:glide:4.7.1'
+    annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+    implementation 'com.vincent.filepicker:MultiTypeFilePicker:1.0.7'
+
 }

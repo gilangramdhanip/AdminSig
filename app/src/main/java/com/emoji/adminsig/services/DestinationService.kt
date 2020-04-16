@@ -2,34 +2,39 @@ package com.emoji.adminsig.services
 
 import com.emoji.adminsig.models.*
 import com.skripsi.sigwam.model.KategoriResponse
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
 interface DestinationService {
 
-    @GET("destination")
+    @GET("api/destination")
     fun getDestinationList(): Call<DestinationResponse>
 
-    @GET("destination")
+    @GET("api/destination")
     fun getDestination(@Path("id_destination") id_destination: Int): Call<DestinationResponse>
 
     @Multipart
-    @POST("destination")
-    fun addDestination(@Body newDestination: Destination): Call<DestinationResponse>
+    @POST("api/destination")
+    fun addDestination(
+        @PartMap partmap: Map<String, @JvmSuppressWildcards RequestBody>,
+        @Part img_destination: MultipartBody.Part
+    ): Call<DestinationResponse>
 
-    @GET("kabupaten")
+    @GET("api/kabupaten")
     fun getKabupaten(): Call<KabupatenResponse>
 
-    @GET("kategori")
+    @GET("api/kategori")
     fun getKategori(): Call<KategoriResponse>
 
 
-    @GET("kecamatan")
+    @GET("api/kecamatan")
     fun getKecamatan(@Query("id_kabupaten") id_kabupaten: String): Call<KecamatanResponse>
 
 
     @FormUrlEncoded
-    @PUT("destination")
+    @PUT("api/destination")
     fun updateDestination(
         @Field("id_destination") id_destination: Int,
         @Field("name_destination") name: String,
@@ -45,7 +50,7 @@ interface DestinationService {
     ): Call<DestinationResponse>
 
     @FormUrlEncoded
-    @HTTP(  method = "DELETE", path = "destination", hasBody = true)
+    @HTTP(  method = "DELETE", path = "api/destination", hasBody = true)
     fun deleteDestination(
         @Field("id_destination") id_destination: Int
     ): Call<DeleteResponse>

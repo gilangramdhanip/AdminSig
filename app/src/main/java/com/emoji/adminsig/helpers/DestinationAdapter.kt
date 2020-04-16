@@ -1,20 +1,28 @@
 package com.emoji.adminsig.helpers
 
+import android.app.Activity
 import android.content.Intent
+import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.emoji.adminsig.R
 import com.emoji.adminsig.activities.DestinationDetailActivity
 import com.emoji.adminsig.activities.DestinationListActivity
 import com.emoji.adminsig.models.Destination
+import com.emoji.adminsig.services.ServiceBuilder
+import kotlinx.android.synthetic.main.activity_destiny_create.view.*
 import kotlinx.android.synthetic.main.activity_destiny_list.*
 import kotlinx.android.synthetic.main.activity_destiny_list.view.*
 import kotlinx.android.synthetic.main.list_item.view.*
+import kotlin.coroutines.coroutineContext
 
 
 class DestinationAdapter(private val destinationList: ArrayList<Destination>): RecyclerView.Adapter<DestinationAdapter.ListViewHolder>(), Filterable {
@@ -42,6 +50,8 @@ class DestinationAdapter(private val destinationList: ArrayList<Destination>): R
 	override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
 
 		holder.bind(filterListResult[position])
+//				Glide.with(context).load(ServiceBuilder.+ filterListResult[position].img_destination).into(itemView.iv_image)
+
 	}
 
 	override fun getItemCount(): Int {
@@ -55,11 +65,18 @@ class DestinationAdapter(private val destinationList: ArrayList<Destination>): R
 				txv_dest_desc.text = destination.desc_destination
 				txv_cat.text = destination.id_kategori
 
+				if(destination.img_destination == ""){
+					iv_home.setImageResource(R.drawable.undraw_journey_lwlj)
+				}else{
+				Glide.with(context)
+					.load("http://192.168.1.71/rest_api/rest-server-sig/assets/foto/"+destination.img_destination)
+					.apply(RequestOptions().override(100, 100))
+					.into(iv_home)
+				}
 				itemView.setOnClickListener {
 					val intent = Intent(context, DestinationDetailActivity::class.java)
 					intent.putExtra(DestinationDetailActivity.EXTRA_DETAIl, destination)
 					context.startActivity(intent)
-//					(context as DestinationListActivity).finish()
 				}
 
 			}
