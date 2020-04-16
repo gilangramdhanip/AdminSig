@@ -2,6 +2,7 @@ package com.emoji.adminsig.activities
 
 import android.Manifest
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -19,6 +20,7 @@ import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -68,6 +70,7 @@ class DestinationCreateActivity : AppCompatActivity() {
 
     private val apiService = ServiceBuilder.create()
     lateinit var img_destination: MultipartBody.Part
+    var REQUEST_CODE = 100
 
     val RequestPermissionCode = 1
     var mLocation: Location? = null
@@ -85,12 +88,12 @@ class DestinationCreateActivity : AppCompatActivity() {
 
         ib_img.setOnClickListener {
             if(EasyPermissions.hasPermissions(this,Manifest.permission.READ_EXTERNAL_STORAGE)){
-//                val i = Intent(this, ImagePickActivity::class.java)
-//                i.putExtra(MAX_NUMBER,1)
-//                startActivityForResult(i, REQUEST_CODE_PICK_IMAGE)
                 val i = Intent(this, ImagePickActivity::class.java)
                 i.putExtra(MAX_NUMBER,1)
                 startActivityForResult(i, REQUEST_CODE_PICK_IMAGE)
+//                val i = Intent(this, ImagePickActivity::class.java)
+//                i.putExtra(MAX_NUMBER,1)
+//                startActivityForResult(i, REQUEST_CODE_PICK_IMAGE)
             }else{
                 // tampilkan permission request saat belum mendapat permission dari user
                 EasyPermissions.requestPermissions(this,"This application need your permission to access photo gallery.",991,android.Manifest.permission.READ_EXTERNAL_STORAGE)

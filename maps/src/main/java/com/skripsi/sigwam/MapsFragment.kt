@@ -1,9 +1,13 @@
 package com.skripsi.sigwam
 
 import android.app.Activity
+import android.app.AlertDialog
+import android.app.Dialog
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
@@ -11,9 +15,8 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Toast
+import android.view.Window
+import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -21,14 +24,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
+import com.google.android.gms.location.places.Place
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.karumi.dexter.Dexter
@@ -44,6 +45,7 @@ import com.skripsi.sigwam.model.Kategori
 import com.skripsi.sigwam.model.MainViewModelKategori
 import com.skripsi.sigwam.service.ServiceBuilder
 import kotlinx.android.synthetic.main.bottom_sheet_category.view.*
+import kotlinx.android.synthetic.main.dialog_item.*
 import kotlinx.android.synthetic.main.fragment_maps.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -72,6 +74,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
     lateinit var cat : List<Kategori>
     lateinit var mainViewModelKategori: MainViewModelKategori
     lateinit var kategoriAdapter: KategoriAdapter
+    lateinit var desti: Destination
     private val kategori = ArrayList<Kategori>()
     private lateinit var category : Kategori
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -100,7 +103,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
         googleMap = map?: return
 
         if (isPermissionGiven()){
-            googleMap.setPadding(0,130,0,0)
+            googleMap.setPadding(0,150,0,0)
             googleMap.isMyLocationEnabled = true
             googleMap.uiSettings.isMyLocationButtonEnabled = true
             googleMap.uiSettings.isZoomControlsEnabled = true
@@ -178,6 +181,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
     }
 
     private fun getLastLocation() {
+
+        val personBitmap = BitmapFactory.decodeResource(resources, R.drawable.personmarker)
+        val personMarker = Bitmap.createScaledBitmap(personBitmap, 100, 100, false)
         fusedLocationProviderClient.lastLocation
             .addOnCompleteListener(requireActivity()) { task ->
                 if (task.isSuccessful && task.result != null) {
@@ -196,13 +202,12 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                         e.printStackTrace()
                     }
 
-//                    val icon = BitmapDescriptorFactory.fromBitmap(BitmapFactory.decodeResource(this.resources, R.drawable.ic_person_pin_circle_black_24dp))
                     googleMap.addMarker(
                         MarkerOptions()
                             .position(LatLng(mLastLocation!!.latitude, mLastLocation.longitude))
                             .title("Lokasi terkini")
                             .snippet(address)
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                            .icon(BitmapDescriptorFactory.fromBitmap(personMarker))
                     )
 
                     val cameraPosition = CameraPosition.Builder()
@@ -230,6 +235,14 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
     }
 
     private fun loadDestination(){
+        val beachBitmap = BitmapFactory.decodeResource(resources, R.drawable.beach)
+        val beachMarker = Bitmap.createScaledBitmap(beachBitmap, 90, 90, false)
+        val hillBitmap = BitmapFactory.decodeResource(resources, R.drawable.mountain)
+        val hillMarker = Bitmap.createScaledBitmap(hillBitmap, 90, 90, false)
+        val mountainBitmap = BitmapFactory.decodeResource(resources, R.drawable.mountain)
+        val mountainMarker = Bitmap.createScaledBitmap(mountainBitmap, 90, 90, false)
+        val waterfallBitmap = BitmapFactory.decodeResource(resources, R.drawable.waterfall)
+        val waterfallMarker = Bitmap.createScaledBitmap(waterfallBitmap, 90, 90, false)
         apiService.getDestinationList().enqueue(object : Callback<DestinationResponse> {
             override fun onFailure(call: Call<DestinationResponse>, t: Throwable) {
                 Toast.makeText(context, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
@@ -249,12 +262,50 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
 
                         val latlng : LatLng = LatLng(lat,lng)
 
+                        if(it.id_kategori=="Pantai"){
+                            googleMap.addMarker(MarkerOptions()
+                                .position(latlng)
+                                .title(it.name_destination)
+                                .snippet(it.address_destination)
+                                .icon(BitmapDescriptorFactory.fromBitmap(beachMarker))
+                            )
+                        }else if(it.id_kategori=="Bukit"){
                         googleMap.addMarker(MarkerOptions()
                             .position(latlng)
                             .title(it.name_destination)
                             .snippet(it.address_destination)
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_AZURE))
+                            .icon(BitmapDescriptorFactory.fromBitmap(hillMarker))
                         )
+                        }else if(it.id_kategori=="Gunung"){
+                            googleMap.addMarker(MarkerOptions()
+                                .position(latlng)
+                                .title(it.name_destination)
+                                .snippet(it.address_destination)
+                                .icon(BitmapDescriptorFactory.fromBitmap(mountainMarker))
+                            )
+                        }else if(it.id_kategori=="Air Terjun"){
+                            googleMap.addMarker(MarkerOptions()
+                                .position(latlng)
+                                .title(it.name_destination)
+                                .snippet(it.address_destination)
+                                .icon(BitmapDescriptorFactory.fromBitmap(waterfallMarker))
+                            )
+                        }
+
+                        googleMap.setOnInfoWindowClickListener(object : GoogleMap.OnInfoWindowClickListener{
+                            override fun onInfoWindowClick(p0: Marker?) {
+
+                                val alertDialog = AlertDialog.Builder(requireContext())
+                                val inflater = layoutInflater
+                                val convertView = inflater.inflate(R.layout.dialog_item, null)
+                                alertDialog.setView(convertView)
+
+                                alertDialog.show()
+
+                            }
+
+                        })
+
 
                         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, destination)
 
@@ -335,6 +386,14 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
     }
 
     private fun filterCategory(simpanKategori: String) {
+        val beachBitmap = BitmapFactory.decodeResource(resources, R.drawable.beach)
+        val beachMarker = Bitmap.createScaledBitmap(beachBitmap, 90, 90, false)
+        val hillBitmap = BitmapFactory.decodeResource(resources, R.drawable.mountain)
+        val hillMarker = Bitmap.createScaledBitmap(hillBitmap, 90, 90, false)
+        val mountainBitmap = BitmapFactory.decodeResource(resources, R.drawable.mountain)
+        val mountainMarker = Bitmap.createScaledBitmap(mountainBitmap, 90, 90, false)
+        val waterfallBitmap = BitmapFactory.decodeResource(resources, R.drawable.waterfall)
+        val waterfallMarker = Bitmap.createScaledBitmap(waterfallBitmap, 90, 90, false)
         apiService.getFilterKategori(simpanKategori).enqueue(object : Callback<DestinationResponse> {
             override fun onFailure(call: Call<DestinationResponse>, t: Throwable) {
                 Toast.makeText(context, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
@@ -354,12 +413,35 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
 
                         val latlng : LatLng = LatLng(lat,lng)
 
-                        googleMap.addMarker(MarkerOptions()
-                            .position(latlng)
-                            .title(it.name_destination)
-                            .snippet(it.address_destination)
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
-                        )
+                        if(it.id_kategori=="Pantai"){
+                            googleMap.addMarker(MarkerOptions()
+                                .position(latlng)
+                                .title(it.name_destination)
+                                .snippet(it.address_destination)
+                                .icon(BitmapDescriptorFactory.fromBitmap(beachMarker))
+                            )
+                        }else if(it.id_kategori=="Bukit"){
+                            googleMap.addMarker(MarkerOptions()
+                                .position(latlng)
+                                .title(it.name_destination)
+                                .snippet(it.address_destination)
+                                .icon(BitmapDescriptorFactory.fromBitmap(hillMarker))
+                            )
+                        }else if(it.id_kategori=="Gunung"){
+                            googleMap.addMarker(MarkerOptions()
+                                .position(latlng)
+                                .title(it.name_destination)
+                                .snippet(it.address_destination)
+                                .icon(BitmapDescriptorFactory.fromBitmap(mountainMarker))
+                            )
+                        }else if(it.id_kategori=="Air Terjun"){
+                            googleMap.addMarker(MarkerOptions()
+                                .position(latlng)
+                                .title(it.name_destination)
+                                .snippet(it.address_destination)
+                                .icon(BitmapDescriptorFactory.fromBitmap(waterfallMarker))
+                            )
+                        }
 
                         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, destination)
 
@@ -398,5 +480,4 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
 
         })
     }
-
 }

@@ -3,9 +3,12 @@ package com.skripsi.sigwam
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.skripsi.sigwam.model.Destination
 import com.skripsi.sigwam.service.ServiceBuilder
 import kotlinx.android.synthetic.main.activity_destiny_detail.*
+import kotlinx.android.synthetic.main.list_item.view.*
 
 
 class DestinationDetailActivity : AppCompatActivity(), View.OnClickListener {
@@ -33,7 +36,14 @@ class DestinationDetailActivity : AppCompatActivity(), View.OnClickListener {
         txv_title.text = destination.name_destination
         txv_address.text = destination.address_destination
         txv_desc.text = destination.desc_destination
-//        et_image.setText(destination.img_destination)
+        if(destination.img_destination == ""){
+            imv_destination.setImageResource(R.drawable.undraw_journey_lwlj)
+        }else{
+            Glide.with(baseContext)
+                .load("http://192.168.1.71/rest_api/rest-server-sig/assets/foto/"+destination.img_destination)
+                .apply(RequestOptions().override(500, 500))
+                .into(imv_destination)
+        }
         txv_cat.text = destination.id_kategori
         txv_kabupaten.text = destination.id_kabupaten
         txv_kecamatan.text = destination.id_kecamatan
