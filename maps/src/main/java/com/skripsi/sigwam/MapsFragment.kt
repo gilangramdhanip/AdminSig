@@ -103,7 +103,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
         googleMap = map?: return
 
         if (isPermissionGiven()){
-            googleMap.setPadding(0,150,0,0)
+            googleMap.setPadding(0,200,0,0)
             googleMap.isMyLocationEnabled = true
             googleMap.uiSettings.isMyLocationButtonEnabled = true
             googleMap.uiSettings.isZoomControlsEnabled = true

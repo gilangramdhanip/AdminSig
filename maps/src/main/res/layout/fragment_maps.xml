@@ -10,7 +10,9 @@
         android:id="@+id/map"
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true" />
 
     <LinearLayout
         android:id="@+id/ln_top_menu"
@@ -26,21 +28,22 @@
             android:layout_height="match_parent"
             android:layout_marginStart="8dp"
             android:layout_weight="0.9"
-            android:background="#ffffff"
+            android:background="@drawable/shape"
             android:padding="5dp"
-            android:drawableRight="@drawable/places_ic_search"
-            android:hint="   Cari disini.." />
+            android:drawableLeft="@drawable/places_ic_search"
+            android:hint="Cari disini.." />
 
         <TextView
             android:id="@+id/filter_cat"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
-            android:background="@android:color/white"
+            android:background="@drawable/shapefilter"
             android:drawableTop="@drawable/ic_filter_list_black_24dp"
             android:paddingLeft="10dp"
             android:paddingBottom="8dp"
-            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="20dp"
             android:text="Filter"
             android:textColor="#B1B0B0"
             android:textSize="10sp"
