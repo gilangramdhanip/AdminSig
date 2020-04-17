@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/imageView2"
@@ -24,7 +24,9 @@
         android:fontFamily="sans-serif"
         android:gravity="center_vertical"
         android:text="Title"
-        android:textSize="16sp"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -33,16 +35,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:drawablePadding="16dp"
         android:fontFamily="sans-serif"
         android:gravity="center_vertical"
         android:text="Category"
-        android:textSize="16sp"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toBottomOf="@+id/tv_title" />
 
     <TextView
+        android:lineSpacingMultiplier="5"
         android:id="@+id/tv_addres"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -52,21 +57,28 @@
         android:fontFamily="sans-serif"
         android:gravity="center_vertical"
         android:text="Alamat"
-        android:textSize="16sp"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toBottomOf="@+id/tv_category" />
 
     <TextView
+        android:lineSpacingMultiplier="5"
         android:id="@+id/tv_desc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         android:drawablePadding="16dp"
         android:fontFamily="sans-serif"
         android:gravity="center_vertical"
         android:text="Alamat"
-        android:textSize="16dp"
+        android:textSize="10sp"
+        android:layout_marginBottom="30dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/imageView2"
         app:layout_constraintTop_toBottomOf="@+id/tv_addres" />
 

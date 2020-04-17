@@ -30,12 +30,12 @@
 
 		<TextView
 			android:id="@+id/txv_dest_desc"
-			android:layout_width="wrap_content"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="28dp"
-			android:layout_marginTop="8dp"
-			android:maxLength="35"
+			android:layout_marginTop="12dp"
 			android:lineSpacingMultiplier="2"
+			android:maxLength="40"
 			android:text="@string/description"
 			app:layout_constraintStart_toEndOf="@+id/iv_home"
 			app:layout_constraintTop_toBottomOf="@+id/txv_destination" />
@@ -56,7 +56,6 @@
 			android:id="@+id/iv_home"
 			android:layout_width="65dp"
 			android:layout_height="65dp"
-
 			android:layout_marginLeft="3dp"
 			android:layout_marginTop="3dp"
 			app:layout_constraintBottom_toBottomOf="parent"

@@ -46,6 +46,7 @@ import com.skripsi.sigwam.model.MainViewModelKategori
 import com.skripsi.sigwam.service.ServiceBuilder
 import kotlinx.android.synthetic.main.bottom_sheet_category.view.*
 import kotlinx.android.synthetic.main.dialog_item.*
+import kotlinx.android.synthetic.main.dialog_item.view.*
 import kotlinx.android.synthetic.main.fragment_maps.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -60,9 +61,6 @@ import kotlin.collections.ArrayList
 class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
 
     companion object {
-        const val REQUEST_CHECK_SETTINGS = 43
-        private const val TAG = "MapsFragment"
-        var EXTRA_NAME = "extra_name"
 
         const val EXTRA_LAT = "extra_lat"
         const val EXTRA_LONG = "extra_lng"
@@ -74,7 +72,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
     lateinit var cat : List<Kategori>
     lateinit var mainViewModelKategori: MainViewModelKategori
     lateinit var kategoriAdapter: KategoriAdapter
-    lateinit var desti: Destination
     private val kategori = ArrayList<Kategori>()
     private lateinit var category : Kategori
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -235,6 +232,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
     }
 
     private fun loadDestination(){
+        var markerOption = MarkerOptions()
         val beachBitmap = BitmapFactory.decodeResource(resources, R.drawable.beach)
         val beachMarker = Bitmap.createScaledBitmap(beachBitmap, 90, 90, false)
         val hillBitmap = BitmapFactory.decodeResource(resources, R.drawable.mountain)
@@ -256,59 +254,60 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                     destination = response.body()!!.data
 
                     destination.forEach {
-
                         val lat = it.lat_destination!!.toDouble()
                         val lng = it.lng_destination!!.toDouble()
-
                         val latlng : LatLng = LatLng(lat,lng)
 
                         if(it.id_kategori=="Pantai"){
-                            googleMap.addMarker(MarkerOptions()
-                                .position(latlng)
-                                .title(it.name_destination)
-                                .snippet(it.address_destination)
-                                .icon(BitmapDescriptorFactory.fromBitmap(beachMarker))
-                            )
+
+                            markerOption.position(latlng)
+                            markerOption.title(it.name_destination)
+                            markerOption.snippet(it.address_destination)
+                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(beachMarker))
                         }else if(it.id_kategori=="Bukit"){
-                        googleMap.addMarker(MarkerOptions()
-                            .position(latlng)
-                            .title(it.name_destination)
-                            .snippet(it.address_destination)
-                            .icon(BitmapDescriptorFactory.fromBitmap(hillMarker))
-                        )
+                            markerOption.position(latlng)
+                            markerOption.title(it.name_destination)
+                            markerOption.snippet(it.address_destination)
+                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(hillMarker))
+
                         }else if(it.id_kategori=="Gunung"){
-                            googleMap.addMarker(MarkerOptions()
-                                .position(latlng)
-                                .title(it.name_destination)
-                                .snippet(it.address_destination)
-                                .icon(BitmapDescriptorFactory.fromBitmap(mountainMarker))
-                            )
+                            markerOption.position(latlng)
+                            markerOption.title(it.name_destination)
+                            markerOption.snippet(it.address_destination)
+                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(mountainMarker))
+
                         }else if(it.id_kategori=="Air Terjun"){
-                            googleMap.addMarker(MarkerOptions()
-                                .position(latlng)
-                                .title(it.name_destination)
-                                .snippet(it.address_destination)
-                                .icon(BitmapDescriptorFactory.fromBitmap(waterfallMarker))
-                            )
+                            markerOption.position(latlng)
+                            markerOption.title(it.name_destination)
+                            markerOption.snippet(it.address_destination)
+                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(waterfallMarker))
                         }
+                        val desti = Destination(id,it.name_destination, it.lat_destination,it.lng_destination, it.address_destination, it.desc_destination, it.id_kategori, it.img_destination, it.id_kabupaten, it.id_kecamatan)
+                        val m = googleMap.addMarker(markerOption)
+                        m.tag = desti
 
                         googleMap.setOnInfoWindowClickListener(object : GoogleMap.OnInfoWindowClickListener{
                             override fun onInfoWindowClick(p0: Marker?) {
 
-                                val alertDialog = AlertDialog.Builder(requireContext())
-                                val inflater = layoutInflater
-                                val convertView = inflater.inflate(R.layout.dialog_item, null)
-                                alertDialog.setView(convertView)
+                               val desti : Destination = p0!!.tag as Destination
 
-                                alertDialog.show()
+                                val intent = Intent(context, DestinationDetailActivity::class.java)
+                                intent.putExtra(DestinationDetailActivity.EXTRA_DETAIl, desti)
+                                startActivity(intent)
 
+//                                val alertDialog = AlertDialog.Builder(requireContext())
+//                                val inflater = layoutInflater
+//                                val convertView = inflater.inflate(R.layout.dialog_item, null)
+//                                alertDialog.setView(convertView)
+//                                convertView.tv_title.text = desti.name_destination
+//                                convertView.tv_addres.text = desti.address_destination
+//                                convertView.tv_category.text = desti.id_kategori
+//                                convertView.tv_desc.text = desti.desc_destination
+//
+//                                alertDialog.show()
                             }
-
                         })
-
-
                         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, destination)
-
                         search_view.threshold=0
                         search_view.setAdapter(adapter)
                     }
@@ -326,15 +325,10 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                                     .build()
 
                                 Toast.makeText(requireContext(), " $c , $b", Toast.LENGTH_LONG).show()
-
                         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
 
                         }
-
-
                         googleMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
-
-
                     Log.d("onResponse", response.toString())
                 }
 
@@ -386,6 +380,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
     }
 
     private fun filterCategory(simpanKategori: String) {
+        var markerOption = MarkerOptions()
         val beachBitmap = BitmapFactory.decodeResource(resources, R.drawable.beach)
         val beachMarker = Bitmap.createScaledBitmap(beachBitmap, 90, 90, false)
         val hillBitmap = BitmapFactory.decodeResource(resources, R.drawable.mountain)
@@ -414,34 +409,54 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                         val latlng : LatLng = LatLng(lat,lng)
 
                         if(it.id_kategori=="Pantai"){
-                            googleMap.addMarker(MarkerOptions()
-                                .position(latlng)
-                                .title(it.name_destination)
-                                .snippet(it.address_destination)
-                                .icon(BitmapDescriptorFactory.fromBitmap(beachMarker))
-                            )
+
+                            markerOption.position(latlng)
+                            markerOption.title(it.name_destination)
+                            markerOption.snippet(it.address_destination)
+                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(beachMarker))
                         }else if(it.id_kategori=="Bukit"){
-                            googleMap.addMarker(MarkerOptions()
-                                .position(latlng)
-                                .title(it.name_destination)
-                                .snippet(it.address_destination)
-                                .icon(BitmapDescriptorFactory.fromBitmap(hillMarker))
-                            )
+                            markerOption.position(latlng)
+                            markerOption.title(it.name_destination)
+                            markerOption.snippet(it.address_destination)
+                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(hillMarker))
+
                         }else if(it.id_kategori=="Gunung"){
-                            googleMap.addMarker(MarkerOptions()
-                                .position(latlng)
-                                .title(it.name_destination)
-                                .snippet(it.address_destination)
-                                .icon(BitmapDescriptorFactory.fromBitmap(mountainMarker))
-                            )
+                            markerOption.position(latlng)
+                            markerOption.title(it.name_destination)
+                            markerOption.snippet(it.address_destination)
+                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(mountainMarker))
+
                         }else if(it.id_kategori=="Air Terjun"){
-                            googleMap.addMarker(MarkerOptions()
-                                .position(latlng)
-                                .title(it.name_destination)
-                                .snippet(it.address_destination)
-                                .icon(BitmapDescriptorFactory.fromBitmap(waterfallMarker))
-                            )
+                            markerOption.position(latlng)
+                            markerOption.title(it.name_destination)
+                            markerOption.snippet(it.address_destination)
+                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(waterfallMarker))
                         }
+                        val desti = Destination(id,it.name_destination, it.lat_destination,it.lng_destination, it.address_destination, it.desc_destination, it.id_kategori, it.img_destination, it.id_kabupaten, it.id_kecamatan)
+                        val m = googleMap.addMarker(markerOption)
+                        m.tag = desti
+
+                        googleMap.setOnInfoWindowClickListener(object : GoogleMap.OnInfoWindowClickListener{
+                            override fun onInfoWindowClick(p0: Marker?) {
+
+                                val desti : Destination = p0!!.tag as Destination
+
+                                val intent = Intent(context, DestinationDetailActivity::class.java)
+                                intent.putExtra(DestinationDetailActivity.EXTRA_DETAIl, desti)
+                                startActivity(intent)
+
+//                                val alertDialog = AlertDialog.Builder(requireContext())
+//                                val inflater = layoutInflater
+//                                val convertView = inflater.inflate(R.layout.dialog_item, null)
+//                                alertDialog.setView(convertView)
+//                                convertView.tv_title.text = desti.name_destination
+//                                convertView.tv_addres.text = desti.address_destination
+//                                convertView.tv_category.text = desti.id_kategori
+//                                convertView.tv_desc.text = desti.desc_destination
+//
+//                                alertDialog.show()
+                            }
+                        })
 
                         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, destination)
 

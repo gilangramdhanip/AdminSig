@@ -25,8 +25,8 @@ class DestinationDetailActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_destiny_detail)
-
-        supportActionBar?.hide()
+//
+//        supportActionBar?.hide()
 
         destination = intent.getParcelableExtra(EXTRA_DETAIl) as Destination
 

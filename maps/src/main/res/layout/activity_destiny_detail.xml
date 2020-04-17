@@ -7,6 +7,10 @@
 	android:background="@android:color/white"
 	tools:context=".DestinationDetailActivity">
 
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
 	<LinearLayout
 		android:orientation="vertical"
 		android:layout_width="match_parent"
@@ -21,11 +25,12 @@
 			android:src="@drawable/undraw_journey_lwlj" />
 
 		<LinearLayout
+			android:layout_marginTop="-65dp"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_gravity="bottom"
 			android:layout_marginBottom="16dp"
-			android:background="#4D000000"
+			android:background="#7F000000"
 			android:gravity="center_vertical"
 			android:orientation="vertical">
 
@@ -61,8 +66,8 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_marginBottom="8dp">
-
 				<TextView
+					android:drawableLeft="@drawable/ic_person_pin_circle_black_24dp"
 					style="@style/TextSpec.Field"
 					android:text="@string/alamat"
 					tools:text="Alamat" />
@@ -79,6 +84,7 @@
 				android:layout_marginBottom="8dp">
 
 				<TextView
+					android:drawableLeft="@drawable/description"
 					style="@style/TextSpec.Field"
 					android:text="deskripsi"
 					tools:text="Deskripsi" />
@@ -95,6 +101,7 @@
 				android:layout_marginBottom="8dp">
 
 				<TextView
+					android:drawableLeft="@drawable/disctrict"
 					style="@style/TextSpec.Field"
 					android:text="@string/kabupaten"
 					tools:text="Kabupaten" />
@@ -111,6 +118,7 @@
 				android:layout_marginBottom="8dp">
 
 				<TextView
+					android:drawableLeft="@drawable/disctrict"
 					style="@style/TextSpec.Field"
 					android:text="@string/kecamatan"
 					tools:text="Kecamatan" />
@@ -135,4 +143,6 @@
 
 
 	</LinearLayout>
+
+	</ScrollView>
 </FrameLayout>
