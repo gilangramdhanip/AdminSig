@@ -73,6 +73,7 @@ class DestinationListActivity : AppCompatActivity() {
                 }else{
                     spin_kecamatan.visibility = View.VISIBLE
                     kabupaten = spin_kabupaten.selectedItem.toString()
+                    destinationAdapter.filter.filter(kabupaten)
                     simpanNamaKab = spinnerKab[position-1].id_kabupaten
                     setKecamatanSpinner(simpanNamaKab)
                 }
@@ -97,6 +98,7 @@ class DestinationListActivity : AppCompatActivity() {
                     kecamatan = ""
                 }else{
                     kecamatan = spin_kecamatan.selectedItem.toString()
+                    destinationAdapter.filter.filter(kecamatan)
                 }
                 Toast.makeText(this@DestinationListActivity, " Kamu memilih spinner "+kecamatan, Toast.LENGTH_SHORT).show()
             }

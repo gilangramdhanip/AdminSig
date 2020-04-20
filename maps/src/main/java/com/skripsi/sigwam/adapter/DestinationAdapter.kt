@@ -1,6 +1,7 @@
 package com.skripsi.sigwam.adapter
 
 import android.content.Intent
+import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,6 +60,8 @@ class DestinationAdapter(private val destinationList: ArrayList<Destination>): R
             with(itemView){
                 txv_destination.text = destination.name_destination
                 txv_dest_desc.text = destination.desc_destination
+                txv_dest_desc.maxLines = 1
+                txv_dest_desc.ellipsize = TextUtils.TruncateAt.END
                 txv_cat.text = destination.id_kategori
                 if(destination.img_destination == ""){
                     iv_home.setImageResource(R.drawable.undraw_journey_lwlj)
@@ -88,7 +91,7 @@ class DestinationAdapter(private val destinationList: ArrayList<Destination>): R
                 else {
                     val resultlist = ArrayList<Destination>()
                     for (row in destinationList) {
-                        if (row.name_destination!!.toLowerCase().contains(charSearch.toLowerCase()))
+                        if (row.id_kabupaten!!.toLowerCase().contains(charSearch.toLowerCase()) || row.id_kecamatan!!.toLowerCase().contains(charSearch.toLowerCase()))
                             resultlist.add(row)
                     }
                     filterListResult = resultlist

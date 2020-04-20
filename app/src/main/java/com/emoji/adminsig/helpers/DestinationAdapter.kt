@@ -92,8 +92,11 @@ class DestinationAdapter(private val destinationList: ArrayList<Destination>): R
 				else {
 					val resultlist = ArrayList<Destination>()
 					for (row in destinationList) {
-						if (row.name_destination!!.toLowerCase().contains(charSearch.toLowerCase()))
+						if (row.id_kabupaten!!.toLowerCase().contains(charSearch.toLowerCase()) || row.id_kecamatan!!.toLowerCase().contains(charSearch.toLowerCase()))
 							resultlist.add(row)
+						else if(row.name_destination!!.toLowerCase().contains(charSearch.toLowerCase())) {
+							resultlist.add(row)
+						}
 					}
 					filterListResult = resultlist
 				}

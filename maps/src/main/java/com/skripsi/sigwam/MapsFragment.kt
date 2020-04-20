@@ -1,8 +1,6 @@
 package com.skripsi.sigwam
 
 import android.app.Activity
-import android.app.AlertDialog
-import android.app.Dialog
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
@@ -15,7 +13,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
@@ -24,14 +21,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
-import com.google.android.gms.location.places.Place
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -45,8 +40,6 @@ import com.skripsi.sigwam.model.Kategori
 import com.skripsi.sigwam.model.MainViewModelKategori
 import com.skripsi.sigwam.service.ServiceBuilder
 import kotlinx.android.synthetic.main.bottom_sheet_category.view.*
-import kotlinx.android.synthetic.main.dialog_item.*
-import kotlinx.android.synthetic.main.dialog_item.view.*
 import kotlinx.android.synthetic.main.fragment_maps.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -294,17 +287,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                                 val intent = Intent(context, DestinationDetailActivity::class.java)
                                 intent.putExtra(DestinationDetailActivity.EXTRA_DETAIl, desti)
                                 startActivity(intent)
-
-//                                val alertDialog = AlertDialog.Builder(requireContext())
-//                                val inflater = layoutInflater
-//                                val convertView = inflater.inflate(R.layout.dialog_item, null)
-//                                alertDialog.setView(convertView)
-//                                convertView.tv_title.text = desti.name_destination
-//                                convertView.tv_addres.text = desti.address_destination
-//                                convertView.tv_category.text = desti.id_kategori
-//                                convertView.tv_desc.text = desti.desc_destination
-//
-//                                alertDialog.show()
                             }
                         })
                         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, destination)
