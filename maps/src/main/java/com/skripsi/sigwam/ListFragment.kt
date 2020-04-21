@@ -10,14 +10,19 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
 import com.skripsi.sigwam.adapter.DestinationAdapter
 import com.skripsi.sigwam.model.*
 import com.skripsi.sigwam.service.DestinationService
 import com.skripsi.sigwam.service.ServiceBuilder
 import kotlinx.android.synthetic.main.fragment_list.*
+import kotlinx.android.synthetic.main.fragment_maps.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -72,6 +77,8 @@ class ListFragment : Fragment() {
                 if(position == 0){
                     spin_kecamatan.visibility = View.GONE
                     kabupaten = ""
+                    rvMaps.clearOnChildAttachStateChangeListeners()
+                    loadDestinationList()
                 }else{
                     spin_kecamatan.visibility = View.VISIBLE
                     kabupaten = spin_kabupaten.selectedItem.toString()
@@ -96,13 +103,14 @@ class ListFragment : Fragment() {
                 id: Long
             ) {
 
-                if(parent!!.selectedItem == "Pilih Kecamatan"){
+                if(position == 0){
                     kecamatan = ""
+                    destinationAdapter.filter.filter(kabupaten)
                 }else{
                     kecamatan = spin_kecamatan.selectedItem.toString()
                     destinationAdapter.filter.filter(kecamatan)
+                    setKecamatan(kabupaten, kecamatan)
                 }
-                Toast.makeText(requireContext(), " Kamu memilih spinner "+kecamatan, Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -126,6 +134,7 @@ class ListFragment : Fragment() {
         mainViewModel.getDestination().observe(this, Observer { destination ->
             if(destination!=null){
                 destinationAdapter.setData(destination)
+                txv_jumlah_destinasi.text = destinationAdapter.itemCount.toString()
                 showLoading(false)
             }
         })
@@ -168,6 +177,7 @@ class ListFragment : Fragment() {
                     val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listSpinner)
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spin_kabupaten.adapter = adapter
+
                     Log.d("KabupatenResponse", response.toString())
                 }
 
@@ -202,12 +212,38 @@ class ListFragment : Fragment() {
                     val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listSpinner)
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spin_kecamatan.adapter = adapter
+                    txv_jumlah_destinasi.text = destinationAdapter.itemCount.toString()
+
                     Log.d("berhasilResponse", response.toString())
                 }
 
                 else{
                     Log.d("gagalresponse", response.toString())
                     Toast.makeText(requireContext(), "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        })
+    }
+
+    private fun setKecamatan(idkabupaten: String,idkecamatan: String){
+        apiService.getKecamatanbyid(idkabupaten,idkecamatan).enqueue(object : Callback<KecamatanResponse>{
+            override fun onFailure(call: Call<KecamatanResponse>, t: Throwable) {
+                Toast.makeText(requireActivity(), "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(
+                call: Call<KecamatanResponse>,
+                response: Response<KecamatanResponse>
+            ) {
+                if(response.isSuccessful){
+                    txv_jumlah_destinasi.text = destinationAdapter.itemCount.toString()
+                    Log.d("berhasilResponse", response.toString())
+                }
+
+                else{
+                    Log.d("gagalresponse", response.toString())
+                    Toast.makeText(requireActivity(), "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
                 }
             }
 
