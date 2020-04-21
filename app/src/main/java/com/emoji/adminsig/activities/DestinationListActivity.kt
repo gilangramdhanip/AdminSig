@@ -11,6 +11,7 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.SearchView
+import androidx.core.view.size
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -38,6 +39,7 @@ class DestinationListActivity : AppCompatActivity() {
     private lateinit var kecamatan : String
 
     lateinit var simpanNamaKab : String
+    lateinit var simpanNamaKec : String
 
     private val des :Destination? = null
     private lateinit var spinner: Spinner
@@ -70,7 +72,9 @@ class DestinationListActivity : AppCompatActivity() {
                 if(position == 0){
                     spin_kecamatan.visibility = View.GONE
                     kabupaten = ""
-                }else{
+                    destiny_recycler_view.clearOnChildAttachStateChangeListeners()
+                    loadDestination()
+                }else if(position > 0){
                     spin_kecamatan.visibility = View.VISIBLE
                     kabupaten = spin_kabupaten.selectedItem.toString()
                     destinationAdapter.filter.filter(kabupaten)
@@ -94,9 +98,10 @@ class DestinationListActivity : AppCompatActivity() {
                 id: Long
             ) {
 
-                if(parent!!.selectedItem == "Pilih Kecamatan"){
+                if(position == 0){
                     kecamatan = ""
-                }else{
+                    destinationAdapter.filter.filter(kabupaten)
+                }else if(position > 0){
                     kecamatan = spin_kecamatan.selectedItem.toString()
                     destinationAdapter.filter.filter(kecamatan)
                 }
@@ -172,7 +177,7 @@ class DestinationListActivity : AppCompatActivity() {
         mainViewModel.getDestination().observe(this, Observer { destination ->
             if(destination!=null){
                 destinationAdapter.setData(destination)
-                txv_jumlah_destinasi.text = destination.size.toString()
+                txv_jumlah_destinasi.text = destinationAdapter.itemCount.toString()
                 showLoading(false)
             }
         })
@@ -182,7 +187,7 @@ class DestinationListActivity : AppCompatActivity() {
 
         apiService.getKabupaten().enqueue(object : Callback<KabupatenResponse>{
             override fun onFailure(call: Call<KabupatenResponse>, t: Throwable) {
-                Toast.makeText(this@DestinationListActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this@DestinationListActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -200,6 +205,7 @@ class DestinationListActivity : AppCompatActivity() {
                     val adapter = ArrayAdapter(this@DestinationListActivity, android.R.layout.simple_spinner_item, listSpinner)
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spin_kabupaten.adapter = adapter
+                    txv_jumlah_destinasi.text = destinationAdapter.itemCount.toString()
                     Log.d("KabupatenResponse", response.toString())
                 }
 
@@ -216,7 +222,7 @@ class DestinationListActivity : AppCompatActivity() {
     private fun setKecamatanSpinner(idkabupaten: String){
         apiService.getKecamatan(idkabupaten).enqueue(object : Callback<KecamatanResponse>{
             override fun onFailure(call: Call<KecamatanResponse>, t: Throwable) {
-                Toast.makeText(this@DestinationListActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this@DestinationListActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -234,6 +240,7 @@ class DestinationListActivity : AppCompatActivity() {
                     val adapter = ArrayAdapter(this@DestinationListActivity, android.R.layout.simple_spinner_item, listSpinner)
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spin_kecamatan.adapter = adapter
+                    txv_jumlah_destinasi.text = destinationAdapter.itemCount.toString()
                     Log.d("berhasilResponse", response.toString())
                 }
 

@@ -18,7 +18,7 @@
         <activity android:name=".AgungActivity"></activity>
         <activity
             android:name=".activities.DestinationListActivity"
-            android:label="Admin Sigwam"
+            android:label="Admin SIWITA"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

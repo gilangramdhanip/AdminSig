@@ -50,7 +50,6 @@ class DestinationAdapter(private val destinationList: ArrayList<Destination>): R
 	override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
 
 		holder.bind(filterListResult[position])
-//				Glide.with(context).load(ServiceBuilder.+ filterListResult[position].img_destination).into(itemView.iv_image)
 
 	}
 
@@ -94,6 +93,7 @@ class DestinationAdapter(private val destinationList: ArrayList<Destination>): R
 					for (row in destinationList) {
 						if (row.id_kabupaten!!.toLowerCase().contains(charSearch.toLowerCase()) || row.id_kecamatan!!.toLowerCase().contains(charSearch.toLowerCase()))
 							resultlist.add(row)
+
 						else if(row.name_destination!!.toLowerCase().contains(charSearch.toLowerCase())) {
 							resultlist.add(row)
 						}
