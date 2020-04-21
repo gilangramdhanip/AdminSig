@@ -71,7 +71,6 @@ class DestinationListActivity : AppCompatActivity() {
 
                 if(position == 0){
                     spin_kecamatan.visibility = View.GONE
-                    kabupaten = ""
                     destiny_recycler_view.clearOnChildAttachStateChangeListeners()
                     loadDestination()
                 }else if(position > 0){
@@ -81,7 +80,7 @@ class DestinationListActivity : AppCompatActivity() {
                     simpanNamaKab = spinnerKab[position-1].id_kabupaten
                     setKecamatanSpinner(simpanNamaKab)
                 }
-                Toast.makeText(this@DestinationListActivity, " Kamu memilih spinner "+kabupaten, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@DestinationListActivity, " Kamu memilih spinner ", Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -101,9 +100,10 @@ class DestinationListActivity : AppCompatActivity() {
                 if(position == 0){
                     kecamatan = ""
                     destinationAdapter.filter.filter(kabupaten)
-                }else if(position > 0){
+                }else{
                     kecamatan = spin_kecamatan.selectedItem.toString()
                     destinationAdapter.filter.filter(kecamatan)
+                    setKecamatan(kabupaten, kecamatan)
                 }
                 Toast.makeText(this@DestinationListActivity, " Kamu memilih spinner "+kecamatan, Toast.LENGTH_SHORT).show()
             }
@@ -240,6 +240,30 @@ class DestinationListActivity : AppCompatActivity() {
                     val adapter = ArrayAdapter(this@DestinationListActivity, android.R.layout.simple_spinner_item, listSpinner)
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spin_kecamatan.adapter = adapter
+                    txv_jumlah_destinasi.text = destinationAdapter.itemCount.toString()
+                    Log.d("berhasilResponse", response.toString())
+                }
+
+                else{
+                    Log.d("gagalresponse", response.toString())
+                    Toast.makeText(this@DestinationListActivity, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+        })
+    }
+
+    private fun setKecamatan(idkabupaten: String,idkecamatan: String){
+        apiService.getKecamatanbyid(idkabupaten,idkecamatan).enqueue(object : Callback<KecamatanResponse>{
+            override fun onFailure(call: Call<KecamatanResponse>, t: Throwable) {
+                Toast.makeText(this@DestinationListActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onResponse(
+                call: Call<KecamatanResponse>,
+                response: Response<KecamatanResponse>
+            ) {
+                if(response.isSuccessful){
                     txv_jumlah_destinasi.text = destinationAdapter.itemCount.toString()
                     Log.d("berhasilResponse", response.toString())
                 }

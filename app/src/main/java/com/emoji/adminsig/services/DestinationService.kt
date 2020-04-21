@@ -28,9 +28,13 @@ interface DestinationService {
     @GET("api/kategori")
     fun getKategori(): Call<KategoriResponse>
 
-
     @GET("api/kecamatan")
     fun getKecamatan(@Query("id_kabupaten") id_kabupaten: String): Call<KecamatanResponse>
+
+    @GET("api/destination")
+    fun getKecamatanbyid(
+        @Query("id_kabupaten") id_kabupaten: String,
+        @Query("id_kecamatan") id_kecamatan: String): Call<KecamatanResponse>
 
 
     @FormUrlEncoded
