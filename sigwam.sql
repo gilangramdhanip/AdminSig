@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 17, 2020 at 09:39 AM
+-- Generation Time: Apr 21, 2020 at 12:30 PM
 -- Server version: 10.4.11-MariaDB
 -- PHP Version: 7.2.28
 
@@ -21,6 +21,25 @@ SET time_zone = "+00:00";
 --
 -- Database: `sigwam`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `admin`
+--
+
+CREATE TABLE `admin` (
+  `id_admin` varchar(4) NOT NULL,
+  `username` varchar(15) NOT NULL,
+  `password` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='table admin to login ';
+
+--
+-- Dumping data for table `admin`
+--
+
+INSERT INTO `admin` (`id_admin`, `username`, `password`) VALUES
+('ADM1', 'adminsigwam', 'admin123');
 
 -- --------------------------------------------------------
 
@@ -106,17 +125,176 @@ INSERT INTO `destination` (`id_destination`, `name_destination`, `lat_destinatio
 (145, 'Bukit Tangkok', '-8.3684022', '116.5382356', 'Sembalun Lawang, Sembalun, Sembalun Lawang, Sembalun, Kabupaten Lombok Timur, Nusa Tenggara Bar', 'JGJR+J5 Sembalun Lawang, East Lombok Regency, West Nusa Tenggara', 'Sembalun', '', 'Bukit', 'Lombok Timur'),
 (146, 'Bukit Selong', '-8.3640592', '116.538192', 'Sembalun Lawang, Sembalun, East Lombok Regency, West Nusa Tenggara 83656', 'Sembalun Lawang, East Lombok Regency, West Nusa Tenggara', 'Sembalun', '', 'Bukit', 'Lombok Timur'),
 (147, 'Bukit Anak Dara', '-8.3640383', '116.5584134', 'Sembalun Lawang, Sembalun, Selong, Nusa Tenggara Bar. 83666', 'Sembalun Lawang, East Lombok Regency, West Nusa Tenggara', 'Sembalun', '', 'Bukit', 'Lombok Timur'),
-(148, 'Bukit Pergasingan', '-8.3454136', '116.5308605', 'Sembalun Lawang, Sembalun, Sembalun Lawang, Sembalun, East Lombok Regency, West Nusa Tenggara', 'Sembalun Lawang, East Lombok Regency, West Nusa Tenggara', 'Sembalun', '', 'Bukit', 'Lombok Timur');
+(148, 'Bukit Pergasingan', '-8.3454136', '116.5308605', 'Sembalun Lawang, Sembalun, Sembalun Lawang, Sembalun, East Lombok Regency, West Nusa Tenggara', 'Sembalun Lawang, East Lombok Regency, West Nusa Tenggara', 'Sembalun', '', 'Bukit', 'Lombok Timur'),
+(234, 'Pantai Kerandangan 1', '-8.489101', '116.0345789', 'Jl. Raya Senggigi, Pemenang Bar., Pemenang, Kabupaten Lombok Utara, Nusa Tenggara Bar. 83352', '', 'Lingsar', '', 'Pantai', 'Lombok Barat'),
+(235, 'Pantai Kerandangan 2', '8.4849899', '116.0325224', 'Jl. Raya Senggigi, Senggigi,Kabupaten Lombok Barat, Nusa Tenggara Bar.', '', 'Batu Layar', '', 'Pantai', 'Lombok Barat'),
+(236, 'Pantai Klui', '-8.4662738', '116.0349154', 'Malaka, Pemenang, North Lombok Regency, West Nusa Tenggara', '', '', '', 'Pantai', ''),
+(237, 'Air Terjun Tibu Ijo', '-8.4933665', '116.1032595', 'Kekait, Gunung Sari, West Lombok Regency, West Nusa Tenggara 83351', '', '', '', 'Air Terjun', ''),
+(238, 'Air Terjun Mangku Sakti', '-8.3183535', '116.4659967', 'Sambik Elen, Bayan, Kabupaten Lombok Utara, Nusa Tenggara Bar. 83354', '', '', '', 'Air Terjun', ''),
+(239, 'Air Terjun Sendang Gile', '-8.3013626', '116.4052316', 'Senaru, Bayan, Kabupaten Lombok Utara, Nusa Tenggara Bar. 83354', '', '', '', 'Air Terjun', ''),
+(240, 'Air Terjun Jeruk manis', '-8.5154529', '116.4218347', 'Kembang Kuning, Sikur, Kabupaten Lombok Timur, Nusa Tenggara Bar. 83662', '', '', '', 'Air Terjun', ''),
+(241, 'Air Terjun Babak Pelangi', '-8.54587', '116.3297025', 'Lantan, Batukliang Utara, Kabupaten Lombok Tengah, Nusa Tenggara Bar. 83552', '', '', '', 'Air Terjun', ''),
+(242, 'Air Terjun Lembah Sriti', '-8.5471997', '116.3309374', 'Lantan, Batukliang Utara, Kabupaten Lombok Tengah, Nusa Tenggara Bar. 83552', '', '', '', 'Air Terjun', ''),
+(243, 'Air Terjung Benang Setukel', '-8.5330505', '116.3391815', 'Aik Berik, Batukliang Utara, Kabupaten Lombok Tengah, Nusa Tenggara Bar. 83552', '', '', '', 'Air Terjun', ''),
+(244, 'Air Terjun Benang Kelambu', '-8.5324278', '116.3348179', 'Desa, Aik Berik, Batukliang Utara, Kabupaten Lombok Tengah, Nusa Tenggara Bar. 83552', '', '', '', 'Air Terjun', ''),
+(245, 'Air Terjun Kelewon', '-8.5338409', '116.3375823', 'Aik Berik, North Batukliang, Central Lombok Regency, West Nusa Tenggara 83552', '', '', '', 'Air Terjun', ''),
+(246, 'Air Terjun Segenter', '-8.4937235', '116.2934777', 'Lebah Sempage, Narmada, Kabupaten Lombok Barat, Nusa Tenggara Bar. 83552', '', '', '', 'Air Terjun', ''),
+(247, 'Air Terjun Sesere', '-8.5341489', '116.3367189', 'Aik Berik, Batukliang Utara, Kabupaten Lombok Tengah, Nusa Tenggara Bar. 83552', '', '', '', 'Air Terjun', ''),
+(248, 'Air Terjun Tiu Sekeper', '-8.3586981', '116.3181963', 'Santong, Kayangan, North Lombok Regency, West Nusa Tenggara 83353', '', '', '', 'Air Terjun', ''),
+(249, 'Air Terjun Tiu Pupus', '-8.3397401', '116.2165472', 'Genggelang, Gangga, Kabupaten Lombok Utara, Nusa Tenggara Bar. 83353', '', '', '', 'Air Terjun', ''),
+(250, 'Air Terjun Tiu Timponan', '-8.5202969', '116.1997184', 'Batu Mekar, Lingsar, Kabupaten Lombok Barat, Nusa Tenggara Bar. 83371', '', '', '', 'Air Terjun', ''),
+(251, 'Air Terjun Tiu Pituq', '8.3400549', '116.2165895', 'Genggelang, Gangga, Kabupaten Lombok Utara, Nusa Tenggara Bar. 83353', '', '', '', 'Air Terjun', ''),
+(252, 'Air Terjun Tibu Atas', '-8.5404537', '116.22749', 'Sesaot, Narmada, Kabupaten Lombok Barat, Nusa Tenggara Bar. 83371', '', '', '', 'Air Terjun', ''),
+(253, 'Air Terjun Tibu Bunter', '-8.5362181', '116.2576645', 'Jln. Suranadi II, Sesaot, Sesaot, Narmada, Nusa Tenggara Bar. 83371', '', '', '', 'Air Terjun', ''),
+(254, 'Air Terjun Aiq Kelep', '-8.504493', '116.1738733', 'Langko, Lingsar, Kabupaten Lombok Barat, Nusa Tenggara Bar. 83371', '', 'Lingsar', '', 'Air Terjun', 'Lombok Barat');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kabupaten`
+--
+
+CREATE TABLE `kabupaten` (
+  `id_kabupaten` varchar(4) NOT NULL,
+  `name_kabupaten` varchar(20) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `kabupaten`
+--
+
+INSERT INTO `kabupaten` (`id_kabupaten`, `name_kabupaten`) VALUES
+('KAB1', 'Mataram'),
+('KAB2', 'Lombok Tengah'),
+('KAB3', 'Lombok Timur'),
+('KAB4', 'Lombok Utara'),
+('KAB5', 'Lombok Barat');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kategori`
+--
+
+CREATE TABLE `kategori` (
+  `id_kategori` varchar(5) NOT NULL,
+  `name_kategori` varchar(15) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `kategori`
+--
+
+INSERT INTO `kategori` (`id_kategori`, `name_kategori`) VALUES
+('Cat1', 'Pantai'),
+('Cat2', 'Gunung'),
+('Cat3', 'Bukit'),
+('Cat4', 'Air Terjun');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `kecamatan`
+--
+
+CREATE TABLE `kecamatan` (
+  `id_kecamatan` varchar(5) NOT NULL,
+  `name_kecamatan` varchar(20) NOT NULL,
+  `id_kabupaten` varchar(4) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `kecamatan`
+--
+
+INSERT INTO `kecamatan` (`id_kecamatan`, `name_kecamatan`, `id_kabupaten`) VALUES
+('LBT1', 'Gerung', 'KAB5'),
+('LBT10', 'Kuripan', 'KAB5'),
+('LBT2', 'Kediri', 'KAB5'),
+('LBT3', 'Narmada', 'KAB5'),
+('LBT4', 'Sekotong', 'KAB5'),
+('LBT5', 'Labu Api', 'KAB5'),
+('LBT6', 'Gunung Sari', 'KAB5'),
+('LBT7', 'Lingsar', 'KAB5'),
+('LBT8', 'Lembar', 'KAB5'),
+('LBT9', 'Batu Layar', 'KAB5'),
+('LTE1', 'Batukliang', 'KAB2'),
+('LTE10', 'Praya Timur', 'KAB2'),
+('LTE11', 'Pringgarata', 'KAB2'),
+('LTE12', 'Pujut', 'KAB2'),
+('LTE2', 'Batukliang Utara', 'KAB2'),
+('LTE3', 'Janapria', 'KAB2'),
+('LTE4', 'Jonggat', 'KAB2'),
+('LTE5', 'Kopang', 'KAB2'),
+('LTE6', 'Praya Kota', 'KAB2'),
+('LTE7', 'Praya Barat', 'KAB2'),
+('LTE8', 'Praya Barat Daya', 'KAB2'),
+('LTE9', 'Praya Tengah', 'KAB2'),
+('LTI1', 'Aikmel', 'KAB3'),
+('LTI10', 'Sakra Timur', 'KAB3'),
+('LTI11', 'Sakra Barat', 'KAB3'),
+('LTI12', 'Sambelia', 'KAB3'),
+('LTI13', 'Selong', 'KAB3'),
+('LTI14', 'Sembalun', 'KAB3'),
+('LTI15', 'Sikur', 'KAB3'),
+('LTI16', 'Sukamulia', 'KAB3'),
+('LTI17', 'Suralaga', 'KAB3'),
+('LTI18', 'Suwela', 'KAB3'),
+('LTI19', 'Terara', 'KAB3'),
+('LTI2', 'Jerowaru', 'KAB3'),
+('LTI20', 'Wanasaba', 'KAB3'),
+('LTI3', 'Keruak', 'KAB3'),
+('LTI4', 'Labuhan Haji', 'KAB3'),
+('LTI5', 'Masbagik', 'KAB3'),
+('LTI6', 'Montong Gading', 'KAB3'),
+('LTI7', 'Pringgabaya', 'KAB3'),
+('LTI8', 'Pringgasela', 'KAB3'),
+('LTI9', 'Sakra', 'KAB3'),
+('LTU1', 'Bayan', 'KAB4'),
+('LTU2', 'Gangga', 'KAB4'),
+('LTU3', 'Kayangan', 'KAB4'),
+('LTU4', 'Pemenang', 'KAB4'),
+('LTU5', 'Tanjung', 'KAB4'),
+('MAT1', 'Ampenan', 'KAB1'),
+('MAT2', 'Cakranegara', 'KAB1'),
+('MAT3', 'Kec.Mataram', 'KAB1'),
+('MAT4', 'Sandubaya', 'KAB1'),
+('MAT5', 'Sekarbela', 'KAB1'),
+('MAT6', 'Selaparang', 'KAB1');
 
 --
 -- Indexes for dumped tables
 --
 
 --
+-- Indexes for table `admin`
+--
+ALTER TABLE `admin`
+  ADD PRIMARY KEY (`id_admin`);
+
+--
 -- Indexes for table `destination`
 --
 ALTER TABLE `destination`
   ADD PRIMARY KEY (`id_destination`);
+
+--
+-- Indexes for table `kabupaten`
+--
+ALTER TABLE `kabupaten`
+  ADD PRIMARY KEY (`id_kabupaten`);
+
+--
+-- Indexes for table `kategori`
+--
+ALTER TABLE `kategori`
+  ADD PRIMARY KEY (`id_kategori`);
+
+--
+-- Indexes for table `kecamatan`
+--
+ALTER TABLE `kecamatan`
+  ADD PRIMARY KEY (`id_kecamatan`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -126,7 +304,7 @@ ALTER TABLE `destination`
 -- AUTO_INCREMENT for table `destination`
 --
 ALTER TABLE `destination`
-  MODIFY `id_destination` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=233;
+  MODIFY `id_destination` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=255;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
