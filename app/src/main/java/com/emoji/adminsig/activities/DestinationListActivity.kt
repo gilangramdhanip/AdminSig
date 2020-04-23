@@ -80,7 +80,6 @@ class DestinationListActivity : AppCompatActivity() {
                     simpanNamaKab = spinnerKab[position-1].id_kabupaten
                     setKecamatanSpinner(simpanNamaKab)
                 }
-                Toast.makeText(this@DestinationListActivity, " Kamu memilih spinner ", Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -100,6 +99,7 @@ class DestinationListActivity : AppCompatActivity() {
                 if(position == 0){
                     kecamatan = ""
                     destinationAdapter.filter.filter(kabupaten)
+                    setKecamatan(kabupaten, kecamatan)
                 }else{
                     kecamatan = spin_kecamatan.selectedItem.toString()
                     destinationAdapter.filter.filter(kecamatan)
