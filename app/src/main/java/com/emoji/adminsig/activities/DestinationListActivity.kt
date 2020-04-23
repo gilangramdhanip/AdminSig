@@ -53,8 +53,6 @@ class DestinationListActivity : AppCompatActivity() {
 		setSupportActionBar(toolbar)
 		toolbar.title = title
 
-        initSpinnerKabupaten()
-
         spin_kabupaten.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
 
 
@@ -155,6 +153,7 @@ class DestinationListActivity : AppCompatActivity() {
         super.onResume()
 
         loadDestination()
+        initSpinnerKabupaten()
     }
 
 

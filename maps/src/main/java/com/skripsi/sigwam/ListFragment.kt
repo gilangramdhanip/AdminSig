@@ -58,8 +58,6 @@ class ListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        initSpinnerKabupaten()
-
         spin_kabupaten.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
 
 
@@ -153,6 +151,7 @@ class ListFragment : Fragment() {
         super.onResume()
 
         loadDestinationList()
+        initSpinnerKabupaten()
     }
 
     private fun initSpinnerKabupaten(){
