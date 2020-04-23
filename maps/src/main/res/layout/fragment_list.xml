@@ -74,19 +74,27 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:text=" Total "
+                tools:text=" Total "
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="Jumlah destinasi : "
-                android:text="@string/jumlah_destinasi"
                 />
 
             <TextView
                 android:text="@string/value_destinasi"
                 android:id="@+id/txv_jumlah_destinasi"
                 tools:text="200"
+                android:textStyle="bold"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 />
+            <TextView
+                android:text=" destinasi ditemukan"
+                tools:text=" destinasi ditemukan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
 
         </LinearLayout>
 

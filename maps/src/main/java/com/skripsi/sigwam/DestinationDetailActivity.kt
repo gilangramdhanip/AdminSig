@@ -2,6 +2,7 @@ package com.skripsi.sigwam
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -62,5 +63,10 @@ class DestinationDetailActivity : AppCompatActivity(), View.OnClickListener {
         mapsFragment.arguments = mBundle
 
         supportFragmentManager.beginTransaction().replace(R.id.container, mapsFragment, MapsFragment::class.java.simpleName).commit()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        Toast.makeText(this,"back key is pressed", Toast.LENGTH_SHORT).show()
     }
 }

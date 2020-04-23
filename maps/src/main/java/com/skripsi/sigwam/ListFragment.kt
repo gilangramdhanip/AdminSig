@@ -169,7 +169,7 @@ class ListFragment : Fragment() {
                 if(response.isSuccessful){
                     spinnerKab = response.body()!!.data
                     val listSpinner = ArrayList<String>(spinnerKab.size)
-                    listSpinner.add("Pilih Kabupaten")
+                    listSpinner.add("Semua Kabupaten")
                     spinnerKab.forEach {
                         listSpinner.add(it.name_kabupaten)
                     }
@@ -204,7 +204,7 @@ class ListFragment : Fragment() {
                 if(response.isSuccessful){
                     spinnerKec = response.body()!!.data
                     val listSpinner = ArrayList<String>(spinnerKec.size)
-                    listSpinner.add("Pilih Kecamatan")
+                    listSpinner.add("Semua Kecamatan")
                     spinnerKec.forEach {
                         listSpinner.add(it.name_kecamatan)
                     }
