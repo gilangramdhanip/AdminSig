@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.activity_destiny_detail.*
 import kotlinx.android.synthetic.main.list_item.view.*
 
 
-class DestinationDetailActivity : AppCompatActivity(), View.OnClickListener {
+class DestinationDetailActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_DETAIl = "extra_detail"
@@ -26,8 +26,8 @@ class DestinationDetailActivity : AppCompatActivity(), View.OnClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_destiny_detail)
-//
-//        supportActionBar?.hide()
+
+        supportActionBar?.hide()
 
         destination = intent.getParcelableExtra(EXTRA_DETAIl) as Destination
 
@@ -41,7 +41,7 @@ class DestinationDetailActivity : AppCompatActivity(), View.OnClickListener {
             imv_destination.setImageResource(R.drawable.undraw_journey_lwlj)
         }else{
             Glide.with(baseContext)
-                .load("http://192.168.1.71/rest_api/rest-server-sig/assets/foto/"+destination.img_destination)
+                .load("http://siwita.000webhostapp.com/rest_api/rest-server-sig/assets/foto/"+destination.img_destination)
                 .apply(RequestOptions().override(500, 500))
                 .into(imv_destination)
         }
@@ -51,19 +51,19 @@ class DestinationDetailActivity : AppCompatActivity(), View.OnClickListener {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        btn_go_maps.setOnClickListener(this)
+//        btn_go_maps.setOnClickListener(this)
 
     }
 
-    override fun onClick(v: View?) {
-        val mBundle = Bundle()
-        mBundle.putString(MapsFragment.EXTRA_LAT, destination.toString())
-        mBundle.putString(MapsFragment.EXTRA_LONG, destination.toString())
-        val mapsFragment = MapsFragment()
-        mapsFragment.arguments = mBundle
-
-        supportFragmentManager.beginTransaction().replace(R.id.container, mapsFragment, MapsFragment::class.java.simpleName).commit()
-    }
+//    override fun onClick(v: View?) {
+//        val mBundle = Bundle()
+//        mBundle.putString(MapsFragment.EXTRA_LAT, destination.toString())
+//        mBundle.putString(MapsFragment.EXTRA_LONG, destination.toString())
+//        val mapsFragment = MapsFragment()
+//        mapsFragment.arguments = mBundle
+//
+//        supportFragmentManager.beginTransaction().replace(R.id.container, mapsFragment, MapsFragment::class.java.simpleName).commit()
+//    }
 
     override fun onBackPressed() {
         super.onBackPressed()

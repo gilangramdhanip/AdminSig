@@ -98,14 +98,17 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
             googleMap.uiSettings.isMyLocationButtonEnabled = true
             googleMap.uiSettings.isZoomControlsEnabled = true
             getCurrentLocation()
-
-            loadDestination()
-            loadKategoriMenu()
-
         } else {
             givePermission()
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        loadDestination()
+        loadKategoriMenu()
     }
 
     private fun isPermissionGiven(): Boolean{

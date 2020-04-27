@@ -2,6 +2,7 @@ package com.skripsi.sigwam.model
 
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -25,10 +26,16 @@ class MainViewModel : AndroidViewModel(Application()) {
             }
 
             override fun onResponse(call: Call<DestinationResponse>, response: Response<DestinationResponse>) {
+
+                if(response.isSuccessful){
                 val dataDes = response.body()
                 Log.d("ResponseLog", response.toString())
                 dataDestination.addAll(dataDes!!.data)
                 destination.postValue(dataDestination)
+                }else{
+                    Log.d("gagalresponse", response.toString())
+//                    Toast.makeText(getApplication(), "Gagal", Toast.LENGTH_SHORT).show()
+                }
             }
         })
     }

@@ -130,16 +130,16 @@
 			</TableRow>
 		</TableLayout>
 
-		<Button
-			android:id="@+id/btn_go_maps"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_gravity="bottom"
-			android:layout_margin="10dp"
-			android:background="#03a9f4"
-			android:text="LIHAT PETA"
-			android:textColor="#fff"
-			android:textStyle="bold" />
+<!--		<Button-->
+<!--			android:id="@+id/btn_go_maps"-->
+<!--			android:layout_width="match_parent"-->
+<!--			android:layout_height="wrap_content"-->
+<!--			android:layout_gravity="bottom"-->
+<!--			android:layout_margin="10dp"-->
+<!--			android:background="#03a9f4"-->
+<!--			android:text="LIHAT PETA"-->
+<!--			android:textColor="#fff"-->
+<!--			android:textStyle="bold" />-->
 
 
 	</LinearLayout>

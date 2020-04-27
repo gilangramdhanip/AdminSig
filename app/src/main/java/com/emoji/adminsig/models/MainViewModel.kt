@@ -2,6 +2,7 @@ package com.emoji.adminsig.models
 
 import android.app.Application
 import android.util.Log
+import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -23,10 +24,15 @@ class MainViewModel : AndroidViewModel(Application()) {
             }
 
             override fun onResponse(call: Call<DestinationResponse>, response: Response<DestinationResponse>) {
-                val dataDes = response.body()
-                Log.d("ResponseLog", response.toString())
-                dataDestination.addAll(dataDes!!.data)
-                destination.postValue(dataDestination)
+                if(response.isSuccessful){
+                    val dataDes = response.body()
+                    Log.d("ResponseLog", response.toString())
+                    dataDestination.addAll(dataDes!!.data)
+                    destination.postValue(dataDestination)
+                }else{
+                    Log.d("else response", response.toString())
+//                    Toast.makeText(getApplication(), "Gagal", Toast.LENGTH_SHORT).show()
+                }
             }
         })
     }
