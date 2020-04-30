@@ -2,10 +2,11 @@
 
 <!-- This a "Splash Screen" XML file, here all the text view, Image view are laid in a linearly fashion inside the Linear layout. The reason of linear layout is for accurately placing the logo and the progress bar without happen to use the constraints -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:background="#fff"
+    android:background="#FFFFFF"
+    android:gravity="center"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -14,41 +15,39 @@
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
-        android:layout_height="200dp"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="100dp"
-        android:src="@drawable/undraw_journey_lwlj" />
+        android:layout_height="300dp"
+        android:src="@drawable/logo" />
 
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Sistem Informasi Pemetaan Wisata Alam"
-        android:textSize="15dp"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:layout_below="@id/imageView"
-        android:padding="30dp"/>
+<!--    <TextView-->
+<!--        android:id="@+id/textView"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="SIWITA"-->
+<!--        android:textSize="36sp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:gravity="center"-->
+<!--        android:layout_below="@id/imageView"-->
+<!--        android:padding="15dp"/>-->
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textView"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="20dp" />
+<!--    <TextView-->
+<!--        android:id="@+id/textView1"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/imageView"-->
+<!--        android:gravity="center"-->
+<!--        android:layout_marginTop="100dp"-->
+<!--        android:padding="15dp"-->
+<!--        android:text="Designed by Gilang Ramdhani"-->
+<!--        android:textSize="15dp"-->
+<!--        android:textStyle="bold"-->
+<!--        android:textAlignment="center"/>-->
 
-    <TextView
-        android:id="@+id/textView1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/progressBar"
-        android:gravity="center"
-        android:layout_marginTop="100dp"
-        android:padding="15dp"
-        android:text="Designed by Gilang Ramdhani"
-        android:textSize="15dp"
-        android:textStyle="bold"
-        android:textAlignment="center"/>
+<!--    <ProgressBar-->
+<!--        android:id="@+id/progressBar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_below="@id/textView1"-->
+<!--        android:layout_centerHorizontal="true"-->
+<!--        android:layout_marginTop="20dp" />-->
 
-</RelativeLayout>
+</LinearLayout>

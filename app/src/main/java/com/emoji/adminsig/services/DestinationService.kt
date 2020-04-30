@@ -4,6 +4,7 @@ import com.emoji.adminsig.models.*
 import com.skripsi.sigwam.model.KategoriResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -35,6 +36,14 @@ interface DestinationService {
     fun getKecamatanbyid(
         @Query("id_kabupaten") id_kabupaten: String,
         @Query("id_kecamatan") id_kecamatan: String): Call<KecamatanResponse>
+
+
+@GET("api/admin")
+fun signin(
+    @Query("username") username: String,
+    @Query("password") password: String
+): Call<LoginResponse>
+
 
 
     @FormUrlEncoded
