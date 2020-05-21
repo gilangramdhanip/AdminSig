@@ -1,3 +1,12 @@
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:fitsSystemWindows="true"
+	tools:ignore="MergeRootFrame">
+
 <androidx.core.widget.NestedScrollView
 		xmlns:android="http://schemas.android.com/apk/res/android"
 		android:layout_width="match_parent"
@@ -8,6 +17,32 @@
 				android:layout_height="wrap_content"
 				android:orientation="vertical"
 				android:layout_margin="24dp">
+
+			<androidx.constraintlayout.widget.ConstraintLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<ImageView
+					android:id="@+id/img_view"
+					android:layout_width="150dp"
+					android:layout_height="150dp"
+					android:src="@drawable/hamster"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintTop_toTopOf="parent" />
+
+				<ImageButton
+					android:id="@+id/btn_img"
+					android:layout_width="53dp"
+					android:layout_height="47dp"
+					android:src="@drawable/ic_account_box_black_24dp"
+					app:layout_constraintBottom_toBottomOf="parent"
+					app:layout_constraintEnd_toEndOf="parent"
+					app:layout_constraintHorizontal_bias="0.732"
+					app:layout_constraintStart_toStartOf="parent" />
+
+			</androidx.constraintlayout.widget.ConstraintLayout>
 
 			<com.google.android.material.textfield.TextInputLayout
 				android:layout_width="match_parent"
@@ -23,36 +58,50 @@
 
 			</com.google.android.material.textfield.TextInputLayout>
 
-			<com.google.android.material.textfield.TextInputLayout
+			<LinearLayout
+				android:orientation="horizontal"
 				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="10dp">
+				android:layout_height="wrap_content">
 
-				<com.google.android.material.textfield.TextInputEditText
-					android:id="@+id/et_latitude"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:hint="latitude"
-					android:inputType="number"
-					android:imeOptions="actionUnspecified"/>
+					<com.google.android.material.textfield.TextInputLayout
+						android:layout_width="wrap_content"
+						android:layout_weight="0.5"
+						android:layout_height="wrap_content">
 
-			</com.google.android.material.textfield.TextInputLayout>
+						<com.google.android.material.textfield.TextInputEditText
+							android:id="@+id/et_latitude"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:hint="latitude"
+							android:inputType="number"
+							android:imeOptions="actionUnspecified"/>
 
-			<com.google.android.material.textfield.TextInputLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="10dp">
+					</com.google.android.material.textfield.TextInputLayout>
 
-				<com.google.android.material.textfield.TextInputEditText
-					android:id="@+id/et_longitude"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:hint="Longitude"
-					android:imeOptions="actionUnspecified"
-					android:inputType="number"
-					/>
 
-			</com.google.android.material.textfield.TextInputLayout>
+				<com.google.android.material.textfield.TextInputLayout
+					android:layout_width="wrap_content"
+					android:layout_weight="0.5"
+					android:layout_height="wrap_content">
+
+					<com.google.android.material.textfield.TextInputEditText
+						android:id="@+id/et_longitude"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Longitude"
+						android:imeOptions="actionUnspecified"
+						android:inputType="number"
+						/>
+
+				</com.google.android.material.textfield.TextInputLayout>
+
+				<Button
+					android:id="@+id/buka_peta"
+					android:text="Buka Peta"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"/>
+
+			</LinearLayout>
 
 
 			<com.google.android.material.textfield.TextInputLayout
@@ -108,22 +157,6 @@
 
 			</LinearLayout>
 
-
-			<com.google.android.material.textfield.TextInputLayout
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="10dp">
-
-				<com.google.android.material.textfield.TextInputEditText
-					android:id="@+id/et_image"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:hint="Image"
-					android:imeOptions="actionUnspecified"
-					android:maxLines="5"/>
-
-			</com.google.android.material.textfield.TextInputLayout>
-
 			<LinearLayout
 				android:orientation="horizontal"
 				android:layout_width="match_parent"
@@ -164,6 +197,42 @@
 			</LinearLayout>
 
 			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<com.google.android.material.textfield.TextInputLayout
+					android:layout_width="match_parent"
+					android:layout_weight="0.5"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="10dp">
+
+					<com.google.android.material.textfield.TextInputEditText
+						android:id="@+id/et_jambuka"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Jam Buka" />
+
+				</com.google.android.material.textfield.TextInputLayout>
+
+
+				<com.google.android.material.textfield.TextInputLayout
+					android:layout_width="match_parent"
+					android:layout_weight="0.5"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="10dp">
+
+					<com.google.android.material.textfield.TextInputEditText
+						android:id="@+id/et_jamtutup"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Jam Tutup" />
+
+				</com.google.android.material.textfield.TextInputLayout>
+
+			</LinearLayout>
+
+			<LinearLayout
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
 					android:weightSum="2"
@@ -194,3 +263,4 @@
 		</LinearLayout>
 
 </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

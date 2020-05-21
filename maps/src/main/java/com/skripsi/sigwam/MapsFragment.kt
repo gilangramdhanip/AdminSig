@@ -13,11 +13,16 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.getkeepsafe.taptargetview.TapTarget
+import com.getkeepsafe.taptargetview.TapTargetSequence
+import com.getkeepsafe.taptargetview.TapTargetView
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -86,6 +91,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
         mapFragment?.getMapAsync(this)
 
         fusedLocationProviderClient = FusedLocationProviderClient(requireActivity())
+        showTapView()
 
     }
 
@@ -106,7 +112,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
 
     override fun onResume() {
         super.onResume()
-
         loadDestination()
         loadKategoriMenu()
     }
@@ -266,7 +271,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                             markerOption.snippet(it.address_destination)
                             markerOption.icon(BitmapDescriptorFactory.fromBitmap(hillMarker))
 
-                        }else if(it.id_kategori=="Gunung"){
+                        }else if(it.id_kategori=="Desa Wisata"){
                             markerOption.position(latlng)
                             markerOption.title(it.name_destination)
                             markerOption.snippet(it.address_destination)
@@ -405,7 +410,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                             markerOption.snippet(it.address_destination)
                             markerOption.icon(BitmapDescriptorFactory.fromBitmap(hillMarker))
 
-                        }else if(it.id_kategori=="Gunung"){
+                        }else if(it.id_kategori=="Desa Wisata"){
                             markerOption.position(latlng)
                             markerOption.title(it.name_destination)
                             markerOption.snippet(it.address_destination)
@@ -479,5 +484,50 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
             }
 
         })
+    }
+
+    fun showTapView() {
+        if (StatusUtils.getTutorialStatus(requireContext())) {
+            TapTargetSequence(activity)
+                // 2
+                .targets(
+                    TapTarget.forView(
+                        view!!.rootView.findViewById(R.id.filter_cat),
+                        "Filter Kategori",
+                        "Lakukan Filter Wisata Berdasarkan Kategori, Dan Temukan Wisata Alam Yang Kamu Mau"
+                    )
+                        .cancelable(false).transparentTarget(true).targetRadius(70),
+                    TapTarget.forView(
+                        view!!.rootView.findViewById(R.id.search_view),
+                        "Pencarian",
+                        "Tulis Nama Wisata Alam Yang Kamu Inginkan Disini"
+                    )
+                        .cancelable(false).transparentTarget(true).targetRadius(70)
+                )
+
+
+                // 3
+                .listener(object : TapTargetSequence.Listener {
+                    override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {
+                    }
+
+                    // 4
+                    override fun onSequenceFinish() {
+                        Toast.makeText(
+                            context, "Berhasil",
+                            Toast.LENGTH_LONG
+                        ).show()
+
+                        StatusUtils.storeTutorialStatus(requireContext(), false)
+                    }
+
+                    // 5
+                    override fun onSequenceCanceled(lastTarget: TapTarget) {
+                    }
+                })
+                // 6
+                .start()
+
+        }
     }
 }

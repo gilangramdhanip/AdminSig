@@ -14,7 +14,9 @@ data class Destination(
 	var id_kategori: String? = null,
 	var img_destination: String? = null,
 	var id_kabupaten: String? = null,
-	var id_kecamatan: String? = null
+	var id_kecamatan: String? = null,
+	var jambuka: String? = null,
+	var jamtutup: String? = null
 ) :Parcelable {
 	override fun toString() = this.name_destination
 }

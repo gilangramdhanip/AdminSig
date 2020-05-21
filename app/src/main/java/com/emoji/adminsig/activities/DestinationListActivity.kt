@@ -4,24 +4,23 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.SearchView
-import androidx.core.view.size
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.emoji.adminsig.R
 import com.emoji.adminsig.helpers.DestinationAdapter
+import com.emoji.adminsig.helpers.SaveSharedPreference
 import com.emoji.adminsig.models.*
+import com.emoji.adminsig.preferencetools.SessionManager
 import com.emoji.adminsig.services.ServiceBuilder
-import kotlinx.android.synthetic.main.activity_destiny_create.*
 import kotlinx.android.synthetic.main.activity_destiny_list.*
-import kotlinx.android.synthetic.main.activity_destiny_list.view.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -45,6 +44,7 @@ class DestinationListActivity : AppCompatActivity() {
     private lateinit var spinner: Spinner
     private lateinit var spinnerKab : Array<Kabupaten>
     private lateinit var spinnerKec : Array<Kecamatan>
+    private lateinit var sessionManager: SessionManager
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -109,35 +109,31 @@ class DestinationListActivity : AppCompatActivity() {
         }
 
 		fab.setOnClickListener {
-			val intent = Intent(this@DestinationListActivity, DestinationCreateActivity::class.java)
+			val intent = Intent(this@DestinationListActivity, MapsTambah::class.java)
 			startActivity(intent)
 		}
 
-	}
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        toolbar.inflateMenu(R.menu.main_menu)
-        val searchView = menu!!.findItem(R.id.search)!!.actionView as SearchView
-        searchView.queryHint = resources.getString(R.string.search_hint)
-        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener{
-            override fun onQueryTextSubmit(query: String?): Boolean {
-
-
-                return true
-            }
-
-            override fun onQueryTextChange(newText: String?): Boolean {
-                destinationAdapter.filter.filter(newText)
-                return false
-            }
-        })
-
-        searchView.setOnCloseListener {
-            showLoading(true)
-            true
+        keluar.setOnClickListener {
+            SaveSharedPreference.setLoggedIn(applicationContext, false)
+            // Logout
+            logout()
         }
 
-        return super.onCreateOptionsMenu(menu)
+
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == R.id.verify) {
+            val mIntent = Intent(applicationContext, VerifikasiActivity::class.java)
+            startActivity(mIntent)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
     }
 
     private fun showLoading(state: Boolean){
@@ -274,6 +270,17 @@ class DestinationListActivity : AppCompatActivity() {
             }
 
         })
+    }
+
+    fun logout() {
+                    val intent = Intent(applicationContext, LoginActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+                    startActivity(intent)
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finishAffinity()
     }
 
 

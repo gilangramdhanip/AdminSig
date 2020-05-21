@@ -1,7 +1,13 @@
 package com.emoji.adminsig.activities
 
+import android.Manifest
+import android.app.TimePickerDialog
 import android.content.Intent
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.text.Editable
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -9,51 +15,59 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
+import androidx.loader.content.CursorLoader
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.emoji.adminsig.R
 import com.emoji.adminsig.models.*
 import com.emoji.adminsig.services.ServiceBuilder
+import com.google.android.gms.maps.model.LatLng
 import com.skripsi.sigwam.model.Kategori
 import com.skripsi.sigwam.model.KategoriResponse
-import kotlinx.android.synthetic.main.activity_destiny_create.*
 import kotlinx.android.synthetic.main.activity_destiny_detail.*
-import kotlinx.android.synthetic.main.activity_destiny_detail.et_address
-import kotlinx.android.synthetic.main.activity_destiny_detail.et_description
-import kotlinx.android.synthetic.main.activity_destiny_detail.et_image
-import kotlinx.android.synthetic.main.activity_destiny_detail.et_latitude
-import kotlinx.android.synthetic.main.activity_destiny_detail.et_longitude
-import kotlinx.android.synthetic.main.activity_destiny_detail.et_name
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import pub.devrel.easypermissions.EasyPermissions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.set
 
 
 class DestinationDetailActivity : AppCompatActivity() {
 
     companion object {
         const val EXTRA_DETAIl = "extra_detail"
+        const val EXTRA_BARU = "extra_baru"
     }
 
     lateinit var simpan : String
     lateinit var kabupaten : String
     lateinit var kecamatan : String
     lateinit var simpanNamaKab : String
+    lateinit var jambuka : String
+    lateinit var jamtutup : String
 
     lateinit var spinnerKab: Array<Kabupaten>
     lateinit var spinnerKec : Array<Kecamatan>
     lateinit var spinnerCat : Array<Kategori>
     private var ambil :Int = 0
-
-    private lateinit var destination : Destination
+    var pickedImg: String? = null
+    private var destination : Destination? = null
     private val apiService = ServiceBuilder.create()
+    lateinit var img_destination: MultipartBody.Part
+    val PICK_IMAGE_REQUEST = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_destiny_detail)
 
-        destination = intent.getParcelableExtra(EXTRA_DETAIl) as Destination
+        destination = intent.getParcelableExtra(EXTRA_DETAIl) as? Destination
+
 
         initSpinnerKabupaten()
         initSpinnerCategory()
@@ -114,13 +128,48 @@ class DestinationDetailActivity : AppCompatActivity() {
 
         //Load Destination
 
-        destination.id_destination
-        et_name.setText(destination.name_destination)
-        et_latitude.setText(destination.lat_destination)
-        et_longitude.setText(destination.lng_destination)
-        et_address.setText(destination.address_destination)
-        et_description.setText(destination.desc_destination)
-        et_image.setText(destination.img_destination)
+        destination?.id_destination
+        et_name.setText(destination?.name_destination)
+        et_latitude.setText(destination?.lat_destination)
+        et_longitude.setText(destination?.lng_destination)
+        et_address.setText(destination?.address_destination)
+        et_description.setText(destination?.desc_destination)
+        et_jambuka.setText(destination?.jambuka)
+        et_jamtutup.setText(destination?.jamtutup)
+
+        if(destination?.img_destination == ""){
+            img_view.setImageResource(R.drawable.undraw_journey_lwlj)
+        }else{
+            Glide.with(applicationContext)
+                .load("http://192.168.1.71/rest_api/rest-server-sig/assets/foto/"+destination?.img_destination)
+                .apply(RequestOptions().override(100, 100))
+                .into(img_view)
+        }
+
+
+        buka_peta.setOnClickListener {
+            val intent = Intent(this@DestinationDetailActivity, MapsUpdate::class.java)
+            intent.putExtra(MapsUpdate.EXTRA_UPDATE, destination)
+            startActivity(intent)
+        }
+
+        btn_img.setOnClickListener {
+            if(EasyPermissions.hasPermissions(this, Manifest.permission.READ_EXTERNAL_STORAGE)){
+                val galleryIntent = Intent(
+                    Intent.ACTION_PICK,
+                    MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                )
+                // Start the Intent
+                // Start the Intent
+                startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST)
+//                val i = Intent(this, ImagePickActivity::class.java)
+//                i.putExtra(MAX_NUMBER,1)
+//                startActivityForResult(i, REQUEST_CODE_PICK_IMAGE)
+            }else{
+                // tampilkan permission request saat belum mendapat permission dari user
+                EasyPermissions.requestPermissions(this,"This application need your permission to access photo gallery.",991,android.Manifest.permission.READ_EXTERNAL_STORAGE)
+            }
+        }
 
 
 //        setSupportActionBar(detail_toolbar)
@@ -129,13 +178,15 @@ class DestinationDetailActivity : AppCompatActivity() {
         btn_delete.setOnClickListener{
 
                     val destinationService = ServiceBuilder.create()
-                    val requestCall = destinationService.deleteDestination(destination.id_destination)
+                    val requestCall = destinationService.deleteDestination(destination!!.id_destination)
 
                     requestCall.enqueue(object: Callback<DeleteResponse> {
 
                         override fun onResponse(call: Call<DeleteResponse>, response: Response<DeleteResponse>) {
                             if (response.isSuccessful) {
-                                finish() // Move back to DestinationListActivity
+                                val intent = Intent(this@DestinationDetailActivity, DestinationListActivity::class.java)
+                                startActivity(intent)
+                                finish()
                                 Toast.makeText(this@DestinationDetailActivity, "Successfully Deleted", Toast.LENGTH_SHORT).show()
                                 Log.d("dihapus", response.toString())
                             } else {
@@ -153,25 +204,32 @@ class DestinationDetailActivity : AppCompatActivity() {
 
 
             btn_update.setOnClickListener{
-                val name = et_name.text.toString()
-                val lat = et_latitude.text.toString()
-                val lng = et_longitude.text.toString()
-                val address = et_address.text.toString()
-                val description = et_description.text.toString()
-                val img = et_image.text.toString()
-                val cat = simpan
-                val kab = kabupaten
-                val kec = kecamatan
+                val map = HashMap<String, RequestBody>()
+                map["name_destination"] = createPartFromString(et_name.text.toString())
+                map["lat_destination"] = createPartFromString(et_latitude.text.toString())
+                map["lng_destination"] = createPartFromString(et_longitude.text.toString())
+                map["address_destination"] = createPartFromString(et_address.text.toString())
+                map["desc_destination"] = createPartFromString(et_description.text.toString())
+                map["id_kategori"] = createPartFromString(simpan)
+                map["id_kabupaten"] = createPartFromString(kabupaten)
+                map["id_kecamatan"] = createPartFromString(kecamatan)
+                map["jambuka"] = createPartFromString(et_jambuka.text.toString())
+                map["jamtutup"] = createPartFromString(et_jamtutup.text.toString())
 
+                if(pickedImg==null){
+                    Toast.makeText(applicationContext, "Image not selected!", Toast.LENGTH_LONG).show()
+                }
 
                 val destinationService = ServiceBuilder.create()
-                val requestCall = destinationService.updateDestination(destination.id_destination, name, lat, lng, address, description,img,cat, kab, kec )
+                val requestCall = destinationService.updateDestination(destination!!.id_destination, map, img_destination)
 
                 requestCall.enqueue(object: Callback<DestinationResponse> {
 
                     override fun onResponse(call: Call<DestinationResponse>, response: Response<DestinationResponse>) {
                         if (response.isSuccessful) {
-                            finish() // Move back to DestinationListActivity
+                            val intent = Intent(this@DestinationDetailActivity, DestinationListActivity::class.java)
+                            startActivity(intent)
+                            finish()
                             var updatedDestination = response.body() // Use it or ignore It
                             Toast.makeText(this@DestinationDetailActivity,
                                 "Item Updated Successfully", Toast.LENGTH_SHORT).show()
@@ -191,7 +249,85 @@ class DestinationDetailActivity : AppCompatActivity() {
                 })
             }
 
+        et_jambuka.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val jam = calendar.get(Calendar.HOUR_OF_DAY)
+            val menit = calendar.get(Calendar.MINUTE)
 
+            val timePickerDialog = TimePickerDialog(
+                this,
+                TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute -> et_jambuka.setText("$hourOfDay:$minute") },
+                jam,
+                menit,
+                false
+            )
+            timePickerDialog.show()
+        }
+
+        et_jamtutup.setOnClickListener {
+            val calendar = Calendar.getInstance()
+            val jam = calendar.get(Calendar.HOUR_OF_DAY)
+            val menit = calendar.get(Calendar.MINUTE)
+
+            val timePickerDialog = TimePickerDialog(
+                this,
+                TimePickerDialog.OnTimeSetListener { view, hourOfDay, minute ->
+                    et_jamtutup.setText(
+                        "$hourOfDay:$minute"
+                    )
+                },
+                jam,
+                menit,
+                false
+            )
+            timePickerDialog.show()
+        }
+
+
+    }
+
+    fun createPartFromString(descriptionString : String) : RequestBody {
+        return RequestBody.create(
+            okhttp3.MultipartBody.FORM, descriptionString)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(resultCode == RESULT_OK){
+
+            if(requestCode == PICK_IMAGE_REQUEST){
+                val picUri: Uri? = data!!.data
+                img_view.visibility = View.VISIBLE
+
+                // membuat variable yang menampung path dari picked image.
+                pickedImg = picUri?.let { getPath(it) }
+
+                Toast.makeText(applicationContext, "$pickedImg", Toast.LENGTH_SHORT).show()
+
+                // membuat request body yang berisi file dari picked image.
+                val requestBody = RequestBody.create(MediaType.parse("multipart"), File(pickedImg))
+
+
+                // mengoper value dari requestbody sekaligus membuat form data untuk upload. dan juga mengambil nama dari picked image
+                img_destination = MultipartBody.Part.createFormData("img_destination", File(pickedImg).name,requestBody)
+
+                // mempilkan image yang akan diupload dengan glide ke imgUpload.
+                Glide.with(this).load(pickedImg).into(img_view)
+            }
+        }
+    }
+
+    private fun getPath(contentUri: Uri): String? {
+        val proj = arrayOf(MediaStore.Images.Media.DATA)
+        val loader =
+            CursorLoader(applicationContext, contentUri, proj, null, null, null)
+        val cursor: Cursor = loader.loadInBackground()!!
+        val column_index: Int = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA)
+        cursor.moveToFirst()
+        val result: String = cursor.getString(column_index)
+        cursor.close()
+        return result
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -209,7 +345,7 @@ class DestinationDetailActivity : AppCompatActivity() {
 
         apiService.getKabupaten().enqueue(object : Callback<KabupatenResponse>{
             override fun onFailure(call: Call<KabupatenResponse>, t: Throwable) {
-                Toast.makeText(this@DestinationDetailActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this@DestinationDetailActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -226,7 +362,7 @@ class DestinationDetailActivity : AppCompatActivity() {
                     val adapter = ArrayAdapter(this@DestinationDetailActivity, android.R.layout.simple_spinner_item, listSpinner)
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spin_kab.adapter = adapter
-                    val kabupatenN = spinnerKab.firstOrNull { it.name_kabupaten == destination.id_kabupaten }
+                    val kabupatenN = spinnerKab.firstOrNull { it.name_kabupaten == destination?.id_kabupaten }
                     spin_kab.setSelection(spinnerKab.indexOf(kabupatenN))
                     Log.d("KabupatenResponse", response.toString())
                 }
@@ -244,7 +380,7 @@ class DestinationDetailActivity : AppCompatActivity() {
     private fun setKecamatanSpinner(idkabupaten: String){
         apiService.getKecamatan(idkabupaten).enqueue(object : Callback<KecamatanResponse>{
             override fun onFailure(call: Call<KecamatanResponse>, t: Throwable) {
-                Toast.makeText(this@DestinationDetailActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this@DestinationDetailActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -263,7 +399,7 @@ class DestinationDetailActivity : AppCompatActivity() {
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spin_kec.adapter = adapter
 
-                    val kecamatanN = spinnerKec.firstOrNull { it.name_kecamatan == destination.id_kecamatan }
+                    val kecamatanN = spinnerKec.firstOrNull { it.name_kecamatan == destination?.id_kecamatan }
                     spin_kec.setSelection(spinnerKec.indexOf(kecamatanN))
                     Log.d("berhasilResponse", response.toString())
                 }
@@ -280,7 +416,7 @@ class DestinationDetailActivity : AppCompatActivity() {
     private fun initSpinnerCategory(){
         apiService.getKategori().enqueue(object : Callback<KategoriResponse>{
             override fun onFailure(call: Call<KategoriResponse>, t: Throwable) {
-                Toast.makeText(this@DestinationDetailActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this@DestinationDetailActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -297,7 +433,7 @@ class DestinationDetailActivity : AppCompatActivity() {
                     val adapter = ArrayAdapter(this@DestinationDetailActivity, android.R.layout.simple_spinner_item, listSpinner)
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spin_cat.adapter = adapter
-                    val kategori = spinnerCat.firstOrNull { it.name_kategori == destination.id_kategori }
+                    val kategori = spinnerCat.firstOrNull { it.name_kategori == destination?.id_kategori }
                     spin_cat.setSelection(spinnerCat.indexOf(kategori))
                     Log.d("KabupatenResponse", response.toString())
                 }

@@ -17,4 +17,6 @@
         <item>Gunung</item>
 
     </string-array>
+    <string name="title_activity_maps_tambah">Map</string>
+    <string name="title_activity_maps_update">Map</string>
 </resources>

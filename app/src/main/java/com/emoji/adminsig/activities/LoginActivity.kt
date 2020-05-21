@@ -1,20 +1,19 @@
 package com.emoji.adminsig.activities
 
 import android.content.Intent
-import android.nfc.Tag
+import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.emoji.adminsig.R
+import com.emoji.adminsig.helpers.DestinationAdapter
+import com.emoji.adminsig.helpers.SaveSharedPreference
+import com.emoji.adminsig.helpers.SaveSharedPreference.setLoggedIn
 import com.emoji.adminsig.models.LoginResponse
-import com.emoji.adminsig.models.SignInBody
 import com.emoji.adminsig.services.ServiceBuilder
 import com.facebook.stetho.Stetho
 import kotlinx.android.synthetic.main.activity_login.*
-import kotlinx.android.synthetic.main.activity_welcome.*
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -26,6 +25,11 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         Stetho.initializeWithDefaults(this)
+
+        if (SaveSharedPreference.getLoggedStatus(applicationContext)) {
+            val intent = Intent(applicationContext, DestinationListActivity::class.java)
+            startActivity(intent)
+        }
         btn_login.setOnClickListener(this)
     }
 
@@ -47,14 +51,22 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                 ).show()
             }
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
-                if (response.code() == 200) {
-                    Toast.makeText(this@LoginActivity, "Login success! $username", Toast.LENGTH_SHORT).show()
-                    val loginIntent = Intent(this@LoginActivity, DestinationListActivity::class.java)
-                    loginIntent.putExtra("username", username)
-                    startActivity(loginIntent)
+                if (response.isSuccessful) {
+                    // Set Logged In statue to 'true'
+                    setLoggedIn(applicationContext, true)
+                    val intent = Intent(applicationContext, DestinationListActivity::class.java)
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK)
+                    intent.putExtra("username", username)
+                    Toast.makeText(
+                        applicationContext, "Selamat datang admin $username",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    startActivity(intent)
                 } else {
-                    Toast.makeText(this@LoginActivity, "Login failed!", Toast.LENGTH_SHORT).show()
-                    Log.d("onFailed",response.toString())
+                    Toast.makeText(
+                        applicationContext, "Password/username salah",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         })

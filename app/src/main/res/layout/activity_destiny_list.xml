@@ -19,7 +19,15 @@
 			android:layout_height="wrap_content"
 			app:titleTextColor="@android:color/white"
 			android:background="@color/colorPrimary"
-			/>
+			>
+
+			<Button
+				android:gravity="left"
+				android:text="Logout"
+				android:id="@+id/keluar"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"/>
+		</androidx.appcompat.widget.Toolbar>
 
 
 	</com.google.android.material.appbar.AppBarLayout>

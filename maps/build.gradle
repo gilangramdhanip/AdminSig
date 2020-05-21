@@ -24,6 +24,9 @@ android {
     }
 
 }
+repositories {
+    jcenter()
+}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -58,4 +61,7 @@ dependencies {
     //glide
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
+
+    //tap
+    implementation 'com.getkeepsafe.taptargetview:taptargetview:1.13.0'
 }

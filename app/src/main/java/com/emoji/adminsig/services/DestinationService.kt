@@ -4,17 +4,14 @@ import com.emoji.adminsig.models.*
 import com.skripsi.sigwam.model.KategoriResponse
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
+
 
 interface DestinationService {
 
     @GET("api/destination")
     fun getDestinationList(): Call<DestinationResponse>
-
-    @GET("api/destination")
-    fun getDestination(@Path("id_destination") id_destination: Int): Call<DestinationResponse>
 
     @Multipart
     @POST("api/destination")
@@ -37,29 +34,18 @@ interface DestinationService {
         @Query("id_kabupaten") id_kabupaten: String,
         @Query("id_kecamatan") id_kecamatan: String): Call<KecamatanResponse>
 
-
-@GET("api/admin")
-fun signin(
-    @Query("username") username: String,
-    @Query("password") password: String
-): Call<LoginResponse>
-
-
-
     @FormUrlEncoded
-    @PUT("api/destination")
-    fun updateDestination(
-        @Field("id_destination") id_destination: Int,
-        @Field("name_destination") name: String,
-        @Field("lat_destination") lat: String,
-        @Field("lng_destination") lng: String,
-        @Field("address_destination") address: String,
-        @Field("desc_destination") description: String,
-        @Field("img_destination") image: String,
-        @Field("id_kategori") cat: String,
-        @Field("id_kabupaten") id_kab: String,
-        @Field("id_kecamatan") id_kec: String
+    @POST("api/user")
+    fun signin(
+        @Field("username") email: String,
+           @Field("password") password: String): Call<LoginResponse>
 
+    @Multipart
+    @POST("api/update")
+    fun updateDestination(
+        @Part("id_destination") id_destination: Int,
+        @PartMap partmap: Map<String, @JvmSuppressWildcards RequestBody>,
+        @Part img_destination: MultipartBody.Part
     ): Call<DestinationResponse>
 
     @FormUrlEncoded

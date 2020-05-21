@@ -7,4 +7,10 @@
         android:title="@string/search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="collapseActionView|ifRoom" />
+
+    <item
+        android:id="@+id/verify"
+        android:title="Verifikasi Activity"
+        android:icon="@drawable/ic_verified_user_black_24dp"
+        app:showAsAction="collapseActionView|ifRoom" />
 </menu>
