@@ -133,6 +133,33 @@ class ListFragment : Fragment() {
             if(destination!=null){
                 destinationAdapter.setData(destination)
                 txv_jumlah_destinasi.text = destinationAdapter.itemCount.toString()
+
+                btn_cari.setOnClickListener {
+                    scView.visibility = View.VISIBLE
+                    btn_cari.visibility = View.GONE
+
+                    val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, destination)
+                    scView.threshold=0
+                    scView.setAdapter(adapter)
+                    scView.setOnItemClickListener { adapterView, view, i, l ->
+                        val a = scView.adapter.getItem(i) as Destination
+                        destinationAdapter.setFlter(a)
+                        txv_jumlah_destinasi.text = destinationAdapter.itemCount.toString()
+
+                        if(scView.text.equals("")){
+                            btn_clear.visibility = View.GONE
+                        }else{
+                            btn_clear.visibility = View.VISIBLE
+                            btn_clear.setOnClickListener {
+                                scView.text.clear()
+                                btn_cari.visibility = View.VISIBLE
+                                scView.visibility = View.GONE
+                                btn_clear.visibility = View.GONE
+                                initSpinnerKabupaten()
+                            }
+                        }
+                    }
+                }
                 showLoading(false)
             }
         })

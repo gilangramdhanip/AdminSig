@@ -1,11 +1,13 @@
 package com.emoji.adminsig.activities
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
@@ -16,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.emoji.adminsig.R
 import com.emoji.adminsig.helpers.DestinationAdapter
+import com.emoji.adminsig.helpers.PencarianAdapter
 import com.emoji.adminsig.helpers.SaveSharedPreference
 import com.emoji.adminsig.models.*
 import com.emoji.adminsig.preferencetools.SessionManager
@@ -31,6 +34,7 @@ class DestinationListActivity : AppCompatActivity() {
     private val apiService = ServiceBuilder.create()
 
     private lateinit var destinationAdapter: DestinationAdapter
+    lateinit var pencarianAdapter: PencarianAdapter
     private lateinit var mainViewModel: MainViewModel
     private val destination = ArrayList<Destination>()
 
@@ -113,19 +117,13 @@ class DestinationListActivity : AppCompatActivity() {
 			startActivity(intent)
 		}
 
-        keluar.setOnClickListener {
-            SaveSharedPreference.setLoggedIn(applicationContext, false)
-            // Logout
-            logout()
-        }
-
-
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.verify) {
-            val mIntent = Intent(applicationContext, VerifikasiActivity::class.java)
-            startActivity(mIntent)
+        if (item.itemId == R.id.keluar) {
+            SaveSharedPreference.setLoggedIn(applicationContext, false)
+            // Logout
+            logout()
         }
         return super.onOptionsItemSelected(item)
     }
@@ -147,7 +145,9 @@ class DestinationListActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
+        val imm: InputMethodManager =
+            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
         loadDestination()
         initSpinnerKabupaten()
     }
@@ -173,6 +173,42 @@ class DestinationListActivity : AppCompatActivity() {
             if(destination!=null){
                 destinationAdapter.setData(destination)
                 txv_jumlah_destinasi.text = destinationAdapter.itemCount.toString()
+
+                    btn_cari.setOnClickListener {
+                        search_view.visibility = View.VISIBLE
+                        btn_cari.visibility = View.GONE
+                        bar.visibility = View.GONE
+                        fab.visibility = View.GONE
+
+                        val adapter = ArrayAdapter(baseContext, android.R.layout.simple_spinner_dropdown_item, destination)
+                        search_view.threshold=0
+                        search_view.setAdapter(adapter)
+                        search_view.setOnItemClickListener { adapterView, view, i, l ->
+                            val a = search_view.adapter.getItem(i) as Destination
+                            destinationAdapter.setFlter(a)
+                            txv_jumlah_destinasi.text = destinationAdapter.itemCount.toString()
+
+                            if(search_view.text.equals("")){
+                                btn_clear.visibility = View.GONE
+                            }else{
+                                btn_clear.visibility = View.VISIBLE
+                                btn_clear.setOnClickListener {
+                                    search_view.text.clear()
+                                    btn_cari.visibility = View.VISIBLE
+                                    search_view.visibility = View.GONE
+                                    btn_clear.visibility = View.GONE
+                                    bar.visibility = View.VISIBLE
+                                    fab.visibility = View.VISIBLE
+                                    val imm: InputMethodManager =
+                                        getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+                                    initSpinnerKabupaten()
+                                }
+                            }
+                    }
+                }
+
+
                 showLoading(false)
             }
         })
@@ -282,6 +318,23 @@ class DestinationListActivity : AppCompatActivity() {
         super.onBackPressed()
         finishAffinity()
     }
+
+//    fun pencarian(){
+//                search_view.queryHint = resources.getString(R.string.search_hint)
+//        search_view.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
+//            androidx.appcompat.widget.SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(p0: String?): Boolean {
+//
+//                return true
+//            }
+//
+//            override fun onQueryTextChange(p0: String?): Boolean {
+//                destinationAdapter.filter.filter(p0)
+//                return false
+//            }
+//
+//        })
+//    }
 
 
 

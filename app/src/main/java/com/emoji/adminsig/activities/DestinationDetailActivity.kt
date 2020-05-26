@@ -2,12 +2,12 @@ package com.emoji.adminsig.activities
 
 import android.Manifest
 import android.app.TimePickerDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.text.Editable
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -21,7 +21,8 @@ import com.bumptech.glide.request.RequestOptions
 import com.emoji.adminsig.R
 import com.emoji.adminsig.models.*
 import com.emoji.adminsig.services.ServiceBuilder
-import com.google.android.gms.maps.model.LatLng
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.skripsi.sigwam.model.Kategori
 import com.skripsi.sigwam.model.KategoriResponse
 import kotlinx.android.synthetic.main.activity_destiny_detail.*
@@ -59,7 +60,7 @@ class DestinationDetailActivity : AppCompatActivity() {
     var pickedImg: String? = null
     private var destination : Destination? = null
     private val apiService = ServiceBuilder.create()
-    lateinit var img_destination: MultipartBody.Part
+    var img_destination: MultipartBody.Part? = null
     val PICK_IMAGE_REQUEST = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -177,6 +178,13 @@ class DestinationDetailActivity : AppCompatActivity() {
 
         btn_delete.setOnClickListener{
 
+            MaterialAlertDialogBuilder(this)
+                .setTitle("Alert!")
+                .setMessage("Apakah anda yakin ingin menghapus data? Data yang dihapus tidak dapat di kembalikan!")
+                .setPositiveButton("Yakin",
+                    DialogInterface.OnClickListener { dialog, which ->
+                        Snackbar.make(it, "Data Gagal ditambahkan", Snackbar.LENGTH_LONG).show()
+
                     val destinationService = ServiceBuilder.create()
                     val requestCall = destinationService.deleteDestination(destination!!.id_destination)
 
@@ -186,24 +194,38 @@ class DestinationDetailActivity : AppCompatActivity() {
                             if (response.isSuccessful) {
                                 val intent = Intent(this@DestinationDetailActivity, DestinationListActivity::class.java)
                                 startActivity(intent)
+                                Snackbar.make(it, "Data Berhasil dihapus", Snackbar.LENGTH_LONG).show()
                                 finish()
-                                Toast.makeText(this@DestinationDetailActivity, "Successfully Deleted", Toast.LENGTH_SHORT).show()
+
                                 Log.d("dihapus", response.toString())
                             } else {
-                                Toast.makeText(this@DestinationDetailActivity, "hayyooo to Delete", Toast.LENGTH_SHORT).show()
+                                Snackbar.make(it, "Data Gagal dihapus", Snackbar.LENGTH_LONG).show()
                                 Log.d("FailureLog", response.toString())
                             }
                         }
 
                         override fun onFailure(call: Call<DeleteResponse>, t: Throwable) {
-                            Toast.makeText(this@DestinationDetailActivity, "Failed to Delete", Toast.LENGTH_SHORT).show()
+                            Snackbar.make(it, "Data Gagal dihapus", Snackbar.LENGTH_LONG).show()
                             Log.d("FailureLog", t.message)
                         }
+
                     })
+
+                    })
+                .setNegativeButton("Kembali",null)
+                .setIcon(R.drawable.ic_warning_black_24dp)
+                .show()
             }
 
 
             btn_update.setOnClickListener{
+
+                MaterialAlertDialogBuilder(this)
+                    .setTitle("Alert!")
+                    .setMessage("Apakah anda yakin ingin mengubah data?")
+                    .setPositiveButton("Yakin",
+                        DialogInterface.OnClickListener { dialog, which ->
+                            Snackbar.make(it, "Harap tunggu Sebentar", Snackbar.LENGTH_LONG).show()
                 val map = HashMap<String, RequestBody>()
                 map["name_destination"] = createPartFromString(et_name.text.toString())
                 map["lat_destination"] = createPartFromString(et_latitude.text.toString())
@@ -229,24 +251,27 @@ class DestinationDetailActivity : AppCompatActivity() {
                         if (response.isSuccessful) {
                             val intent = Intent(this@DestinationDetailActivity, DestinationListActivity::class.java)
                             startActivity(intent)
+                            Snackbar.make(it, "Data Berhasil diubah", Snackbar.LENGTH_LONG).show()
                             finish()
                             var updatedDestination = response.body() // Use it or ignore It
-                            Toast.makeText(this@DestinationDetailActivity,
-                                "Item Updated Successfully", Toast.LENGTH_SHORT).show()
+
                             Log.d("onResponse", response.toString())
                         } else {
-                            Toast.makeText(this@DestinationDetailActivity,
-                                "Failed to update item", Toast.LENGTH_SHORT).show()
+                            Snackbar.make(it, "Data Gagal diubah", Snackbar.LENGTH_LONG).show()
                             Log.d("respongagal", response.toString())
                         }
                     }
 
                     override fun onFailure(call: Call<DestinationResponse>, t: Throwable) {
-                        Toast.makeText(this@DestinationDetailActivity,
-                            "Failed to update item", Toast.LENGTH_SHORT).show()
+                        Snackbar.make(it, "Data Gagal diubah", Snackbar.LENGTH_LONG).show()
                         Log.d("respon gagagal", t.message)
                     }
                 })
+
+                        })
+                    .setNegativeButton("Kembali",null)
+                    .setIcon(R.drawable.ic_mood_black_24dp)
+                    .show()
             }
 
         et_jambuka.setOnClickListener {
@@ -305,15 +330,17 @@ class DestinationDetailActivity : AppCompatActivity() {
 
                 Toast.makeText(applicationContext, "$pickedImg", Toast.LENGTH_SHORT).show()
 
-                // membuat request body yang berisi file dari picked image.
-                val requestBody = RequestBody.create(MediaType.parse("multipart"), File(pickedImg))
+                if(!pickedImg.isNullOrEmpty()){
+                    val requestBody = RequestBody.create(MediaType.parse("multipart"), File(pickedImg))
+                    img_destination = MultipartBody.Part.createFormData("img_destination", File(pickedImg).name,requestBody)
+                    Glide.with(this).load(pickedImg).into(img_view)
+                }else{
+                    val requestBody = RequestBody.create(MultipartBody.FORM, "")
+                    img_destination = MultipartBody.Part.createFormData("img_destination", "",requestBody)
+                }
 
-
-                // mengoper value dari requestbody sekaligus membuat form data untuk upload. dan juga mengambil nama dari picked image
-                img_destination = MultipartBody.Part.createFormData("img_destination", File(pickedImg).name,requestBody)
 
                 // mempilkan image yang akan diupload dengan glide ke imgUpload.
-                Glide.with(this).load(pickedImg).into(img_view)
             }
         }
     }

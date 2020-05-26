@@ -6,7 +6,7 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Destination(
 	var id_destination: Int,
-	var name_destination: String? = null,
+	var name_destination: String,
 	var lat_destination: String? = null,
 	var lng_destination: String? = null,
 	var address_destination: String? = null,
@@ -17,7 +17,9 @@ data class Destination(
 	var id_kecamatan: String? = null,
 	var jambuka : String? = null,
 	var jamtutup : String? = null
-) :Parcelable
+) :Parcelable {
+	override fun toString() = this.name_destination
+}
 
 
 

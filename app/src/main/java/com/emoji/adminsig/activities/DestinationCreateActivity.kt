@@ -3,6 +3,8 @@ package com.emoji.adminsig.activities
 import android.Manifest
 import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
+import android.content.ActivityNotFoundException
+import android.content.DialogInterface
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
@@ -27,6 +29,8 @@ import com.emoji.adminsig.services.ServiceBuilder
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.skripsi.sigwam.model.Kategori
 import com.skripsi.sigwam.model.KategoriResponse
 import kotlinx.android.synthetic.main.activity_destiny_create.*
@@ -38,6 +42,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
+import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -62,7 +67,7 @@ class DestinationCreateActivity : AppCompatActivity() {
     private lateinit var spinnerKec: Array<Kecamatan>
 
     private val apiService = ServiceBuilder.create()
-    lateinit var img_destination: MultipartBody.Part
+    var img_destination: MultipartBody.Part? = null
     var REQUEST_CODE = 100
 
     val RequestPermissionCode = 1
@@ -74,7 +79,6 @@ class DestinationCreateActivity : AppCompatActivity() {
     private lateinit var lng : String
     val PICK_IMAGE_REQUEST = 1
 
-
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,59 +88,6 @@ class DestinationCreateActivity : AppCompatActivity() {
         destination = intent.getParcelableExtra(EXTRA_CREATE) as LatLng
         et_latitude.text =Editable.Factory.getInstance().newEditable(destination.latitude.toString())
         et_longitude.text = Editable.Factory.getInstance().newEditable(destination.longitude.toString())
-
-            btn_add.setOnClickListener {
-
-                val map = HashMap<String, RequestBody>()
-                map["name_destination"] = createPartFromString(et_name.text.toString())
-                map["lat_destination"] = createPartFromString(et_latitude.text.toString())
-                map["lng_destination"] = createPartFromString(et_longitude.text.toString())
-                map["address_destination"] = createPartFromString(et_address.text.toString())
-                map["desc_destination"] = createPartFromString(et_description.text.toString())
-                map["id_kategori"] = createPartFromString(simpan)
-                map["id_kabupaten"] = createPartFromString(kabupaten)
-                map["id_kecamatan"] = createPartFromString(kecamatan)
-                map["jambuka"] = createPartFromString(et_jambuka.text.toString())
-                map["jamtutup"] = createPartFromString(et_jamtutup.text.toString())
-
-
-                val destinationService = ServiceBuilder.create()
-                val requestCall = destinationService.addDestination(map, img_destination)
-
-                requestCall.enqueue(object : Callback<DestinationResponse> {
-
-                    override fun onResponse(
-                        call: Call<DestinationResponse>,
-                        response: Response<DestinationResponse>
-                    ) {
-                        if (response.isSuccessful) {
-                            val intent = Intent(this@DestinationCreateActivity, DestinationListActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                            var newlyCreatedDestination = response.body() // Use it or ignore it
-                            Toast.makeText(
-                                this@DestinationCreateActivity,
-                                "Successfully Added",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            Log.d("ResponseLog", response.toString())
-                        } else {
-                            Toast.makeText(
-                                this@DestinationCreateActivity,
-                                "Gagal di tambahkan",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            Log.d("gagalLog", response.toString())
-                        }
-                    }
-
-                    override fun onFailure(call: Call<DestinationResponse>, t: Throwable) {
-                        Toast.makeText(applicationContext, "Failed to add item", Toast.LENGTH_SHORT)
-                            .show()
-                        Log.d("FailureLog", t.message)
-                    }
-                })
-            }
 
 
         initSpinnerKabupaten()
@@ -148,9 +99,11 @@ class DestinationCreateActivity : AppCompatActivity() {
                     Intent.ACTION_PICK,
                     MediaStore.Images.Media.EXTERNAL_CONTENT_URI
                 )
-                // Start the Intent
-                // Start the Intent
+                try{
                 startActivityForResult(galleryIntent, PICK_IMAGE_REQUEST)
+                }catch(e: ActivityNotFoundException){
+                    e.printStackTrace()
+                }
             }else{
                 // tampilkan permission request saat belum mendapat permission dari user
                 EasyPermissions.requestPermissions(this,"This application need your permission to access photo gallery.",991,android.Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -265,6 +218,64 @@ class DestinationCreateActivity : AppCompatActivity() {
             )
             timePickerDialog.show()
         }
+
+
+
+                    btn_add.setOnClickListener {
+
+                        MaterialAlertDialogBuilder(this)
+                            .setTitle("Alert!")
+                            .setMessage("Apakah Data Sudah benar?")
+                            .setPositiveButton("Ya",
+                                DialogInterface.OnClickListener { dialog, which ->
+
+                                    Snackbar.make(it, "Harap Tunggu Sebentar", Snackbar.LENGTH_LONG).show()
+                        val map = HashMap<String, RequestBody>()
+                        map["name_destination"] = createPartFromString(et_name.text.toString())
+                        map["lat_destination"] = createPartFromString(et_latitude.text.toString())
+                        map["lng_destination"] = createPartFromString(et_longitude.text.toString())
+                        map["address_destination"] = createPartFromString(et_address.text.toString())
+                        map["desc_destination"] = createPartFromString(et_description.text.toString())
+                        map["id_kategori"] = createPartFromString(simpan)
+                        map["id_kabupaten"] = createPartFromString(kabupaten)
+                        map["id_kecamatan"] = createPartFromString(kecamatan)
+                        map["jambuka"] = createPartFromString(et_jambuka.text.toString())
+                        map["jamtutup"] = createPartFromString(et_jamtutup.text.toString())
+
+                        val destinationService = ServiceBuilder.create()
+                        val requestCall = destinationService.addDestination(map, img_destination)
+
+                        requestCall.enqueue(object : Callback<DestinationResponse> {
+
+                            override fun onResponse(
+                                call: Call<DestinationResponse>,
+                                response: Response<DestinationResponse>
+                            ) {
+                                if (response.isSuccessful) {
+                                    val intent = Intent(this@DestinationCreateActivity, DestinationListActivity::class.java)
+                                    startActivity(intent)
+                                    Snackbar.make(it, "Data Berhasil ditambahkan", Snackbar.LENGTH_LONG).show()
+                                    finish()
+                                    var newlyCreatedDestination = response.body() // Use it or ignore it
+                                    Log.d("ResponseLog", response.toString())
+                                } else {
+                                    Snackbar.make(it, "Data Gagal ditambahkan", Snackbar.LENGTH_LONG).show()
+                                    Log.d("gagalLog", response.toString())
+                                }
+                            }
+
+                            override fun onFailure(call: Call<DestinationResponse>, t: Throwable) {
+                                Snackbar.make(it, "Data Gagal ditambahkan", Snackbar.LENGTH_LONG).show()
+                                Log.d("FailureLog", t.message)
+                            }
+                        })
+
+                                })
+                            .setNegativeButton("Kembali",null)
+                            .setIcon(R.drawable.ic_mood_black_24dp)
+                            .show()
+                    }
+
 
     }
 
@@ -453,23 +464,30 @@ fun createPartFromString(descriptionString : String) : RequestBody {
         if(resultCode == RESULT_OK){
 
             if(requestCode == PICK_IMAGE_REQUEST){
+
                 val picUri: Uri? = data!!.data
                 iv_image.visibility = View.VISIBLE
 
                 // membuat variable yang menampung path dari picked image.
-                pickedImg = picUri?.let { getPath(it) }
+                        pickedImg = picUri?.let { getPath(it) }
 
-                Toast.makeText(applicationContext, "$pickedImg", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "$pickedImg", Toast.LENGTH_SHORT).show()
 
-                // membuat request body yang berisi file dari picked image.
-                val requestBody = RequestBody.create(MediaType.parse("multipart"), File(pickedImg))
+                    // membuat request body yang berisi file dari picked image.
 
-                // mengoper value dari requestbody sekaligus membuat form data untuk upload. dan juga mengambil nama dari picked image
-                img_destination = MultipartBody.Part.createFormData("img_destination",
-                    File(pickedImg).name,requestBody)
+                if(!pickedImg.isNullOrEmpty()){
+                    val requestBody = RequestBody.create(MediaType.parse("multipart"), File(pickedImg))
+                    img_destination = MultipartBody.Part.createFormData("img_destination", File(pickedImg).name,requestBody)
+                    Glide.with(this).load(pickedImg).into(iv_image)
+                }else{
+                    val requestBody = RequestBody.create(MultipartBody.FORM, "")
+                    img_destination = MultipartBody.Part.createFormData("img_destination", "",requestBody)
+                }
+
+                    // mengoper value dari requestbody sekaligus membuat form data untuk upload. dan juga mengambil nama dari picked image
+
 
                 // mempilkan image yang akan diupload dengan glide ke imgUpload.
-                Glide.with(this).load(pickedImg).into(iv_image)
 
             }
 

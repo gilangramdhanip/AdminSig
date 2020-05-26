@@ -17,7 +17,7 @@ interface DestinationService {
     @POST("api/destination")
     fun addDestination(
         @PartMap partmap: Map<String, @JvmSuppressWildcards RequestBody>,
-        @Part img_destination: MultipartBody.Part
+        @Part img_destination: MultipartBody.Part?
     ): Call<DestinationResponse>
 
     @GET("api/kabupaten")
@@ -45,7 +45,7 @@ interface DestinationService {
     fun updateDestination(
         @Part("id_destination") id_destination: Int,
         @PartMap partmap: Map<String, @JvmSuppressWildcards RequestBody>,
-        @Part img_destination: MultipartBody.Part
+        @Part img_destination: MultipartBody.Part?
     ): Call<DestinationResponse>
 
     @FormUrlEncoded

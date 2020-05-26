@@ -48,6 +48,8 @@ class DestinationDetailActivity : AppCompatActivity() {
         txv_cat.text = destination.id_kategori
         txv_kabupaten.text = destination.id_kabupaten
         txv_kecamatan.text = destination.id_kecamatan
+        txv_jambuka.text = destination.jambuka
+        txv_jamtutup.text = destination.jamtutup
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
