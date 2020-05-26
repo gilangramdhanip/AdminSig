@@ -1,6 +1,8 @@
 package com.skripsi.sigwam
 
+import android.annotation.SuppressLint
 import android.app.Activity
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.IntentSender
 import android.content.pm.PackageManager
@@ -32,6 +34,8 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import com.google.android.material.snackbar.Snackbar
 import com.karumi.dexter.Dexter
 import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
@@ -200,13 +204,31 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                         e.printStackTrace()
                     }
 
-                    googleMap.addMarker(
+                    val a = googleMap.addMarker(
                         MarkerOptions()
                             .position(LatLng(mLastLocation!!.latitude, mLastLocation.longitude))
                             .title("Lokasi terkini")
                             .snippet(address)
                             .icon(BitmapDescriptorFactory.fromBitmap(personMarker))
                     )
+                    val alamat: List<Address>
+                    alamat = gcd.getFromLocation(mLastLocation!!.latitude, mLastLocation.longitude, 1)
+                    val alamatku = alamat[0].getAddressLine(0)
+                    val desti = alamatku
+                    a.tag = desti
+
+                    googleMap.setOnInfoWindowClickListener(object : GoogleMap.OnInfoWindowClickListener{
+                        override fun onInfoWindowClick(p0: Marker?) {
+
+                            val desti = p0!!.tag as String
+
+                            MaterialAlertDialogBuilder(requireContext())
+                                .setTitle("Lokasi Saat ini")
+                                .setMessage("$desti")
+                                .setPositiveButton("Kembali",null)
+                                .show()
+                        }
+                    })
 
                     val cameraPosition = CameraPosition.Builder()
                         .target(LatLng(mLastLocation.latitude, mLastLocation.longitude))
@@ -243,8 +265,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
         val waterfallBitmap = BitmapFactory.decodeResource(resources, R.drawable.waterfall)
         val waterfallMarker = Bitmap.createScaledBitmap(waterfallBitmap, 90, 90, false)
         apiService.getDestinationList().enqueue(object : Callback<DestinationResponse> {
+            @SuppressLint("WrongConstant")
             override fun onFailure(call: Call<DestinationResponse>, t: Throwable) {
-                Toast.makeText(context, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Terdapat kesalahan Koneksi", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -323,8 +346,9 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                 }
 
                 else{
+                    googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
                     Log.d("gagalresponse", response.toString())
-                    Toast.makeText(context, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(requireContext(), "Terdapat kesalahan Koneksi", Toast.LENGTH_SHORT).show()
                 }
             }
 
