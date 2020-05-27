@@ -1,26 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
     <fragment
         android:id="@+id/nav_host"
-        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         app:defaultNavHost="true"
-        app:navGraph="@navigation/menu_navigation"
-        android:layout_above="@id/nav_bottom"/>
+        app:navGraph='@navigation/menu_navigation'
+        app:layout_constraintBottom_toTopOf="@+id/btm"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <com.google.android.material.bottomnavigation.BottomNavigationView
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/btm"
+        android:layout_width="match_parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_height="wrap_content"
+        tools:ignore="BottomAppBar">
+
+    <me.ibrahimsn.lib.SmoothBottomBar
         android:id="@+id/nav_bottom"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
+        android:layout_height="70dp"
+        app:textColor="#017FC3"
+        app:textSize="14sp"
+        app:iconSize="24dp"
+        app:indicatorColor="#3326A6EC"
+        app:indicatorRadius="10dp"
+        app:sideMargins="10dp"
+        app:itemPadding="10dp"
+        app:iconTint="#000"
+        app:iconTintActive="#017FC3"
         app:menu="@menu/bottom_nav_menu"
-        android:background="?android:attr/windowBackground"/>
+        />
 
-</RelativeLayout>
+    </com.google.android.material.bottomappbar.BottomAppBar>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

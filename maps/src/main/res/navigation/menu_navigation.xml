@@ -18,5 +18,10 @@
         android:name="com.skripsi.sigwam.MapsFragment"
         tools:layout="@layout/fragment_maps" />
 
+    <fragment
+        android:id="@+id/navigation_help"
+        android:name="com.skripsi.sigwam.BantuanFragment"
+        tools:layout="@layout/fragment_bantuan" />
+
 
 </navigation>

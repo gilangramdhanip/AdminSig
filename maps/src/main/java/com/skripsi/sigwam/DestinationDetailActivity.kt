@@ -1,7 +1,7 @@
 package com.skripsi.sigwam
 
+import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -9,7 +9,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.skripsi.sigwam.model.Destination
 import com.skripsi.sigwam.service.ServiceBuilder
 import kotlinx.android.synthetic.main.activity_destiny_detail.*
-import kotlinx.android.synthetic.main.list_item.view.*
 
 
 class DestinationDetailActivity : AppCompatActivity() {
@@ -52,6 +51,25 @@ class DestinationDetailActivity : AppCompatActivity() {
         txv_jamtutup.text = destination?.jamtutup
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        btn_share.setOnClickListener {
+            try {
+                val shareIntent = Intent(Intent.ACTION_SEND)
+                shareIntent.type = "text/plain"
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, destination?.id_destination)
+                var shareMessage = "\nWisata ${destination?.name_destination} berada di Kabupaten ${destination?.id_kabupaten} dan Kecamatan ${destination?.id_kecamatan}" +
+                        "\nSelengkapnya ada di Aplikasi Siwita, Yuk Download\n\n"
+                shareMessage =
+                    """
+                    ${shareMessage}https://play.google.com/store/apps/details?id=${BuildConfig.APPLICATION_ID}
+
+                    """.trimIndent()
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage)
+                startActivity(Intent.createChooser(shareIntent, "Pilih Metode"))
+            } catch (e: Exception) {
+                //e.toString();
+            }
+        }
 
 //        btn_go_maps.setOnClickListener(this)
 

@@ -6,8 +6,10 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.preference.PreferenceManager
 import android.provider.Settings
+import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -24,6 +26,7 @@ class MainActivity : AppCompatActivity() {
             return contextOfApp
         }
     }
+    lateinit var navController : NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,15 +37,25 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
 
-        val navController = findNavController(R.id.nav_host)
-        val appBarConfiguration = AppBarConfiguration.Builder(
-            R.id.navigation_home, R.id.navigation_map, R.id.navigation_list
-        ).build()
+        navController = findNavController(R.id.nav_host)
+//        val appBarConfiguration = AppBarConfiguration.Builder(
+//            R.id.navigation_home, R.id.navigation_map, R.id.navigation_list
+//        ).build()
 
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        nav_bottom.setupWithNavController(navController)
+        setupActionBarWithNavController(navController)
 
         showTapView()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.bottom_nav_menu,menu)
+        nav_bottom.setupWithNavController(menu!!,navController)
+        return true
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        navController.navigateUp()
+        return true
     }
 
     override fun onBackPressed() {

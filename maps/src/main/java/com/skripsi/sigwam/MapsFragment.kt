@@ -271,7 +271,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
         val waterfallBitmap = BitmapFactory.decodeResource(resources, R.drawable.waterfall)
         val waterfallMarker = Bitmap.createScaledBitmap(waterfallBitmap, 90, 90, false)
         apiService.getDestinationList().enqueue(object : Callback<DestinationResponse> {
-            @SuppressLint("WrongConstant")
             override fun onFailure(call: Call<DestinationResponse>, t: Throwable) {
                 Toast.makeText(requireContext(), "Terdapat kesalahan Koneksi", Toast.LENGTH_SHORT).show()
             }

@@ -23,4 +23,8 @@
     <string name="jamtutup">Jam Tutup</string>
     <string name="kecamatan_value">Ampenan</string>
     <string name="search_hint">Cari disini....</string>
+    <string name="text_help">Selamat Datang di aplikasi SIWITA ( Sistem Informasi Geografis Pemetaan Lokasi Wisata Alam di Pulau Lombok). Dengan adanya aplikasi ini harapannya dapat membantu wisatawan menemukan dan mencari lokasi wisata alam dengan mudah.
+        Jika terdapat saran lokasi dapat di infokan pada kontak dibawah ini : \n
+        Email : gramdhani66@gmail.com
+</string>
 </resources>

@@ -69,4 +69,10 @@ dependencies {
 
     //circleimage
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+
+    //Zoom
+    implementation 'com.github.dmallcott:DismissibleImageView:1.0.1'
+
+    //SmoothBottom
+    implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7.5'
 }
