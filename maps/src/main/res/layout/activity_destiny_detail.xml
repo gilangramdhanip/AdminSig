@@ -22,7 +22,7 @@
 			android:layout_height="280dp"
 			android:adjustViewBounds="true"
 			android:scaleType="fitXY"
-			android:src="@drawable/undraw_journey_lwlj" />
+			android:src="@drawable/default_img" />
 
 		<LinearLayout
 			android:layout_marginTop="-65dp"

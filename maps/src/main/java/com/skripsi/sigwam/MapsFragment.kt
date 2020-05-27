@@ -15,10 +15,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -74,6 +76,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
     lateinit var cat : List<Kategori>
     lateinit var mainViewModelKategori: MainViewModelKategori
     lateinit var kategoriAdapter: KategoriAdapter
+    private var dessss : Destination? = null
     private val kategori = ArrayList<Kategori>()
     private lateinit var category : Kategori
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
@@ -101,6 +104,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
 
     override fun onMapReady(map: GoogleMap?) {
         googleMap = map?: return
+
+        val cameraPosition = CameraPosition.Builder()
+            .target(LatLng(-8.6064737,116.2000303))
+            .zoom(10f)
+            .build()
+
+        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
 
         if (isPermissionGiven()){
             googleMap.setPadding(0,200,0,0)
@@ -204,34 +214,30 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                         e.printStackTrace()
                     }
 
-                    val a = googleMap.addMarker(
-                        MarkerOptions()
-                            .position(LatLng(mLastLocation!!.latitude, mLastLocation.longitude))
-                            .title("Lokasi terkini")
-                            .snippet(address)
-                            .icon(BitmapDescriptorFactory.fromBitmap(personMarker))
-                    )
-                    val alamat: List<Address>
-                    alamat = gcd.getFromLocation(mLastLocation!!.latitude, mLastLocation.longitude, 1)
-                    val alamatku = alamat[0].getAddressLine(0)
-                    val desti = alamatku
-                    a.tag = desti
-
-                    googleMap.setOnInfoWindowClickListener(object : GoogleMap.OnInfoWindowClickListener{
-                        override fun onInfoWindowClick(p0: Marker?) {
-
-                            val desti = p0!!.tag as String
-
-                            MaterialAlertDialogBuilder(requireContext())
-                                .setTitle("Lokasi Saat ini")
-                                .setMessage("$desti")
-                                .setPositiveButton("Kembali",null)
-                                .show()
-                        }
-                    })
+//                    val a = googleMap.addMarker(
+//                        MarkerOptions()
+//                            .position(LatLng(mLastLocation!!.latitude, mLastLocation.longitude))
+//                            .title("Lokasi terkini")
+//                            .snippet(address)
+//                            .icon(BitmapDescriptorFactory.fromBitmap(personMarker))
+//                    )
+//
+//                    val desti = Destination(1,"", mLastLocation!!.latitude.toString(),mLastLocation.longitude.toString(), address, "", "", "", "", "")
+//                    val m = a
+//                    m.tag = desti
+//
+//                    googleMap.setOnInfoWindowClickListener { p0 ->
+//                        val desti  = p0!!.tag as? Destination
+//
+//                        MaterialAlertDialogBuilder(requireContext())
+//                            .setTitle("Alert!")
+//                            .setMessage("$desti")
+//                            .setNegativeButton("Kembali",null)
+//                            .show()
+//                    }
 
                     val cameraPosition = CameraPosition.Builder()
-                        .target(LatLng(mLastLocation.latitude, mLastLocation.longitude))
+                        .target(LatLng(mLastLocation!!.latitude, mLastLocation!!.longitude))
                         .zoom(10f)
                         .build()
                     googleMap.moveCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
@@ -313,17 +319,27 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                         googleMap.setOnInfoWindowClickListener(object : GoogleMap.OnInfoWindowClickListener{
                             override fun onInfoWindowClick(p0: Marker?) {
 
-                               val desti : Destination = p0!!.tag as Destination
+                               val desti  = p0!!.tag as? Destination
 
                                 val intent = Intent(context, DestinationDetailActivity::class.java)
                                 intent.putExtra(DestinationDetailActivity.EXTRA_DETAIl, desti)
                                 startActivity(intent)
                             }
                         })
+
                         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_dropdown_item, destination)
                         search_view.threshold=0
                         search_view.setAdapter(adapter)
+
                     }
+
+                    btn_search.setOnClickListener {
+                        search_view.visibility = View.VISIBLE
+                        btn_search.visibility = View.GONE
+
+                        if(search_view.text.equals("")){
+                            btn_hapus.visibility = View.GONE
+                        }else{
 
                     search_view.setOnItemClickListener { parent: AdapterView<*>?, view: View?, position: Int, id: Long ->
 
@@ -340,7 +356,19 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                                 Toast.makeText(requireContext(), " $c , $b", Toast.LENGTH_LONG).show()
                         googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
 
+                        btn_hapus.visibility = View.VISIBLE
+                        btn_hapus.setOnClickListener {
+                            search_view.text.clear()
+                            btn_search.visibility = View.VISIBLE
+                            search_view.visibility = View.GONE
+                            btn_hapus.visibility = View.GONE
                         }
+
+                        }
+
+                        }
+
+                    }
                         googleMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
                     Log.d("onResponse", response.toString())
                 }
@@ -379,6 +407,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
             mainViewModelKategori.getKategori().observe(this, androidx.lifecycle.Observer { kategori->
                 if(kategori!=null){
                     kategoriAdapter.setData(kategori)
+
                 }
             })
         }
@@ -423,7 +452,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                         val latlng : LatLng = LatLng(lat,lng)
 
                         if(it.id_kategori=="Pantai"){
-
                             markerOption.position(latlng)
                             markerOption.title(it.name_destination)
                             markerOption.snippet(it.address_destination)
@@ -459,16 +487,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                                 intent.putExtra(DestinationDetailActivity.EXTRA_DETAIl, desti)
                                 startActivity(intent)
 
-//                                val alertDialog = AlertDialog.Builder(requireContext())
-//                                val inflater = layoutInflater
-//                                val convertView = inflater.inflate(R.layout.dialog_item, null)
-//                                alertDialog.setView(convertView)
-//                                convertView.tv_title.text = desti.name_destination
-//                                convertView.tv_addres.text = desti.address_destination
-//                                convertView.tv_category.text = desti.id_kategori
-//                                convertView.tv_desc.text = desti.desc_destination
-//
-//                                alertDialog.show()
                             }
                         })
 
@@ -478,21 +496,40 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                         search_view.setAdapter(adapter)
                     }
 
-                    search_view.setOnItemClickListener { parent: AdapterView<*>?, view: View?, position: Int, id: Long ->
+                    btn_search.setOnClickListener {
+                        search_view.visibility = View.VISIBLE
+                        btn_search.visibility = View.GONE
 
-                        val a = search_view.adapter.getItem(position) as Destination
-                        val b = a.lat_destination!!.toDouble()
-                        val c = a.lng_destination!!.toDouble()
+                        if(search_view.text.equals("")){
+                            btn_hapus.visibility = View.GONE
+                        }else{
+
+                            search_view.setOnItemClickListener { parent: AdapterView<*>?, view: View?, position: Int, id: Long ->
+
+                                val a = search_view.adapter.getItem(position) as Destination
+                                val b = a.lat_destination!!.toDouble()
+                                val c = a.lng_destination!!.toDouble()
 
 
-                        val cameraPosition = CameraPosition.Builder()
-                            .target(LatLng(b,c))
-                            .zoom(15f)
-                            .build()
+                                val cameraPosition = CameraPosition.Builder()
+                                    .target(LatLng(b,c))
+                                    .zoom(15f)
+                                    .build()
 
-                        Toast.makeText(requireContext(), " $c , $b", Toast.LENGTH_LONG).show()
+                                Toast.makeText(requireContext(), " $c , $b", Toast.LENGTH_LONG).show()
+                                googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
 
-                        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
+                                btn_hapus.visibility = View.VISIBLE
+                                btn_hapus.setOnClickListener {
+                                    search_view.text.clear()
+                                    btn_search.visibility = View.VISIBLE
+                                    search_view.visibility = View.GONE
+                                    btn_hapus.visibility = View.GONE
+                                }
+
+                            }
+
+                        }
 
                     }
                     googleMap.mapType = GoogleMap.MAP_TYPE_SATELLITE

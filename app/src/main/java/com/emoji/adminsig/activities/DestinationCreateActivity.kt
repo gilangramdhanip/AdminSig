@@ -8,6 +8,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.database.Cursor
 import android.graphics.Bitmap
+import android.location.Address
 import android.location.Location
 import android.net.Uri
 import android.os.Build
@@ -19,6 +20,7 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.loader.content.CursorLoader
@@ -33,6 +35,8 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.skripsi.sigwam.model.Kategori
 import com.skripsi.sigwam.model.KategoriResponse
+import com.vincent.filepicker.activity.BaseActivity
+import id.zelory.compressor.Compressor
 import kotlinx.android.synthetic.main.activity_destiny_create.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -74,7 +78,7 @@ class DestinationCreateActivity : AppCompatActivity() {
     var mLocation: Location? = null
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
-    private lateinit var destination : LatLng
+    private lateinit var destination : Address
     private lateinit var lat : String
     private lateinit var lng : String
     val PICK_IMAGE_REQUEST = 1
@@ -85,9 +89,10 @@ class DestinationCreateActivity : AppCompatActivity() {
         setContentView(R.layout.activity_destiny_create)
 
 
-        destination = intent.getParcelableExtra(EXTRA_CREATE) as LatLng
+        destination = intent.getParcelableExtra(EXTRA_CREATE) as Address
         et_latitude.text =Editable.Factory.getInstance().newEditable(destination.latitude.toString())
         et_longitude.text = Editable.Factory.getInstance().newEditable(destination.longitude.toString())
+        et_address.text = Editable.Factory.getInstance().newEditable(destination.getAddressLine(0).toString())
 
 
         initSpinnerKabupaten()
@@ -219,8 +224,6 @@ class DestinationCreateActivity : AppCompatActivity() {
             timePickerDialog.show()
         }
 
-
-
                     btn_add.setOnClickListener {
 
                         MaterialAlertDialogBuilder(this)
@@ -275,8 +278,6 @@ class DestinationCreateActivity : AppCompatActivity() {
                             .setIcon(R.drawable.ic_mood_black_24dp)
                             .show()
                     }
-
-
     }
 
     private fun initSpinnerKabupaten() {
@@ -422,75 +423,32 @@ fun createPartFromString(descriptionString : String) : RequestBody {
             okhttp3.MultipartBody.FORM, descriptionString);
 }
 
-//    fun getLastLocation() {
-//        if (ActivityCompat.checkSelfPermission(
-//                this,
-//                Manifest.permission.ACCESS_FINE_LOCATION
-//            ) != PackageManager.PERMISSION_GRANTED
-//        ) {
-//            requestPermission()
-//        } else {
-//            fusedLocationClient.lastLocation
-//                .addOnSuccessListener { location: Location? ->
-//
-//                    val gcd = Geocoder(this, Locale.getDefault())
-//                    val addresses: List<Address>
-//                    addresses = gcd.getFromLocation(location!!.latitude, location.longitude, 1)
-//                    mLocation = location
-//                    if (location != null) {
-//                        et_latitude.text =
-//                            Editable.Factory.getInstance().newEditable(location.latitude.toString())
-//                        et_longitude.text = Editable.Factory.getInstance()
-//                            .newEditable(location.longitude.toString())
-//                        et_address.text = Editable.Factory.getInstance()
-//                            .newEditable(addresses[0].getAddressLine(0))
-//                    }
-//                }
-//        }
-//    }
-
-//    private fun requestPermission() {
-//        ActivityCompat.requestPermissions(
-//            this,
-//            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-//            RequestPermissionCode
-//        )
-//        this.recreate()
-//    }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if(resultCode == RESULT_OK){
 
             if(requestCode == PICK_IMAGE_REQUEST){
-
                 val picUri: Uri? = data!!.data
                 iv_image.visibility = View.VISIBLE
-
                 // membuat variable yang menampung path dari picked image.
                         pickedImg = picUri?.let { getPath(it) }
 
+                val compressedImageFile = Compressor(this).compressToFile(File(pickedImg))
+
                     Toast.makeText(applicationContext, "$pickedImg", Toast.LENGTH_SHORT).show()
-
                     // membuat request body yang berisi file dari picked image.
-
                 if(!pickedImg.isNullOrEmpty()){
-                    val requestBody = RequestBody.create(MediaType.parse("multipart"), File(pickedImg))
-                    img_destination = MultipartBody.Part.createFormData("img_destination", File(pickedImg).name,requestBody)
+                    val requestBody = RequestBody.create(MediaType.parse("multipart"), compressedImageFile)
+                    img_destination = MultipartBody.Part.createFormData("img_destination",
+                        compressedImageFile.name,requestBody)
+                    Toast.makeText(baseContext, "$compressedImageFile", Toast.LENGTH_SHORT ).show()
                     Glide.with(this).load(pickedImg).into(iv_image)
                 }else{
                     val requestBody = RequestBody.create(MultipartBody.FORM, "")
                     img_destination = MultipartBody.Part.createFormData("img_destination", "",requestBody)
                 }
-
-                    // mengoper value dari requestbody sekaligus membuat form data untuk upload. dan juga mengambil nama dari picked image
-
-
-                // mempilkan image yang akan diupload dengan glide ke imgUpload.
-
             }
-
         }
     }
 
@@ -504,6 +462,20 @@ fun createPartFromString(descriptionString : String) : RequestBody {
         val result: String = cursor.getString(column_index)
         cursor.close()
         return result
+    }
+
+    override fun onBackPressed() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Alert!")
+            .setMessage("Yakin ingin keluar dari halaman ini? Jika anda keluar, data akan terhapus!")
+            .setPositiveButton("Ya",
+                DialogInterface.OnClickListener { dialog, which ->
+                    super.onBackPressed()
+                    finish()
+                })
+            .setNegativeButton("Kembali",null)
+            .setIcon(R.drawable.ic_warning_black_24dp)
+            .show()
     }
 
 }

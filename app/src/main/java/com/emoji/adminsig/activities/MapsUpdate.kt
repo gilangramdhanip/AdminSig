@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import com.emoji.adminsig.R
 import com.emoji.adminsig.models.Destination
+import com.google.android.gms.location.FusedLocationProviderClient
 
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -35,6 +36,7 @@ class MapsUpdate : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        supportActionBar?.hide()
 
         destination = intent.getParcelableExtra(EXTRA_UPDATE) as Destination
         destination.id_destination
@@ -43,6 +45,10 @@ class MapsUpdate : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+
+        mMap.isMyLocationEnabled = true
+        mMap.uiSettings.isMyLocationButtonEnabled = true
+        mMap.uiSettings.isZoomControlsEnabled = true
 
         mMap.addMarker(MarkerOptions()
             .position
@@ -80,7 +86,7 @@ class MapsUpdate : AppCompatActivity(), OnMapReadyCallback {
                         )
                     )
                 val lokasi = Destination(destination.id_destination, destination.name_destination,
-                    latLng.latitude.toString(), latLng.longitude.toString(), destination.address_destination, destination.desc_destination, destination.id_kategori, destination.img_destination, destination.id_kabupaten, destination.id_kecamatan, destination.jambuka, destination.jamtutup)
+                    latLng.latitude.toString(), latLng.longitude.toString(), address.getAddressLine(0).toString(), destination.desc_destination, destination.id_kategori, destination.img_destination, destination.id_kabupaten, destination.id_kecamatan, destination.jambuka, destination.jamtutup)
                 marker = mMap.addMarker(options)
                 marker.tag = lokasi
 

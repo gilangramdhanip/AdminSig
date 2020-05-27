@@ -1,12 +1,22 @@
 package com.emoji.adminsig.activities
 
 import android.content.Intent
+import android.content.IntentSender
+import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
+import android.webkit.PermissionRequest
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.emoji.adminsig.R
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -15,13 +25,23 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.single.PermissionListener
 import java.io.IOException
+import java.util.*
 
 
-class MapsTambah : AppCompatActivity(), OnMapReadyCallback {
+class MapsTambah : AppCompatActivity(), OnMapReadyCallback{
 
     private lateinit var mMap: GoogleMap
     private lateinit var marker: Marker
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    companion object {
+        const val REQUEST_CHECK_SETTINGS = 43
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,10 +50,15 @@ class MapsTambah : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        fusedLocationProviderClient = FusedLocationProviderClient(application)
         supportActionBar?.hide()
     }
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
+            mMap.setPadding(0,0,0,0)
+            mMap.isMyLocationEnabled = true
+            mMap.uiSettings.isMyLocationButtonEnabled = true
+            mMap.uiSettings.isZoomControlsEnabled = true
 
         val cameraPosition = CameraPosition.Builder()
             .target(LatLng(-8.6064737,116.2000303))
@@ -65,7 +90,8 @@ class MapsTambah : AppCompatActivity(), OnMapReadyCallback {
                             latLng.longitude
                         )
                     )
-                val lokasi = LatLng(latLng.latitude, latLng.longitude)
+                val lokasi =  address
+
                 marker = mMap.addMarker(options)
                 marker.tag = lokasi
 
@@ -74,7 +100,7 @@ class MapsTambah : AppCompatActivity(), OnMapReadyCallback {
             mMap.setOnInfoWindowClickListener(object : GoogleMap.OnInfoWindowClickListener{
                 override fun onInfoWindowClick(p0: Marker?) {
 
-                    val desti = p0!!.tag as LatLng
+                    val desti = p0!!.tag as Address
 
                     val intent = Intent(this@MapsTambah, DestinationCreateActivity::class.java)
                     intent.putExtra(DestinationCreateActivity.EXTRA_CREATE, desti)

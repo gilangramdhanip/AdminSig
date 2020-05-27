@@ -2,17 +2,21 @@ package com.emoji.adminsig.activities
 
 import android.app.Activity
 import android.content.Intent
+import android.content.IntentSender
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.webkit.PermissionRequest
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,13 +27,21 @@ import com.emoji.adminsig.helpers.SaveSharedPreference
 import com.emoji.adminsig.models.*
 import com.emoji.adminsig.preferencetools.SessionManager
 import com.emoji.adminsig.services.ServiceBuilder
+import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
+import com.karumi.dexter.Dexter
+import com.karumi.dexter.PermissionToken
+import com.karumi.dexter.listener.PermissionDeniedResponse
+import com.karumi.dexter.listener.PermissionGrantedResponse
+import com.karumi.dexter.listener.single.PermissionListener
 import kotlinx.android.synthetic.main.activity_destiny_list.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class DestinationListActivity : AppCompatActivity() {
+class DestinationListActivity : AppCompatActivity(), PermissionListener {
 
     private val apiService = ServiceBuilder.create()
 
@@ -50,12 +62,25 @@ class DestinationListActivity : AppCompatActivity() {
     private lateinit var spinnerKec : Array<Kecamatan>
     private lateinit var sessionManager: SessionManager
 
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
+    companion object {
+        const val REQUEST_CHECK_SETTINGS = 43
+    }
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_destiny_list)
 
 		setSupportActionBar(toolbar)
 		toolbar.title = title
+
+        fusedLocationProviderClient = FusedLocationProviderClient(application)
+
+        if (isPermissionGiven()){
+            getCurrentLocation()
+        } else {
+            givePermission()
+        }
 
         spin_kabupaten.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
 
@@ -117,6 +142,75 @@ class DestinationListActivity : AppCompatActivity() {
 			startActivity(intent)
 		}
 
+    }
+
+    private fun isPermissionGiven(): Boolean{
+        return ActivityCompat.checkSelfPermission(applicationContext, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun givePermission() {
+        Dexter.withActivity(this@DestinationListActivity)
+            .withPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
+            .withListener(this)
+            .check()
+    }
+
+    override fun onPermissionGranted(response: PermissionGrantedResponse?) {
+        getCurrentLocation()
+    }
+
+    override fun onPermissionRationaleShouldBeShown(
+        permission: com.karumi.dexter.listener.PermissionRequest?,
+        token: PermissionToken?
+    ) {
+        TODO("Not yet implemented")
+    }
+
+    fun onPermissionRationaleShouldBeShown(
+        permission: PermissionRequest?,
+        token: PermissionToken?
+    ) {
+        token!!.continuePermissionRequest()
+    }
+
+    override fun onPermissionDenied(response: PermissionDeniedResponse?) {
+        Toast.makeText(this@DestinationListActivity, "Permission required for showing location", Toast.LENGTH_LONG).show()
+        this?.finish()
+    }
+
+    private fun getCurrentLocation() {
+
+        val locationRequest = LocationRequest()
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        locationRequest.interval = (10 * 1000).toLong()
+        locationRequest.fastestInterval = 2000
+
+        val builder = LocationSettingsRequest.Builder()
+        builder.addLocationRequest(locationRequest)
+        val locationSettingsRequest = builder.build()
+
+        val result = LocationServices.getSettingsClient(application).checkLocationSettings(locationSettingsRequest)
+        result.addOnCompleteListener { task ->
+            try {
+                val response = task.getResult(ApiException::class.java)
+                if (response!!.locationSettingsStates.isLocationPresent){
+
+                }
+            } catch (exception: ApiException) {
+                when (exception.statusCode) {
+                    LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> try {
+                        val resolvable = exception as ResolvableApiException
+                        resolvable.startResolutionForResult(this@DestinationListActivity,
+                            MapsTambah.REQUEST_CHECK_SETTINGS
+                        )
+                    } catch (e: IntentSender.SendIntentException) {
+                    } catch (e: ClassCastException) {
+                    }
+
+                    LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> { }
+                }
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -318,25 +412,6 @@ class DestinationListActivity : AppCompatActivity() {
         super.onBackPressed()
         finishAffinity()
     }
-
-//    fun pencarian(){
-//                search_view.queryHint = resources.getString(R.string.search_hint)
-//        search_view.setOnQueryTextListener(object : SearchView.OnQueryTextListener,
-//            androidx.appcompat.widget.SearchView.OnQueryTextListener {
-//            override fun onQueryTextSubmit(p0: String?): Boolean {
-//
-//                return true
-//            }
-//
-//            override fun onQueryTextChange(p0: String?): Boolean {
-//                destinationAdapter.filter.filter(p0)
-//                return false
-//            }
-//
-//        })
-//    }
-
-
 
 }
 

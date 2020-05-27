@@ -25,6 +25,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.skripsi.sigwam.model.Kategori
 import com.skripsi.sigwam.model.KategoriResponse
+import id.zelory.compressor.Compressor
 import kotlinx.android.synthetic.main.activity_destiny_detail.*
 import okhttp3.MediaType
 import okhttp3.MultipartBody
@@ -139,11 +140,11 @@ class DestinationDetailActivity : AppCompatActivity() {
         et_jamtutup.setText(destination?.jamtutup)
 
         if(destination?.img_destination == ""){
-            img_view.setImageResource(R.drawable.undraw_journey_lwlj)
+            img_view.setImageResource(R.drawable.default_img)
         }else{
             Glide.with(applicationContext)
                 .load("http://192.168.1.71/rest_api/rest-server-sig/assets/foto/"+destination?.img_destination)
-                .apply(RequestOptions().override(100, 100))
+                .apply(RequestOptions().override(1280, 720))
                 .into(img_view)
         }
 
@@ -183,7 +184,7 @@ class DestinationDetailActivity : AppCompatActivity() {
                 .setMessage("Apakah anda yakin ingin menghapus data? Data yang dihapus tidak dapat di kembalikan!")
                 .setPositiveButton("Yakin",
                     DialogInterface.OnClickListener { dialog, which ->
-                        Snackbar.make(it, "Data Gagal ditambahkan", Snackbar.LENGTH_LONG).show()
+                        Snackbar.make(it, "Data Sedang dihapus", Snackbar.LENGTH_LONG).show()
 
                     val destinationService = ServiceBuilder.create()
                     val requestCall = destinationService.deleteDestination(destination!!.id_destination)
@@ -328,11 +329,13 @@ class DestinationDetailActivity : AppCompatActivity() {
                 // membuat variable yang menampung path dari picked image.
                 pickedImg = picUri?.let { getPath(it) }
 
+                val compressedImageFile = Compressor(this).compressToFile(File(pickedImg))
+
                 Toast.makeText(applicationContext, "$pickedImg", Toast.LENGTH_SHORT).show()
 
                 if(!pickedImg.isNullOrEmpty()){
-                    val requestBody = RequestBody.create(MediaType.parse("multipart"), File(pickedImg))
-                    img_destination = MultipartBody.Part.createFormData("img_destination", File(pickedImg).name,requestBody)
+                    val requestBody = RequestBody.create(MediaType.parse("multipart"), compressedImageFile)
+                    img_destination = MultipartBody.Part.createFormData("img_destination", compressedImageFile.name,requestBody)
                     Glide.with(this).load(pickedImg).into(img_view)
                 }else{
                     val requestBody = RequestBody.create(MultipartBody.FORM, "")
@@ -473,5 +476,22 @@ class DestinationDetailActivity : AppCompatActivity() {
 
         })
     }
+
+    override fun onBackPressed() {
+        MaterialAlertDialogBuilder(this)
+            .setTitle("Alert!")
+            .setMessage("Yakin ingin keluar dari halaman ini? Jika anda keluar, data akan terhapus!")
+            .setPositiveButton("Ya",
+                DialogInterface.OnClickListener { dialog, which ->
+                    super.onBackPressed()
+                    finish()
+                })
+            .setNegativeButton("Kembali",null)
+            .setIcon(R.drawable.ic_warning_black_24dp)
+            .show()
+
+
+    }
+
 
 }

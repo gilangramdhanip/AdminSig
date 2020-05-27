@@ -52,7 +52,7 @@
 			app:layout_constraintStart_toEndOf="@+id/txv_destination"
 			app:layout_constraintTop_toTopOf="parent" />
 
-		<ImageView
+		<de.hdodenhof.circleimageview.CircleImageView
 			android:id="@+id/iv_home"
 			android:layout_width="65dp"
 			android:layout_height="65dp"
@@ -62,7 +62,7 @@
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintTop_toTopOf="parent"
 			app:layout_constraintVertical_bias="0.0"
-			app:srcCompat="@drawable/undraw_journey_lwlj" />
+			android:src="@drawable/default_img" />
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 

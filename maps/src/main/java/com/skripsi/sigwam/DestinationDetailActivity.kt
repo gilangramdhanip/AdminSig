@@ -20,7 +20,7 @@ class DestinationDetailActivity : AppCompatActivity() {
 
     private var ambil :Int = 0
 
-    private lateinit var destination : Destination
+    private var destination : Destination? = null
     private val apiService = ServiceBuilder.create()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,27 +29,27 @@ class DestinationDetailActivity : AppCompatActivity() {
 
         supportActionBar?.hide()
 
-        destination = intent.getParcelableExtra(EXTRA_DETAIl) as Destination
+        destination = intent.getParcelableExtra(EXTRA_DETAIl) as? Destination
 
         //Load Destination
 
-        destination.id_destination
-        txv_title.text = destination.name_destination
-        txv_address.text = destination.address_destination
-        txv_desc.text = destination.desc_destination
-        if(destination.img_destination == ""){
-            imv_destination.setImageResource(R.drawable.undraw_journey_lwlj)
+        destination?.id_destination
+        txv_title.text = destination?.name_destination
+        txv_address.text = destination?.address_destination
+        txv_desc.text = destination?.desc_destination
+        if(destination?.img_destination == ""){
+            imv_destination.setImageResource(R.drawable.default_img)
         }else{
             Glide.with(baseContext)
-                .load("http://192.168.1.71/rest_api/rest-server-sig/assets/foto/"+destination.img_destination)
-                .apply(RequestOptions().override(500, 500))
+                .load("http://192.168.1.71/rest_api/rest-server-sig/assets/foto/"+destination?.img_destination)
+                .apply(RequestOptions().override(1280, 720))
                 .into(imv_destination)
         }
-        txv_cat.text = destination.id_kategori
-        txv_kabupaten.text = destination.id_kabupaten
-        txv_kecamatan.text = destination.id_kecamatan
-        txv_jambuka.text = destination.jambuka
-        txv_jamtutup.text = destination.jamtutup
+        txv_cat.text = destination?.id_kategori
+        txv_kabupaten.text = destination?.id_kabupaten
+        txv_kecamatan.text = destination?.id_kecamatan
+        txv_jambuka.text = destination?.jambuka
+        txv_jamtutup.text = destination?.jamtutup
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 

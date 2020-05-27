@@ -66,4 +66,7 @@ dependencies {
 
     //tap
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.13.0'
+
+    //circleimage
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 }
