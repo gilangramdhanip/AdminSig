@@ -22,8 +22,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.emoji.adminsig.R
-import com.emoji.adminsig.helpers.DestinationAdapter
-import com.emoji.adminsig.helpers.PencarianAdapter
+import com.emoji.adminsig.adapter.DestinationAdapter
+import com.emoji.adminsig.adapter.PencarianAdapter
 import com.emoji.adminsig.models.*
 import com.emoji.adminsig.services.ServiceBuilder
 import com.google.android.gms.common.api.ApiException

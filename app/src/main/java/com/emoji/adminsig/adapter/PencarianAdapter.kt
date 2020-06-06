@@ -1,28 +1,18 @@
-package com.emoji.adminsig.helpers
+package com.emoji.adminsig.adapter
 
-import android.app.Activity
 import android.content.Intent
-import android.graphics.Bitmap
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.emoji.adminsig.R
 import com.emoji.adminsig.activities.DestinationDetailActivity
-import com.emoji.adminsig.activities.DestinationListActivity
 import com.emoji.adminsig.models.Destination
-import com.emoji.adminsig.services.ServiceBuilder
-import kotlinx.android.synthetic.main.activity_destiny_create.view.*
-import kotlinx.android.synthetic.main.activity_destiny_list.*
-import kotlinx.android.synthetic.main.activity_destiny_list.view.*
 import kotlinx.android.synthetic.main.list_item.view.*
-import kotlin.coroutines.coroutineContext
 
 
 class PencarianAdapter(private val destinationList: ArrayList<Destination>): RecyclerView.Adapter<PencarianAdapter.ListViewHolder>(), Filterable {
