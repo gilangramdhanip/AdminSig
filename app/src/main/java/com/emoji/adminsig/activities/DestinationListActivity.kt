@@ -1,5 +1,6 @@
 package com.emoji.adminsig.activities
 
+import SessionManager
 import android.app.Activity
 import android.content.Intent
 import android.content.IntentSender
@@ -23,9 +24,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.emoji.adminsig.R
 import com.emoji.adminsig.helpers.DestinationAdapter
 import com.emoji.adminsig.helpers.PencarianAdapter
-import com.emoji.adminsig.helpers.SaveSharedPreference
 import com.emoji.adminsig.models.*
-import com.emoji.adminsig.preferencetools.SessionManager
 import com.emoji.adminsig.services.ServiceBuilder
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
@@ -70,6 +69,10 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_destiny_list)
+
+        val id = sessionManager.getId()
+
+        Toast.makeText(baseContext, "$id", Toast.LENGTH_SHORT).show()
 
 		setSupportActionBar(toolbar)
 		toolbar.title = title
@@ -215,7 +218,6 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == R.id.keluar) {
-            SaveSharedPreference.setLoggedIn(applicationContext, false)
             // Logout
             logout()
         }
@@ -403,6 +405,7 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
     }
 
     fun logout() {
+        sessionManager.clearSession()
                     val intent = Intent(applicationContext, LoginActivity::class.java)
                     intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
                     startActivity(intent)

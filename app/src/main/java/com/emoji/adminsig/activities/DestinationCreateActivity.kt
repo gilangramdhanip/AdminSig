@@ -1,5 +1,6 @@
 package com.emoji.adminsig.activities
 
+import SessionManager
 import android.Manifest
 import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
@@ -82,11 +83,14 @@ class DestinationCreateActivity : AppCompatActivity() {
     private lateinit var lat : String
     private lateinit var lng : String
     val PICK_IMAGE_REQUEST = 1
+    private lateinit var sessionManager: SessionManager
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_destiny_create)
+
+        val id = sessionManager.getId()
 
 
         destination = intent.getParcelableExtra(EXTRA_CREATE) as Address
@@ -244,6 +248,7 @@ class DestinationCreateActivity : AppCompatActivity() {
                         map["id_kecamatan"] = createPartFromString(kecamatan)
                         map["jambuka"] = createPartFromString(et_jambuka.text.toString())
                         map["jamtutup"] = createPartFromString(et_jamtutup.text.toString())
+                                    map["id_admin"] = createPartFromString(sessionManager.getId())
 
                         val destinationService = ServiceBuilder.create()
                         val requestCall = destinationService.addDestination(map, img_destination)

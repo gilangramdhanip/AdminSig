@@ -1,5 +1,6 @@
 package com.emoji.adminsig.activities
 
+import SessionManager
 import android.Manifest
 import android.app.TimePickerDialog
 import android.content.DialogInterface
@@ -63,6 +64,7 @@ class DestinationDetailActivity : AppCompatActivity() {
     private val apiService = ServiceBuilder.create()
     var img_destination: MultipartBody.Part? = null
     val PICK_IMAGE_REQUEST = 1
+    private lateinit var sessionManager: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -238,6 +240,7 @@ class DestinationDetailActivity : AppCompatActivity() {
                 map["id_kecamatan"] = createPartFromString(kecamatan)
                 map["jambuka"] = createPartFromString(et_jambuka.text.toString())
                 map["jamtutup"] = createPartFromString(et_jamtutup.text.toString())
+                map["id_admin"] = createPartFromString(sessionManager.getId())
 
                 if(pickedImg==null){
                     Toast.makeText(applicationContext, "Image not selected!", Toast.LENGTH_LONG).show()

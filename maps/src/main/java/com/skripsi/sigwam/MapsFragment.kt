@@ -270,6 +270,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
         val mountainMarker = Bitmap.createScaledBitmap(mountainBitmap, 90, 90, false)
         val waterfallBitmap = BitmapFactory.decodeResource(resources, R.drawable.waterfall)
         val waterfallMarker = Bitmap.createScaledBitmap(waterfallBitmap, 90, 90, false)
+//        markerOption.icon(BitmapDescriptorFactory.fromBitmap(waterfallMarker))
         apiService.getDestinationList().enqueue(object : Callback<DestinationResponse> {
             override fun onFailure(call: Call<DestinationResponse>, t: Throwable) {
                 Toast.makeText(requireContext(), "Terdapat kesalahan Koneksi", Toast.LENGTH_SHORT).show()
@@ -288,30 +289,34 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                         val latlng : LatLng = LatLng(lat,lng)
 
                         if(it.id_kategori=="Pantai"){
-
                             markerOption.position(latlng)
                             markerOption.title(it.name_destination)
                             markerOption.snippet(it.address_destination)
-                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(beachMarker))
-                        }else if(it.id_kategori=="Bukit"){
+                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                        }else if(it.id_kategori=="Gili"){
                             markerOption.position(latlng)
                             markerOption.title(it.name_destination)
                             markerOption.snippet(it.address_destination)
-                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(hillMarker))
+                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
 
                         }else if(it.id_kategori=="Desa Wisata"){
                             markerOption.position(latlng)
                             markerOption.title(it.name_destination)
                             markerOption.snippet(it.address_destination)
-                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(mountainMarker))
+                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
 
                         }else if(it.id_kategori=="Air Terjun"){
                             markerOption.position(latlng)
                             markerOption.title(it.name_destination)
                             markerOption.snippet(it.address_destination)
-                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(waterfallMarker))
+                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                        }else{
+                            markerOption.position(latlng)
+                            markerOption.title(it.name_destination)
+                            markerOption.snippet(it.address_destination)
+                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
                         }
-                        val desti = Destination(id,it.name_destination, it.lat_destination,it.lng_destination, it.address_destination, it.desc_destination, it.id_kategori, it.img_destination, it.id_kabupaten, it.id_kecamatan)
+                        val desti = Destination(id,it.name_destination, it.lat_destination,it.lng_destination, it.address_destination, it.desc_destination, it.id_kategori, it.img_destination, it.id_kabupaten, it.id_kecamatan,it.jambuka, it.jamtutup)
                         val m = googleMap.addMarker(markerOption)
                         m.tag = desti
 
@@ -423,14 +428,14 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
 
     private fun filterCategory(simpanKategori: String) {
         var markerOption = MarkerOptions()
-        val beachBitmap = BitmapFactory.decodeResource(resources, R.drawable.beach)
-        val beachMarker = Bitmap.createScaledBitmap(beachBitmap, 90, 90, false)
-        val hillBitmap = BitmapFactory.decodeResource(resources, R.drawable.mountain)
-        val hillMarker = Bitmap.createScaledBitmap(hillBitmap, 90, 90, false)
-        val mountainBitmap = BitmapFactory.decodeResource(resources, R.drawable.mountain)
-        val mountainMarker = Bitmap.createScaledBitmap(mountainBitmap, 90, 90, false)
-        val waterfallBitmap = BitmapFactory.decodeResource(resources, R.drawable.waterfall)
-        val waterfallMarker = Bitmap.createScaledBitmap(waterfallBitmap, 90, 90, false)
+//        val beachBitmap = BitmapFactory.decodeResource(resources, R.drawable.beach)
+//        val beachMarker = Bitmap.createScaledBitmap(beachBitmap, 90, 90, false)
+//        val hillBitmap = BitmapFactory.decodeResource(resources, R.drawable.mountain)
+//        val hillMarker = Bitmap.createScaledBitmap(hillBitmap, 90, 90, false)
+//        val mountainBitmap = BitmapFactory.decodeResource(resources, R.drawable.mountain)
+//        val mountainMarker = Bitmap.createScaledBitmap(mountainBitmap, 90, 90, false)
+//        val waterfallBitmap = BitmapFactory.decodeResource(resources, R.drawable.waterfall)
+//        val waterfallMarker = Bitmap.createScaledBitmap(waterfallBitmap, 90, 90, false)
         apiService.getFilterKategori(simpanKategori).enqueue(object : Callback<DestinationResponse> {
             override fun onFailure(call: Call<DestinationResponse>, t: Throwable) {
                 Toast.makeText(context, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
@@ -454,26 +459,31 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                             markerOption.position(latlng)
                             markerOption.title(it.name_destination)
                             markerOption.snippet(it.address_destination)
-                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(beachMarker))
-                        }else if(it.id_kategori=="Bukit"){
+                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
+                        }else if(it.id_kategori=="Gili"){
                             markerOption.position(latlng)
                             markerOption.title(it.name_destination)
                             markerOption.snippet(it.address_destination)
-                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(hillMarker))
+                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
 
                         }else if(it.id_kategori=="Desa Wisata"){
                             markerOption.position(latlng)
                             markerOption.title(it.name_destination)
                             markerOption.snippet(it.address_destination)
-                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(mountainMarker))
+                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
 
                         }else if(it.id_kategori=="Air Terjun"){
                             markerOption.position(latlng)
                             markerOption.title(it.name_destination)
                             markerOption.snippet(it.address_destination)
-                            markerOption.icon(BitmapDescriptorFactory.fromBitmap(waterfallMarker))
+                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                        }else{
+                            markerOption.position(latlng)
+                            markerOption.title(it.name_destination)
+                            markerOption.snippet(it.address_destination)
+                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
                         }
-                        val desti = Destination(id,it.name_destination, it.lat_destination,it.lng_destination, it.address_destination, it.desc_destination, it.id_kategori, it.img_destination, it.id_kabupaten, it.id_kecamatan)
+                        val desti = Destination(id,it.name_destination, it.lat_destination,it.lng_destination, it.address_destination, it.desc_destination, it.id_kategori, it.img_destination, it.id_kabupaten, it.id_kecamatan, it.jambuka, it.jamtutup)
                         val m = googleMap.addMarker(markerOption)
                         m.tag = desti
 
@@ -552,13 +562,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                 // 2
                 .targets(
                     TapTarget.forView(
-                        view!!.rootView.findViewById(R.id.filter_cat),
+                        requireView().rootView.findViewById(R.id.filter_cat),
                         "Filter Kategori",
                         "Lakukan Filter Wisata Berdasarkan Kategori, Dan Temukan Wisata Alam Yang Kamu Mau"
                     )
                         .cancelable(false).transparentTarget(true).targetRadius(70),
                     TapTarget.forView(
-                        view!!.rootView.findViewById(R.id.search_view),
+                        requireView().rootView.findViewById(R.id.search_view),
                         "Pencarian",
                         "Tulis Nama Wisata Alam Yang Kamu Inginkan Disini"
                     )

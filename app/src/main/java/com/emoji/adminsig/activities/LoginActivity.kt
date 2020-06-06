@@ -1,15 +1,14 @@
 package com.emoji.adminsig.activities
 
+import SessionManager
 import android.content.Intent
 import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.emoji.adminsig.R
-import com.emoji.adminsig.helpers.DestinationAdapter
-import com.emoji.adminsig.helpers.SaveSharedPreference
-import com.emoji.adminsig.helpers.SaveSharedPreference.setLoggedIn
 import com.emoji.adminsig.models.LoginResponse
 import com.emoji.adminsig.services.ServiceBuilder
 import com.facebook.stetho.Stetho
@@ -21,15 +20,19 @@ import retrofit2.Response
 
 class LoginActivity : AppCompatActivity(), View.OnClickListener {
 
+    private lateinit var sessionManager: SessionManager
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
         Stetho.initializeWithDefaults(this)
 
-        if (SaveSharedPreference.getLoggedStatus(applicationContext)) {
-            val intent = Intent(applicationContext, DestinationListActivity::class.java)
-            startActivity(intent)
+        sessionManager = SessionManager(this)
+        if (sessionManager.isLoggedIn()){
+            val toMenu = Intent(this@LoginActivity, DestinationListActivity::class.java)
+            startActivity(toMenu)
         }
+
         btn_login.setOnClickListener(this)
     }
 
@@ -53,20 +56,18 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
             override fun onResponse(call: Call<LoginResponse>, response: Response<LoginResponse>) {
                 if (response.isSuccessful) {
                     // Set Logged In statue to 'true'
-                    setLoggedIn(applicationContext, true)
-                    val intent = Intent(applicationContext, DestinationListActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or FLAG_ACTIVITY_CLEAR_TASK)
-                    intent.putExtra("username", username)
-                    Toast.makeText(
-                        applicationContext, "Selamat datang admin $username",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    startActivity(intent)
-                } else {
-                    Toast.makeText(
-                        applicationContext, "Password/username salah",
-                        Toast.LENGTH_SHORT
-                    ).show()
+                    val data = response.body()
+
+                    sessionManager.saveData(
+                        data!!.data.id_admin,
+                        data!!.data.username,
+                        data!!.data.password
+
+                    )
+                    Log.d("error apanih", response.message())
+                    val toLogin = Intent(this@LoginActivity, DestinationListActivity::class.java)
+                    toLogin.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                    startActivity(toLogin)
                 }
             }
         })
