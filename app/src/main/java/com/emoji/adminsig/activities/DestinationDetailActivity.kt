@@ -1,6 +1,6 @@
 package com.emoji.adminsig.activities
 
-import SessionManager
+import com.emoji.adminsig.preferencetools.SessionManager
 import android.Manifest
 import android.app.TimePickerDialog
 import android.content.DialogInterface
@@ -69,7 +69,7 @@ class DestinationDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_destiny_detail)
-
+        sessionManager = SessionManager(this)
         destination = intent.getParcelableExtra(EXTRA_DETAIl) as? Destination
 
 

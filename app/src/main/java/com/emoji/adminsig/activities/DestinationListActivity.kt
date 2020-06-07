@@ -1,6 +1,6 @@
 package com.emoji.adminsig.activities
 
-import SessionManager
+import com.emoji.adminsig.preferencetools.SessionManager
 import android.app.Activity
 import android.content.Intent
 import android.content.IntentSender
@@ -69,7 +69,7 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_destiny_list)
-
+        sessionManager = SessionManager(this)
         val id = sessionManager.getId()
 
         Toast.makeText(baseContext, "$id", Toast.LENGTH_SHORT).show()

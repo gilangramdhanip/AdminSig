@@ -1,8 +1,7 @@
 package com.emoji.adminsig.activities
 
-import SessionManager
+import com.emoji.adminsig.preferencetools.SessionManager
 import android.content.Intent
-import android.content.Intent.FLAG_ACTIVITY_CLEAR_TASK
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -62,7 +61,6 @@ class LoginActivity : AppCompatActivity(), View.OnClickListener {
                         data!!.data.id_admin,
                         data!!.data.username,
                         data!!.data.password
-
                     )
                     Log.d("error apanih", response.message())
                     val toLogin = Intent(this@LoginActivity, DestinationListActivity::class.java)

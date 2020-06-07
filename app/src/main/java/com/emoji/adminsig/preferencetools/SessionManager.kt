@@ -1,3 +1,5 @@
+package com.emoji.adminsig.preferencetools
+
 import android.content.Context
 import android.content.SharedPreferences
 
@@ -7,13 +9,13 @@ class SessionManager(val context: Context) {
 
     fun saveData(id_admin: String,
                  username: String,
-                 password : String
+                 password: String
     ){
         val editor: SharedPreferences.Editor = sharedPref.edit()
         editor.putBoolean("LOGIN_STATUS", true)
-        editor.putString("id_admin", id_admin)
-        editor.putString("username", username)
-        editor.putString("password", password)
+        editor.putString("ID", id_admin)
+        editor.putString("USERNAME", username)
+        editor.putString("PASS", password)
         editor.apply()
     }
 
@@ -21,12 +23,12 @@ class SessionManager(val context: Context) {
         return sharedPref.getString("ID", null).toString()
     }
 
-    fun getEmail(): String{
+    fun getUsername(): String{
         return sharedPref.getString("USERNAME", null).toString()
     }
 
     fun getPassword(): String{
-        return sharedPref.getString("PASSWORD", null).toString()
+        return sharedPref.getString("PASS", null).toString()
     }
 
     fun isLoggedIn(): Boolean{

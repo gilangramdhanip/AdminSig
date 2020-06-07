@@ -1,6 +1,6 @@
 package com.emoji.adminsig.activities
 
-import SessionManager
+import com.emoji.adminsig.preferencetools.SessionManager
 import android.Manifest
 import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
@@ -21,7 +21,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.loader.content.CursorLoader
@@ -31,12 +30,10 @@ import com.emoji.adminsig.models.*
 import com.emoji.adminsig.services.ServiceBuilder
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
 import com.skripsi.sigwam.model.Kategori
 import com.skripsi.sigwam.model.KategoriResponse
-import com.vincent.filepicker.activity.BaseActivity
 import id.zelory.compressor.Compressor
 import kotlinx.android.synthetic.main.activity_destiny_create.*
 import okhttp3.MediaType
@@ -47,7 +44,6 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.io.File
-import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
@@ -89,7 +85,7 @@ class DestinationCreateActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_destiny_create)
-
+        sessionManager = SessionManager(this)
         val id = sessionManager.getId()
 
 
@@ -248,7 +244,7 @@ class DestinationCreateActivity : AppCompatActivity() {
                         map["id_kecamatan"] = createPartFromString(kecamatan)
                         map["jambuka"] = createPartFromString(et_jambuka.text.toString())
                         map["jamtutup"] = createPartFromString(et_jamtutup.text.toString())
-                                    map["id_admin"] = createPartFromString(sessionManager.getId())
+                        map["id_admin"] = createPartFromString(sessionManager.getId())
 
                         val destinationService = ServiceBuilder.create()
                         val requestCall = destinationService.addDestination(map, img_destination)
