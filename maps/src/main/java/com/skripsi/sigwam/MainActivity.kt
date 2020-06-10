@@ -9,6 +9,7 @@ import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -44,12 +45,13 @@ class MainActivity : AppCompatActivity() {
 
         setupActionBarWithNavController(navController)
 
-        showTapView()
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.bottom_nav_menu,menu)
         nav_bottom.setupWithNavController(menu!!,navController)
+
+
         return true
     }
 
@@ -62,48 +64,8 @@ class MainActivity : AppCompatActivity() {
         super.onBackPressed()
     }
 
-    fun showTapView() {
-        if (StatusUtils.getTutorialStatus(this)) {
-            TapTargetSequence(this)
-                // 2
-                .targets(
-
-                    TapTarget.forView(
-                        findViewById(R.id.navigation_list),
-                        "List Wisata",
-                        "Halaman untuk menampilkan Daftar Wisata Alam"
-                    )
-                        .cancelable(false).transparentTarget(true).targetRadius(70),
-                    TapTarget.forView(
-                        findViewById(R.id.navigation_map),
-                        "Halaman Peta",
-                        "Halaman untuk menampilkan peta Wisata Alam"
-                    )
-                        .cancelable(false).transparentTarget(true).targetRadius(70)
-                )
-
-
-                // 3
-                .listener(object : TapTargetSequence.Listener {
-                    override fun onSequenceStep(lastTarget: TapTarget?, targetClicked: Boolean) {
-                    }
-
-                    // 4
-                    override fun onSequenceFinish() {
-                        Toast.makeText(
-                            this@MainActivity, "Berhasil",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    }
-
-                    // 5
-                    override fun onSequenceCanceled(lastTarget: TapTarget) {
-                    }
-                })
-                // 6
-                .start()
-
-        }
-    }
+//    fun showTapView() {
+//
+//    }
 
 }
