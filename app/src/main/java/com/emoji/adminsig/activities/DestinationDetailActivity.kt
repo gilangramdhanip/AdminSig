@@ -242,9 +242,9 @@ class DestinationDetailActivity : AppCompatActivity() {
                 map["jamtutup"] = createPartFromString(et_jamtutup.text.toString())
                 map["id_admin"] = createPartFromString(sessionManager.getId())
 
-                if(pickedImg==null){
-                    Toast.makeText(applicationContext, "Image not selected!", Toast.LENGTH_LONG).show()
-                }
+//                if(pickedImg==null){
+//                    Toast.makeText(applicationContext, "Image not selected!", Toast.LENGTH_LONG).show()
+//                }
 
                 val destinationService = ServiceBuilder.create()
                 val requestCall = destinationService.updateDestination(destination!!.id_destination, map, img_destination)
@@ -267,7 +267,7 @@ class DestinationDetailActivity : AppCompatActivity() {
                     }
 
                     override fun onFailure(call: Call<DestinationResponse>, t: Throwable) {
-                        Snackbar.make(it, "Data Gagal diubah", Snackbar.LENGTH_LONG).show()
+                        Snackbar.make(it, "Data Gagal diubah bro", Snackbar.LENGTH_LONG).show()
                         Log.d("respon gagagal", t.message)
                     }
                 })
@@ -342,7 +342,7 @@ class DestinationDetailActivity : AppCompatActivity() {
                     Glide.with(this).load(pickedImg).into(img_view)
                 }else{
                     val requestBody = RequestBody.create(MultipartBody.FORM, "")
-                    img_destination = MultipartBody.Part.createFormData("img_destination", "",requestBody)
+                    img_destination = MultipartBody.Part.createFormData("", "",requestBody)
                 }
 
 

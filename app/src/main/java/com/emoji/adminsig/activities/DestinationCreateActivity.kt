@@ -244,7 +244,7 @@ class DestinationCreateActivity : AppCompatActivity() {
                         map["id_kecamatan"] = createPartFromString(kecamatan)
                         map["jambuka"] = createPartFromString(et_jambuka.text.toString())
                         map["jamtutup"] = createPartFromString(et_jamtutup.text.toString())
-                        map["id_admin"] = createPartFromString(sessionManager.getId())
+                                    map["id_admin"] = createPartFromString(sessionManager.getId())
 
                         val destinationService = ServiceBuilder.create()
                         val requestCall = destinationService.addDestination(map, img_destination)

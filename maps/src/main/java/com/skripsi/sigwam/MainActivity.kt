@@ -22,10 +22,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity() {
     companion object{
         lateinit var contextOfApp: Context
-        fun getContextApp(): Context {
-            return contextOfApp
-        }
+    fun getContextApp(): Context {
+        return contextOfApp
     }
+}
     lateinit var navController : NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
