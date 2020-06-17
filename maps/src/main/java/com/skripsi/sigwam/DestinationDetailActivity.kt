@@ -8,7 +8,7 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.skripsi.sigwam.model.Destination
 import com.skripsi.sigwam.service.ServiceBuilder
-import kotlinx.android.synthetic.main.activity_destiny_detail.*
+import kotlinx.android.synthetic.main.destiny_detail.*
 
 
 class DestinationDetailActivity : AppCompatActivity() {
@@ -24,7 +24,7 @@ class DestinationDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_destiny_detail)
+        setContentView(R.layout.destiny_detail)
 
         supportActionBar?.hide()
 

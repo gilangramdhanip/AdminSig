@@ -1,4 +1,4 @@
-package com.emoji.adminsig.activities
+package com.skripsi.sigwam.activity
 
 import com.emoji.adminsig.preferencetools.SessionManager
 import android.Manifest
@@ -16,16 +16,16 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.loader.content.CursorLoader
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.emoji.adminsig.R
-import com.emoji.adminsig.models.*
-import com.emoji.adminsig.services.ServiceBuilder
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.skripsi.sigwam.model.Kategori
-import com.skripsi.sigwam.model.KategoriResponse
+import com.skripsi.sigwam.MainActivity
+import com.skripsi.sigwam.R
+import com.skripsi.sigwam.model.*
+import com.skripsi.sigwam.service.ServiceBuilder
 import id.zelory.compressor.Compressor
 import kotlinx.android.synthetic.main.activity_destiny_detail.*
 import okhttp3.MediaType
@@ -41,7 +41,7 @@ import kotlin.collections.ArrayList
 import kotlin.collections.set
 
 
-class DestinationDetailActivity : AppCompatActivity() {
+class DestinationDetail : AppCompatActivity() {
 
     companion object {
         const val EXTRA_DETAIl = "extra_detail"
@@ -72,7 +72,9 @@ class DestinationDetailActivity : AppCompatActivity() {
         sessionManager = SessionManager(this)
         destination = intent.getParcelableExtra(EXTRA_DETAIl) as? Destination
 
-
+        val toolbar: Toolbar? = findViewById<Toolbar>(R.id.profileToolbar)
+        toolbar!!.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
+        toolbar.setNavigationOnClickListener(View.OnClickListener { onBackPressed() })
         initSpinnerKabupaten()
         initSpinnerCategory()
 
@@ -90,7 +92,7 @@ class DestinationDetailActivity : AppCompatActivity() {
                 kabupaten = spin_kab.selectedItem.toString()
                 simpanNamaKab = spinnerKab[position].id_kabupaten
                 setKecamatanSpinner(simpanNamaKab)
-                Toast.makeText(this@DestinationDetailActivity, " Kamu memilih spinner "+spinnerKab[position].name_kabupaten, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@DestinationDetail, " Kamu memilih spinner "+spinnerKab[position].name_kabupaten, Toast.LENGTH_SHORT).show()
             }
 
         }
@@ -152,7 +154,7 @@ class DestinationDetailActivity : AppCompatActivity() {
 
 
         buka_peta.setOnClickListener {
-            val intent = Intent(this@DestinationDetailActivity, MapsUpdate::class.java)
+            val intent = Intent(this@DestinationDetail, MapsUpdate::class.java)
             intent.putExtra(MapsUpdate.EXTRA_UPDATE, destination)
             startActivity(intent)
         }
@@ -195,7 +197,7 @@ class DestinationDetailActivity : AppCompatActivity() {
 
                         override fun onResponse(call: Call<DeleteResponse>, response: Response<DeleteResponse>) {
                             if (response.isSuccessful) {
-                                val intent = Intent(this@DestinationDetailActivity, DestinationListActivity::class.java)
+                                val intent = Intent(this@DestinationDetail, DestinationListActivity::class.java)
                                 startActivity(intent)
                                 Snackbar.make(it, "Data Berhasil dihapus", Snackbar.LENGTH_LONG).show()
                                 finish()
@@ -216,7 +218,7 @@ class DestinationDetailActivity : AppCompatActivity() {
 
                     })
                 .setNegativeButton("Kembali",null)
-                .setIcon(R.drawable.ic_warning_black_24dp)
+                .setIcon(R.drawable.helpicon)
                 .show()
             }
 
@@ -241,8 +243,8 @@ class DestinationDetailActivity : AppCompatActivity() {
                 map["jambuka"] = createPartFromString(et_jambuka.text.toString())
                 map["jamtutup"] = createPartFromString(et_jamtutup.text.toString())
                 map["id_admin"] = createPartFromString(sessionManager.getId())
-                map["status"] = createPartFromString("1")
-                map["id_wisatawan"] = createPartFromString("")
+                map["status"] = createPartFromString("0")
+                map["id_wisatawan"] = createPartFromString(sessionManager.getId())
 
 //                if(pickedImg==null){
 //                    Toast.makeText(applicationContext, "Image not selected!", Toast.LENGTH_LONG).show()
@@ -255,10 +257,10 @@ class DestinationDetailActivity : AppCompatActivity() {
 
                     override fun onResponse(call: Call<DestinationResponse>, response: Response<DestinationResponse>) {
                         if (response.isSuccessful) {
-                            val intent = Intent(this@DestinationDetailActivity, DestinationListActivity::class.java)
+                            val intent = Intent(this@DestinationDetail, MainActivity::class.java)
                             startActivity(intent)
                             Snackbar.make(it, "Data Berhasil diubah", Snackbar.LENGTH_LONG).show()
-                            finish()
+                            finishAffinity()
                             var updatedDestination = response.body() // Use it or ignore It
 
                             Log.d("onResponse", response.toString())
@@ -276,7 +278,7 @@ class DestinationDetailActivity : AppCompatActivity() {
 
                         })
                     .setNegativeButton("Kembali",null)
-                    .setIcon(R.drawable.ic_mood_black_24dp)
+                    .setIcon(R.drawable.personmarker)
                     .show()
             }
 
@@ -380,7 +382,7 @@ class DestinationDetailActivity : AppCompatActivity() {
 
         apiService.getKabupaten().enqueue(object : Callback<KabupatenResponse>{
             override fun onFailure(call: Call<KabupatenResponse>, t: Throwable) {
-                Toast.makeText(this@DestinationDetailActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@DestinationDetail, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -394,7 +396,7 @@ class DestinationDetailActivity : AppCompatActivity() {
                         listSpinner.add(it.name_kabupaten)
                     }
 
-                    val adapter = ArrayAdapter(this@DestinationDetailActivity, android.R.layout.simple_spinner_item, listSpinner)
+                    val adapter = ArrayAdapter(this@DestinationDetail, android.R.layout.simple_spinner_item, listSpinner)
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spin_kab.adapter = adapter
                     val kabupatenN = spinnerKab.firstOrNull { it.name_kabupaten == destination?.id_kabupaten }
@@ -404,7 +406,7 @@ class DestinationDetailActivity : AppCompatActivity() {
 
                 else{
                     Log.d("gagalresponse", response.toString())
-                    Toast.makeText(this@DestinationDetailActivity, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@DestinationDetail, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -415,7 +417,7 @@ class DestinationDetailActivity : AppCompatActivity() {
     private fun setKecamatanSpinner(idkabupaten: String){
         apiService.getKecamatan(idkabupaten).enqueue(object : Callback<KecamatanResponse>{
             override fun onFailure(call: Call<KecamatanResponse>, t: Throwable) {
-                Toast.makeText(this@DestinationDetailActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@DestinationDetail, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -430,7 +432,7 @@ class DestinationDetailActivity : AppCompatActivity() {
                         listSpinner.add(it.name_kecamatan)
                     }
 
-                    val adapter = ArrayAdapter(this@DestinationDetailActivity, android.R.layout.simple_spinner_item, listSpinner)
+                    val adapter = ArrayAdapter(this@DestinationDetail, android.R.layout.simple_spinner_item, listSpinner)
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spin_kec.adapter = adapter
 
@@ -441,7 +443,7 @@ class DestinationDetailActivity : AppCompatActivity() {
 
                 else{
                     Log.d("gagalresponse", response.toString())
-                    Toast.makeText(this@DestinationDetailActivity, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@DestinationDetail, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -451,7 +453,7 @@ class DestinationDetailActivity : AppCompatActivity() {
     private fun initSpinnerCategory(){
         apiService.getKategori().enqueue(object : Callback<KategoriResponse>{
             override fun onFailure(call: Call<KategoriResponse>, t: Throwable) {
-                Toast.makeText(this@DestinationDetailActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@DestinationDetail, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -465,7 +467,7 @@ class DestinationDetailActivity : AppCompatActivity() {
                         listSpinner.add(it.name_kategori)
                     }
 
-                    val adapter = ArrayAdapter(this@DestinationDetailActivity, android.R.layout.simple_spinner_item, listSpinner)
+                    val adapter = ArrayAdapter(this@DestinationDetail, android.R.layout.simple_spinner_item, listSpinner)
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spin_cat.adapter = adapter
                     val kategori = spinnerCat.firstOrNull { it.name_kategori == destination?.id_kategori }
@@ -475,7 +477,7 @@ class DestinationDetailActivity : AppCompatActivity() {
 
                 else{
                     Log.d("gagalresponse", response.toString())
-                    Toast.makeText(this@DestinationDetailActivity, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@DestinationDetail, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -492,7 +494,7 @@ class DestinationDetailActivity : AppCompatActivity() {
                     finish()
                 })
             .setNegativeButton("Kembali",null)
-            .setIcon(R.drawable.ic_warning_black_24dp)
+            .setIcon(R.drawable.helpicon)
             .show()
 
 

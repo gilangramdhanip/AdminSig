@@ -16,7 +16,22 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".activity.AkunActivity"></activity>
+        <activity android:name=".activity.WisataActivity" />
+        <activity android:name=".activity.DestinationCreateActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activity.DestinationDetail"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activity.DestinationListActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activity.MapsTambah"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".activity.MapsUpdate"
+            android:theme="@style/AppTheme.NoActionBar"/>
+
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".RegistrationActivity" />
+        <activity android:name=".MainActivity" />
         <activity android:name=".SplasScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

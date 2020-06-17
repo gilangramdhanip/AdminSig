@@ -1,6 +1,8 @@
 package com.skripsi.sigwam.service
 
 import com.skripsi.sigwam.model.*
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -8,6 +10,11 @@ interface DestinationService {
 
     @GET("destination")
     fun getDestinationList(): Call<DestinationResponse>
+
+    @GET("destination")
+    fun getDestinationbyId(
+        @Query ("id_wisatawan") id_wisatawan : String
+    ): Call<DestinationResponse>
 
     @GET("destination")
     fun getFilterKategori(@Query("id_kategori") id_kategori: String): Call<DestinationResponse>
@@ -29,20 +36,34 @@ interface DestinationService {
         @Query("id_kabupaten") id_kabupaten: String,
         @Query("id_kecamatan") id_kecamatan: String): Call<KecamatanResponse>
 
-    @FormUrlEncoded
-    @PUT("destination")
+    @Multipart
+    @POST("update")
     fun updateDestination(
-        @Field("id_destination") id_destination: Int,
-        @Field("name_destination") name: String,
-        @Field("lat_destination") lat: String,
-        @Field("lng_destination") lng: String,
-        @Field("address_destination") address: String,
-        @Field("desc_destination") description: String,
-        @Field("img_destination") image: String,
-        @Field("id_kategori") cat: String,
-        @Field("id_kabupaten") id_kab: String,
-        @Field("id_kecamatan") id_kec: String
-
+        @Part("id_destination") id_destination: Int,
+        @PartMap partmap: Map<String, @JvmSuppressWildcards RequestBody>,
+        @Part img_destination: MultipartBody.Part?
     ): Call<DestinationResponse>
+
+    @Multipart
+    @POST("destination")
+    fun addDestination(
+        @PartMap partmap: Map<String, @JvmSuppressWildcards RequestBody>,
+        @Part img_destination: MultipartBody.Part?
+    ): Call<DestinationResponse>
+
+    @FormUrlEncoded
+    @POST("wisatawan")
+    fun signin(
+        @Field("email") email: String,
+        @Field("password") password: String): Call<LoginResponse>
+
+    @POST("registration")
+    fun regisWisatawan(@Body newWisatawan: Wisatawan): Call<WisatawanResponse>
+
+    @FormUrlEncoded
+    @HTTP(  method = "DELETE", path = "api/destination", hasBody = true)
+    fun deleteDestination(
+        @Field("id_destination") id_destination: Int
+    ): Call<DeleteResponse>
 
 }

@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		xmlns:tools="http://schemas.android.com/tools"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:fitsSystemWindows="true">
+
+	<RelativeLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+		<androidx.appcompat.widget.Toolbar
+			android:id="@+id/profileToolbar"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content">
+
+		</androidx.appcompat.widget.Toolbar>
+		<TextView
+			android:layout_below="@+id/profileToolbar"
+			android:id="@+id/txv_judulnya"
+			android:gravity="center"
+			android:text="DAFTAR WISATA YANG ANDA TAMBAHKAN"
+			android:textSize="20sp"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"/>
+
+		<LinearLayout
+			android:layout_below="@+id/txv_judulnya"
+			android:id="@+id/ll_spinner"
+			android:orientation="horizontal"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:orientation="horizontal"
+				android:layout_height="wrap_content">
+
+				<Spinner
+					android:id="@+id/spin_kabupaten"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:padding="10dp"
+					android:spinnerMode="dropdown"
+					android:textColor="#000000"
+					android:hint="Category"/>
+
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_width="wrap_content"
+				android:orientation="horizontal"
+				android:layout_height="wrap_content">
+
+				<com.toptoche.searchablespinnerlibrary.SearchableSpinner
+					android:id="@+id/spin_kecamatan"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:padding="10dp"
+					android:spinnerMode="dropdown"
+					android:visibility="gone"
+					android:textColor="#000000"
+					android:hint="Category"/>
+
+			</LinearLayout>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_marginTop="10dp"
+			android:layout_below="@id/ll_spinner"
+			android:orientation="horizontal"
+			android:id="@+id/ll_search"
+            android:padding="10dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/shapessearch"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+			<TextView
+				android:drawableLeft="@drawable/search"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:id="@+id/btn_cari"
+				android:text="Lakukan Pencarian Lokasi disini"
+				android:visibility="visible"
+				/>
+
+			<AutoCompleteTextView
+				android:drawableLeft="@drawable/search"
+				android:layout_marginStart="8dp"
+				android:layout_weight="0.9"
+				android:id="@+id/search_view"
+				android:background="@android:color/transparent"
+				android:visibility="gone"
+				app:queryHint="Cari disini.."
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"/>
+
+			<TextView
+				android:drawableRight="@drawable/clear"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:id="@+id/btn_clear"
+				android:visibility="gone"
+				/>
+		</LinearLayout>
+
+		<LinearLayout
+			android:layout_marginStart="10dp"
+			android:layout_marginTop="10dp"
+			android:id="@+id/ll_tv"
+			android:layout_below="@+id/ll_search"
+			android:layout_width="match_parent"
+			android:orientation="horizontal"
+			android:layout_height="wrap_content">
+
+			<TextView
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				tools:text="Total "
+				/>
+
+			<TextView
+				android:id="@+id/txv_jumlah_destinasi"
+				tools:text="200"
+                android:textStyle="bold"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				/>
+			<TextView
+				android:text=" destinasi ditemukan"
+				tools:text=" destinasi ditemukan"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				/>
+
+		</LinearLayout>
+
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_below="@+id/ll_tv"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
+
+		<ProgressBar
+			android:id="@+id/progressbar"
+			style="?android:attr/progressBarStyle"
+			android:layout_width="match_parent"
+			android:layout_gravity="center_horizontal"
+			android:layout_height="wrap_content"
+			android:visibility="gone">
+		</ProgressBar>
+			<TextView
+				android:gravity="center"
+				android:visibility="visible"
+				android:id="@+id/not_found"
+				android:text="Data Tidak ditemukan"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"/>
+
+		<androidx.recyclerview.widget.RecyclerView
+				android:visibility="visible"
+				android:id="@+id/destiny_recycler_view"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:layout_marginTop="5dp"
+				tools:context="com.emoji.adminsig.activities.DestinationListActivity"
+				tools:listitem="@layout/list_item"/>
+
+		</LinearLayout>
+
+    </RelativeLayout>
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bar"
+		app:hideOnScroll="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        style="@style/Widget.MaterialComponents.BottomAppBar"
+        android:layout_gravity="bottom"
+        app:backgroundTint="#3D96FB" />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/fab"
+        app:hideOnScroll="true"
+        android:layout_width="wrap_content"
+        android:src="@drawable/ic_add_black_24dp"
+        android:layout_height="wrap_content"
+        app:backgroundTint="#ECD511"
+        app:layout_anchor="@id/bar"/>
+
+
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

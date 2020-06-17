@@ -17,7 +17,9 @@ data class Destination(
 	var id_kecamatan: String? = null,
 	var jambuka : String? = null,
 	var jamtutup : String? = null,
-	var id_admin : String? = null
+	var id_admin: String? = null,
+	var status: String? = null,
+	var id_wisatawan: String? = null
 ) :Parcelable {
 	override fun toString() = this.name_destination
 }

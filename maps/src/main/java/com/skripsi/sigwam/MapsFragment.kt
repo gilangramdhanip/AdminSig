@@ -288,34 +288,38 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                         val lng = it.lng_destination!!.toDouble()
                         val latlng : LatLng = LatLng(lat,lng)
 
-                        if(it.id_kategori=="Pantai"){
+                        if(it.status=="0"){
                             markerOption.position(latlng)
                             markerOption.title(it.name_destination)
-                            markerOption.snippet(it.address_destination)
-                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
-                        }else if(it.id_kategori=="Gili"){
-                            markerOption.position(latlng)
-                            markerOption.title(it.name_destination)
-                            markerOption.snippet(it.address_destination)
-                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
-
-                        }else if(it.id_kategori=="Desa Wisata"){
-                            markerOption.position(latlng)
-                            markerOption.title(it.name_destination)
-                            markerOption.snippet(it.address_destination)
-                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
-
-                        }else if(it.id_kategori=="Air Terjun"){
-                            markerOption.position(latlng)
-                            markerOption.title(it.name_destination)
-                            markerOption.snippet(it.address_destination)
-                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                            markerOption.snippet("Belum Terverifikasi")
+                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
                         }else{
                             markerOption.position(latlng)
                             markerOption.title(it.name_destination)
-                            markerOption.snippet(it.address_destination)
-                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                            markerOption.snippet("Sudah Terverifikasi")
+                            markerOption.icon(
+                                BitmapDescriptorFactory.defaultMarker(
+                                    BitmapDescriptorFactory.HUE_RED
+                                )
+                            )
                         }
+//                        }else if(it.id_kategori=="Desa Wisata"){
+//                            markerOption.position(latlng)
+//                            markerOption.title(it.name_destination)
+//                            markerOption.snippet(it.address_destination)
+//                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
+//
+//                        }else if(it.id_kategori=="Air Terjun"){
+//                            markerOption.position(latlng)
+//                            markerOption.title(it.name_destination)
+//                            markerOption.snippet(it.address_destination)
+//                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+//                        }else{
+//                            markerOption.position(latlng)
+//                            markerOption.title(it.name_destination)
+//                            markerOption.snippet(it.address_destination)
+//                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+//                        }
                         val desti = Destination(id,it.name_destination, it.lat_destination,it.lng_destination, it.address_destination, it.desc_destination, it.id_kategori, it.img_destination, it.id_kabupaten, it.id_kecamatan,it.jambuka, it.jamtutup)
                         val m = googleMap.addMarker(markerOption)
                         m.tag = desti
@@ -456,32 +460,74 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                         val latlng : LatLng = LatLng(lat,lng)
 
                         if(it.id_kategori=="Pantai"){
+                            if(it.status == "1"){
                             markerOption.position(latlng)
                             markerOption.title(it.name_destination)
-                            markerOption.snippet(it.address_destination)
-                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_YELLOW))
-                        }else if(it.id_kategori=="Gili"){
-                            markerOption.position(latlng)
-                            markerOption.title(it.name_destination)
-                            markerOption.snippet(it.address_destination)
-                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                            markerOption.snippet("Sudah Terverifikasi")
+                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                            }else{
+                                markerOption.position(latlng)
+                                markerOption.title(it.name_destination)
+                                markerOption.snippet("Belum Terverifikasi")
+                                markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                            }
+                        }
+                        else if(it.id_kategori=="Gili"){
+                            if(it.status == "1"){
+                                markerOption.position(latlng)
+                                markerOption.title(it.name_destination)
+                                markerOption.snippet("Sudah Terverifikasi")
+                                markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                            }else{
+                                markerOption.position(latlng)
+                                markerOption.title(it.name_destination)
+                                markerOption.snippet("Belum Terverifikasi")
+                                markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                            }
 
-                        }else if(it.id_kategori=="Desa Wisata"){
-                            markerOption.position(latlng)
-                            markerOption.title(it.name_destination)
-                            markerOption.snippet(it.address_destination)
-                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_VIOLET))
+                        }
 
-                        }else if(it.id_kategori=="Air Terjun"){
-                            markerOption.position(latlng)
-                            markerOption.title(it.name_destination)
-                            markerOption.snippet(it.address_destination)
-                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
-                        }else{
-                            markerOption.position(latlng)
-                            markerOption.title(it.name_destination)
-                            markerOption.snippet(it.address_destination)
-                            markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))
+                        else if(it.id_kategori=="Desa Wisata"){
+                            if(it.status == "1"){
+                                markerOption.position(latlng)
+                                markerOption.title(it.name_destination)
+                                markerOption.snippet("Sudah Terverifikasi")
+                                markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                            }else{
+                                markerOption.position(latlng)
+                                markerOption.title(it.name_destination)
+                                markerOption.snippet("Belum Terverifikasi")
+                                markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                            }
+
+                        }
+
+                        else if(it.id_kategori=="Air Terjun"){
+                            if(it.status == "1"){
+                                markerOption.position(latlng)
+                                markerOption.title(it.name_destination)
+                                markerOption.snippet("Sudah Terverifikasi")
+                                markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                            }else{
+                                markerOption.position(latlng)
+                                markerOption.title(it.name_destination)
+                                markerOption.snippet("Belum Terverifikasi")
+                                markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                            }
+                        }
+
+                        if(it.id_kategori=="Taman"){
+                            if(it.status == "1"){
+                                markerOption.position(latlng)
+                                markerOption.title(it.name_destination)
+                                markerOption.snippet("Sudah Terverifikasi")
+                                markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                            }else{
+                                markerOption.position(latlng)
+                                markerOption.title(it.name_destination)
+                                markerOption.snippet("Belum Terverifikasi")
+                                markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                            }
                         }
                         val desti = Destination(id,it.name_destination, it.lat_destination,it.lng_destination, it.address_destination, it.desc_destination, it.id_kategori, it.img_destination, it.id_kabupaten, it.id_kecamatan, it.jambuka, it.jamtutup)
                         val m = googleMap.addMarker(markerOption)

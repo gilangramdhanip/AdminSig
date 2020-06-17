@@ -15,6 +15,7 @@ import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
+import com.emoji.adminsig.preferencetools.SessionManager
 import com.getkeepsafe.taptargetview.TapTarget
 import com.getkeepsafe.taptargetview.TapTargetSequence
 import com.getkeepsafe.taptargetview.TapTargetView
@@ -28,10 +29,13 @@ class MainActivity : AppCompatActivity() {
     }
 }
     lateinit var navController : NavController
+    private lateinit var sessionManager: SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        sessionManager = SessionManager(this)
+        Toast.makeText(this@MainActivity, sessionManager.getEmail(), Toast.LENGTH_SHORT).show()
 
         contextOfApp = applicationContext
 

@@ -17,6 +17,6 @@
 
     <item
         android:id="@+id/navigation_help"
-        android:icon="@drawable/helpicon"
-        android:title="Bantuan" />
+        android:icon="@drawable/ic_person_black_24dp"
+        android:title="Account" />
 </menu>

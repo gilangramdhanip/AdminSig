@@ -67,12 +67,19 @@ dependencies {
     //tap
     implementation 'com.getkeepsafe.taptargetview:taptargetview:1.13.0'
 
-    //circleimage
-    implementation 'de.hdodenhof:circleimageview:2.2.0'
-
     //Zoom
     implementation 'com.github.dmallcott:DismissibleImageView:1.0.1'
 
     //SmoothBottom
     implementation 'com.github.ibrahimsn98:SmoothBottomBar:1.7.5'
+
+    //easypermission
+    implementation 'pub.devrel:easypermissions:1.2.0'
+    implementation 'com.vincent.filepicker:MultiTypeFilePicker:1.0.7'
+
+    //compress image
+    implementation 'id.zelory:compressor:2.1.0'
+
+    //circleimage
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 }

@@ -20,8 +20,8 @@
 
     <fragment
         android:id="@+id/navigation_help"
-        android:name="com.skripsi.sigwam.BantuanFragment"
-        tools:layout="@layout/fragment_bantuan" />
+        android:name="com.skripsi.sigwam.AccountFragment"
+        tools:layout="@layout/fragment_account" />
 
 
 </navigation>

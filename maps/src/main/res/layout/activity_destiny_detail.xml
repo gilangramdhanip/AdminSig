@@ -1,211 +1,281 @@
-<?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
-	android:id="@+id/container"
 	android:layout_height="match_parent"
-	android:background="@android:color/white"
-	tools:context=".DestinationDetailActivity">
+	android:fitsSystemWindows="true"
+	android:orientation="vertical"
+	tools:ignore="MergeRootFrame">
 
-	<ScrollView
+	<androidx.appcompat.widget.Toolbar
+		android:id="@+id/profileToolbar"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content">
+
+	</androidx.appcompat.widget.Toolbar>
+
+<androidx.core.widget.NestedScrollView
 		android:layout_width="match_parent"
 		android:layout_height="match_parent">
-
-	<LinearLayout
-		android:orientation="vertical"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent">
-
-		<com.dmallcott.dismissibleimageview.DismissibleImageView
-			android:id="@+id/imv_destination"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:adjustViewBounds="true"
-			android:scaleType="fitCenter"
-			android:src="@drawable/default_img" />
 
 		<LinearLayout
-			android:layout_marginTop="-65dp"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_gravity="bottom"
-			android:layout_marginBottom="16dp"
-			android:background="#7F000000"
-			android:gravity="center_vertical"
-			android:orientation="horizontal">
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:layout_margin="24dp">
 
 			<LinearLayout
 				android:orientation="vertical"
-				android:layout_weight="1"
-				android:layout_width="wrap_content"
+				android:gravity="center_horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<de.hdodenhof.circleimageview.CircleImageView
+					android:id="@+id/img_view"
+					android:layout_width="150dp"
+					android:layout_height="150dp"
+					app:srcCompat="@drawable/default_img" />
+
+				<Button
+					android:id="@+id/btn_img"
+					android:layout_width="wrap_content"
+					android:layout_height="47dp"
+					android:text="Pilih Gambar"
+					style="?attr/materialButtonOutlinedStyle" />
+
+			</LinearLayout>
+
+			<com.google.android.material.textfield.TextInputLayout
+				android:layout_width="match_parent"
+				style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+				android:layout_height="wrap_content">
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/et_name"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:hint="Nama Wisata"
+					android:inputType="textEmailAddress"
+					android:maxLines="1"/>
+
+			</com.google.android.material.textfield.TextInputLayout>
+
+			<LinearLayout
+				android:layout_marginTop="10dp"
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+					<com.google.android.material.textfield.TextInputLayout
+						android:layout_width="wrap_content"
+						android:layout_weight="0.5"
+						style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+						android:layout_height="wrap_content">
+
+						<com.google.android.material.textfield.TextInputEditText
+							android:id="@+id/et_latitude"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:hint="latitude"
+							android:inputType="number"
+							android:imeOptions="actionUnspecified"/>
+
+					</com.google.android.material.textfield.TextInputLayout>
+
+
+				<com.google.android.material.textfield.TextInputLayout
+					android:layout_width="wrap_content"
+					android:layout_weight="0.5"
+					style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+					android:layout_height="wrap_content">
+
+					<com.google.android.material.textfield.TextInputEditText
+						android:id="@+id/et_longitude"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Longitude"
+						android:layout_marginLeft="8dp"
+						android:imeOptions="actionUnspecified"
+						android:inputType="number"
+						/>
+
+				</com.google.android.material.textfield.TextInputLayout>
+
+				<Button
+					android:layout_marginLeft="8dp"
+					android:id="@+id/buka_peta"
+					android:text="Peta"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"/>
+
+			</LinearLayout>
+
+
+			<com.google.android.material.textfield.TextInputLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+				android:layout_marginTop="10dp">
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/et_address"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:hint="Alamat"
+					android:imeOptions="actionUnspecified"
+					android:maxLines="5"/>
+
+			</com.google.android.material.textfield.TextInputLayout>
+
+
+			<com.google.android.material.textfield.TextInputLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+				android:layout_marginTop="10dp">
+
+				<com.google.android.material.textfield.TextInputEditText
+					android:id="@+id/et_description"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:hint="Deskripsi"
+					android:imeOptions="actionUnspecified"
+					android:maxLines="5"/>
+
+			</com.google.android.material.textfield.TextInputLayout>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:orientation="horizontal"
 				android:layout_height="wrap_content">
 
 				<TextView
-					android:id="@+id/txv_title"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:padding="8dp"
-					android:text="@string/nama_destinasi"
-					android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-					android:textColor="#fff" />
+					android:padding="10dp"
+					android:text="Kategori"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"/>
 
-				<TextView
-					android:id="@+id/txv_cat"
+				<Spinner
+					android:id="@+id/spin_cat"
 					android:layout_width="match_parent"
 					android:layout_height="wrap_content"
-					android:layout_marginBottom="5dp"
-					android:paddingLeft="8dp"
-					android:text="@string/category_destination"
-					android:textAppearance="@style/TextAppearance.AppCompat.Small"
-					android:textColor="#fff" />
+					android:padding="10dp"
+					android:spinnerMode="dropdown"
+					android:textColor="#000000"
+					android:hint="Category"/>
 
 			</LinearLayout>
 
 			<LinearLayout
-				android:layout_gravity="end"
-				android:gravity="end"
-				android:layout_width="wrap_content"
-				android:layout_height="match_parent">
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
 
-				<com.google.android.material.floatingactionbutton.FloatingActionButton
-					android:id="@+id/btn_share"
-					android:layout_gravity="center_vertical"
+				<LinearLayout
 					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					app:backgroundTint="#9CD2F6"
-					android:src="@drawable/sharebtn"
-					android:layout_marginEnd="20dp"
-					android:textColor="#B1B0B0"
+					android:orientation="horizontal"
+					android:layout_height="wrap_content">
 
-					/>
+					<Spinner
+						android:id="@+id/spin_kab"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:padding="10dp"
+						android:spinnerMode="dropdown"
+						android:textColor="#000000"
+						android:hint="Category"/>
+
+				</LinearLayout>
+
+				<LinearLayout
+					android:layout_width="wrap_content"
+					android:orientation="horizontal"
+					android:layout_height="wrap_content">
+
+					<com.toptoche.searchablespinnerlibrary.SearchableSpinner
+						android:id="@+id/spin_kec"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:padding="10dp"
+						android:spinnerMode="dropdown"
+						android:textColor="#000000"
+						android:hint="Category"/>
+
+				</LinearLayout>
+
 			</LinearLayout>
 
+			<LinearLayout
+				android:orientation="horizontal"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content">
+
+				<com.google.android.material.textfield.TextInputLayout
+					android:layout_width="match_parent"
+					android:layout_weight="0.5"
+					style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="10dp">
+
+					<com.google.android.material.textfield.TextInputEditText
+						android:id="@+id/et_jambuka"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Jam Buka" />
+
+				</com.google.android.material.textfield.TextInputLayout>
+
+
+				<com.google.android.material.textfield.TextInputLayout
+					android:layout_width="match_parent"
+					android:layout_weight="0.5"
+					style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="10dp">
+
+					<com.google.android.material.textfield.TextInputEditText
+						android:id="@+id/et_jamtutup"
+						android:layout_marginLeft="8dp"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:hint="Jam Tutup" />
+
+				</com.google.android.material.textfield.TextInputLayout>
+
+			</LinearLayout>
+
+			<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:weightSum="2"
+					android:orientation="horizontal">
+
+				<Button
+                        android:layout_marginRight="5dp"
+						android:id="@+id/btn_delete"
+						android:textSize="16sp"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="16dp"
+						android:text="Delete"
+                        android:backgroundTint="@color/design_default_color_error"
+						android:layout_weight="1"/>
+
+				<Button
+						android:id="@+id/btn_update"
+						android:textSize="16sp"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginTop="16dp"
+						android:backgroundTint="@color/colorPrimary"
+						android:text="Update"
+						android:textColor="@android:color/white"
+						android:layout_weight="1"/>
+
+			</LinearLayout>
 
 		</LinearLayout>
 
-		<TableLayout
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:layout_marginLeft="16dp"
-			android:layout_marginRight="16dp"
-			android:layout_marginBottom="16dp">
-
-			<TableRow
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginBottom="8dp">
-				<TextView
-					android:drawableLeft="@drawable/ic_person_pin_circle_black_24dp"
-					style="@style/TextSpec.Field"
-					android:text="@string/alamat"
-					tools:text="Alamat" />
-
-				<TextView
-					android:id="@+id/txv_address"
-					style="@style/TextSpec.Value"
-					android:text="@string/address_destination" />
-			</TableRow>
-
-			<TableRow
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginBottom="8dp">
-
-				<TextView
-					android:drawableLeft="@drawable/description"
-					style="@style/TextSpec.Field"
-					android:text="deskripsi"
-					tools:text="Deskripsi" />
-
-				<TextView
-					android:id="@+id/txv_desc"
-					style="@style/TextSpec.Value"
-					android:text="@string/description_destination" />
-			</TableRow>
-
-			<TableRow
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginBottom="8dp">
-
-				<TextView
-					android:drawableLeft="@drawable/disctrict"
-					style="@style/TextSpec.Field"
-					android:text="@string/kabupaten"
-					tools:text="Kabupaten" />
-
-				<TextView
-					android:id="@+id/txv_kabupaten"
-					style="@style/TextSpec.Value"
-					android:text="@string/kabupaten_value" />
-			</TableRow>
-
-			<TableRow
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginBottom="8dp">
-
-				<TextView
-					android:drawableLeft="@drawable/disctrict"
-					style="@style/TextSpec.Field"
-					android:text="@string/kecamatan"
-					tools:text="Kecamatan" />
-
-				<TextView
-					android:id="@+id/txv_kecamatan"
-					style="@style/TextSpec.Value"
-					android:text="@string/kecamatan_value" />
-			</TableRow>
-
-			<TableRow
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginBottom="8dp">
-
-				<TextView
-					android:drawableLeft="@drawable/ic_access_time_black_24dp"
-					style="@style/TextSpec.Field"
-					android:text="@string/jambuka"
-					tools:text="@string/jambuka" />
-
-				<TextView
-					android:id="@+id/txv_jambuka"
-					style="@style/TextSpec.Value"
-					android:text="@string/jambuka" />
-			</TableRow>
-
-			<TableRow
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginBottom="8dp">
-
-				<TextView
-					android:drawableLeft="@drawable/ic_access_time_black_24dp"
-					style="@style/TextSpec.Field"
-					android:text="@string/jamtutup"
-					tools:text="@string/jamtutup" />
-
-				<TextView
-					android:id="@+id/txv_jamtutup"
-					style="@style/TextSpec.Value"
-					android:text="@string/kecamatan_value" />
-			</TableRow>
-		</TableLayout>
-
-<!--		<Button-->
-<!--			android:id="@+id/btn_go_maps"-->
-<!--			android:layout_width="match_parent"-->
-<!--			android:layout_height="wrap_content"-->
-<!--			android:layout_gravity="bottom"-->
-<!--			android:layout_margin="10dp"-->
-<!--			android:background="#03a9f4"-->
-<!--			android:text="LIHAT PETA"-->
-<!--			android:textColor="#fff"-->
-<!--			android:textStyle="bold" />-->
-
-
-	</LinearLayout>
-
-	</ScrollView>
-</FrameLayout>
+</androidx.core.widget.NestedScrollView>
+</LinearLayout>

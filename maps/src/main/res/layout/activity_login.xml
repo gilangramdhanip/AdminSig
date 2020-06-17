@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:background="@android:color/white"
     android:layout_height="match_parent"
-    tools:context=".activities.LoginActivity">
+    tools:context="LoginActivity">
 
     <RelativeLayout
         android:layout_margin="10dp"
@@ -13,21 +13,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:contentDescription="logo"
-            android:id="@+id/img_logo"
-            android:layout_width="wrap_content"
-            android:layout_height="200dp"
-            android:layout_alignParentTop="true"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/undraw_journey_lwlj"/>
-
         <TextView
             android:id="@+id/title_"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/img_logo"
             android:layout_marginTop="30dp"
             android:text="Welcome Back"
             android:textSize="30sp"
@@ -68,11 +57,10 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:paddingBottom="20dp"
-                        android:id="@+id/edt_username"
-                        android:drawableStart="@drawable/ic_account_circle_black_24dp"
+                        android:id="@+id/ed_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Username" />
+                        android:hint="Email" />
 
                 </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
@@ -92,9 +80,8 @@
                     >
 
                     <com.google.android.material.textfield.TextInputEditText
-                        android:drawableStart="@drawable/ic_keyboard_blue_24dp"
                         android:paddingBottom="20dp"
-                        android:id="@+id/edt_password"
+                        android:id="@+id/ed_password"
                         android:inputType="textPassword"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -104,14 +91,30 @@
 
             </LinearLayout>
 
+            <TextView
+                android:layout_gravity="end"
+                android:layout_marginTop="5dp"
+                android:text="Lupa Password?"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
             <Button
                 android:layout_marginTop="30dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/btn_login"
+                android:id="@+id/button_masuk"
                 android:text="LOGIN"
                 android:textColor="#fff"
                 android:background="#009AE1"
+                />
+
+            <Button
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/btn_daftar"
+                android:text="DAFTAR"
+                android:textColor="#009AE1"
+                android:backgroundTint="#fff"
                 />
         </LinearLayout>
 

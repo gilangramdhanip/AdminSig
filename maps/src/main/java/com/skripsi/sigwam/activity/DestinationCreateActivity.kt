@@ -1,4 +1,4 @@
-package com.emoji.adminsig.activities
+package com.skripsi.sigwam.activity
 
 import com.emoji.adminsig.preferencetools.SessionManager
 import android.Manifest
@@ -23,17 +23,17 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.loader.content.CursorLoader
 import com.bumptech.glide.Glide
-import com.emoji.adminsig.R
-import com.emoji.adminsig.models.*
-import com.emoji.adminsig.services.ServiceBuilder
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.snackbar.Snackbar
-import com.skripsi.sigwam.model.Kategori
-import com.skripsi.sigwam.model.KategoriResponse
+import com.skripsi.sigwam.MainActivity
+import com.skripsi.sigwam.R
+import com.skripsi.sigwam.model.*
+import com.skripsi.sigwam.service.ServiceBuilder
 import id.zelory.compressor.Compressor
 import kotlinx.android.synthetic.main.activity_destiny_create.*
 import okhttp3.MediaType
@@ -88,7 +88,9 @@ class DestinationCreateActivity : AppCompatActivity() {
         sessionManager = SessionManager(this)
         val id = sessionManager.getId()
 
-
+        val toolbar: Toolbar? = findViewById<Toolbar>(R.id.profileToolbar)
+        toolbar!!.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
+        toolbar.setNavigationOnClickListener(View.OnClickListener { onBackPressed() })
         destination = intent.getParcelableExtra(EXTRA_CREATE) as Address
         et_latitude.text =Editable.Factory.getInstance().newEditable(destination.latitude.toString())
         et_longitude.text = Editable.Factory.getInstance().newEditable(destination.longitude.toString())
@@ -244,9 +246,9 @@ class DestinationCreateActivity : AppCompatActivity() {
                         map["id_kecamatan"] = createPartFromString(kecamatan)
                         map["jambuka"] = createPartFromString(et_jambuka.text.toString())
                         map["jamtutup"] = createPartFromString(et_jamtutup.text.toString())
-                        map["id_admin"] = createPartFromString(sessionManager.getId())
-                        map["status"] = createPartFromString("1")
-                        map["id_wisatawan"] = createPartFromString("")
+                        map["id_admin"] = createPartFromString("")
+                        map["status"] = createPartFromString("0")
+                        map["id_wisatawan"] = createPartFromString(sessionManager.getId())
 
                         val destinationService = ServiceBuilder.create()
                         val requestCall = destinationService.addDestination(map, img_destination)
@@ -258,10 +260,10 @@ class DestinationCreateActivity : AppCompatActivity() {
                                 response: Response<DestinationResponse>
                             ) {
                                 if (response.isSuccessful) {
-                                    val intent = Intent(this@DestinationCreateActivity, DestinationListActivity::class.java)
+                                    val intent = Intent(this@DestinationCreateActivity, MainActivity::class.java)
                                     startActivity(intent)
                                     Snackbar.make(it, "Data Berhasil ditambahkan", Snackbar.LENGTH_LONG).show()
-                                    finish()
+                                    finishAffinity()
                                     var newlyCreatedDestination = response.body() // Use it or ignore it
                                     Log.d("ResponseLog", response.toString())
                                 } else {
@@ -278,7 +280,7 @@ class DestinationCreateActivity : AppCompatActivity() {
 
                                 })
                             .setNegativeButton("Kembali",null)
-                            .setIcon(R.drawable.ic_mood_black_24dp)
+                            .setIcon(R.drawable.personmarker)
                             .show()
                     }
     }
@@ -477,7 +479,7 @@ fun createPartFromString(descriptionString : String) : RequestBody {
                     finish()
                 })
             .setNegativeButton("Kembali",null)
-            .setIcon(R.drawable.ic_warning_black_24dp)
+            .setIcon(R.drawable.helpicon)
             .show()
     }
 

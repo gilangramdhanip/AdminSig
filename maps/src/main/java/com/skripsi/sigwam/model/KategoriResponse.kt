@@ -6,5 +6,5 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class KategoriResponse(
     var status: Boolean,
-    var data: List<Kategori>
+    var data: Array<Kategori>
 ): Parcelable
