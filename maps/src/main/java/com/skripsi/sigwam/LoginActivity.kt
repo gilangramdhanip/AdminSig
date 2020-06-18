@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Toast
 import com.emoji.adminsig.preferencetools.SessionManager
+import com.skripsi.sigwam.activity.GantiPasswordActivity
 import com.skripsi.sigwam.model.LoginResponse
 import com.skripsi.sigwam.service.ServiceBuilder
 import kotlinx.android.synthetic.main.activity_login.*
@@ -37,6 +38,10 @@ class LoginActivity : AppCompatActivity(){
 
         btn_daftar.setOnClickListener {
             val intent = Intent(this@LoginActivity, RegistrationActivity::class.java)
+            startActivity(intent)
+        }
+        lupa_password.setOnClickListener {
+            val intent = Intent(this@LoginActivity, GantiPasswordActivity::class.java)
             startActivity(intent)
         }
     }
