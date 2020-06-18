@@ -31,6 +31,7 @@ import com.karumi.dexter.listener.single.PermissionListener
 import com.skripsi.sigwam.R
 import com.skripsi.sigwam.adapter.DestinationAdapter
 import com.skripsi.sigwam.adapter.PencarianAdapter
+import com.skripsi.sigwam.adapter.WisatawanDestinationAdapter
 import com.skripsi.sigwam.model.*
 import com.skripsi.sigwam.service.ServiceBuilder
 import kotlinx.android.synthetic.main.activity_destiny_list.*
@@ -43,7 +44,7 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
 
     private val apiService = ServiceBuilder.create()
 
-    private lateinit var destinationAdapter: DestinationAdapter
+    private lateinit var destinationAdapter: WisatawanDestinationAdapter
     lateinit var pencarianAdapter: PencarianAdapter
     private lateinit var mainViewModel: MainViewModelWisatawan
     private val destination = ArrayList<Destination>()
@@ -73,12 +74,6 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
 
         val toolbar: Toolbar? = findViewById<Toolbar>(R.id.profileToolbar)
         toolbar!!.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
-////        setSupportActionBar(toolbar)
-//        supportActionBar!!.hide()
-//        supportActionBar!!.title = "Smart Take Away"
-//        //  getSupportActionBar().setDisplayShowTitleEnabled(false);
-//        //  getSupportActionBar().setDisplayShowTitleEnabled(false);
-////        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         toolbar.setNavigationOnClickListener(View.OnClickListener { onBackPressed() })
 
         Toast.makeText(baseContext, "$id", Toast.LENGTH_SHORT).show()
@@ -243,7 +238,7 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
 
     private fun loadDestination(){
 
-        destinationAdapter = DestinationAdapter(destination)
+        destinationAdapter = WisatawanDestinationAdapter(destination)
         destinationAdapter.notifyDataSetChanged()
 
         mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(

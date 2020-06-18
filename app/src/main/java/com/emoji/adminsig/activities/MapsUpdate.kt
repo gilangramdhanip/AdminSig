@@ -29,6 +29,7 @@ class MapsUpdate : AppCompatActivity(), OnMapReadyCallback {
     }
 
     lateinit var latlng : LatLng
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
     private lateinit var destination : Destination
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -38,11 +39,13 @@ class MapsUpdate : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        fusedLocationProviderClient = FusedLocationProviderClient(application)
+
         val toolbar: Toolbar? = findViewById<Toolbar>(R.id.profileToolbar)
         toolbar!!.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
-        toolbar.setNavigationOnClickListener(View.OnClickListener {
-            onBackPressed()
-        })
+
+        toolbar.setNavigationOnClickListener(View.OnClickListener { onBackPressed() })
 
         destination = intent.getParcelableExtra(EXTRA_UPDATE) as Destination
         destination.id_destination

@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.appcompat.widget.Toolbar
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -22,6 +23,7 @@ class MapsUpdate : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var mMap: GoogleMap
     private lateinit var marker: Marker
 
+    private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
     companion object {
         const val EXTRA_UPDATE = "extra_update"
     }
@@ -36,10 +38,12 @@ class MapsUpdate : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        fusedLocationProviderClient = FusedLocationProviderClient(application)
+
         val toolbar: Toolbar? = findViewById<Toolbar>(R.id.profileToolbar)
         toolbar!!.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
+
         toolbar.setNavigationOnClickListener(View.OnClickListener { onBackPressed() })
-        supportActionBar?.hide()
 
         destination = intent.getParcelableExtra(EXTRA_UPDATE) as Destination
         destination.id_destination

@@ -20,7 +20,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 
-class DestinationAdapter(private val destinationList: ArrayList<Destination>): RecyclerView.Adapter<DestinationAdapter.ListViewHolder>(), Filterable {
+class WisatawanDestinationAdapter(private val destinationList: ArrayList<Destination>): RecyclerView.Adapter<WisatawanDestinationAdapter.ListViewHolder>(), Filterable {
 
     internal var filterListResult: ArrayList<Destination>
 
@@ -81,7 +81,7 @@ class DestinationAdapter(private val destinationList: ArrayList<Destination>): R
                 }
 
                 itemView.setOnClickListener {
-                    val intent = Intent(context, DestinationDetailActivity::class.java)
+                    val intent = Intent(context, DestinationDetail::class.java)
                     intent.putExtra(DestinationDetailActivity.EXTRA_DETAIl, destination)
                     context.startActivity(intent)
                 }

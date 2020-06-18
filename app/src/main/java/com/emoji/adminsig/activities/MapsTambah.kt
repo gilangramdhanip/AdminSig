@@ -1,10 +1,6 @@
 package com.emoji.adminsig.activities
 
 import android.content.Intent
-import android.content.IntentSender
-import android.content.pm.PackageManager
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
@@ -55,9 +51,8 @@ class MapsTambah : AppCompatActivity(), OnMapReadyCallback{
         fusedLocationProviderClient = FusedLocationProviderClient(application)
         val toolbar: Toolbar? = findViewById<Toolbar>(R.id.profileToolbar)
         toolbar!!.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
-        toolbar.setNavigationOnClickListener(View.OnClickListener {
-            onBackPressed()
-        })
+
+        toolbar.setNavigationOnClickListener(View.OnClickListener { onBackPressed() })
     }
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
@@ -103,16 +98,13 @@ class MapsTambah : AppCompatActivity(), OnMapReadyCallback{
 
             })
 
-            mMap.setOnInfoWindowClickListener(object : GoogleMap.OnInfoWindowClickListener{
-                override fun onInfoWindowClick(p0: Marker?) {
+            mMap.setOnInfoWindowClickListener { p0 ->
+                val desti = p0!!.tag as Address
 
-                    val desti = p0!!.tag as Address
-
-                    val intent = Intent(this@MapsTambah, DestinationCreateActivity::class.java)
-                    intent.putExtra(DestinationCreateActivity.EXTRA_CREATE, desti)
-                    startActivity(intent)
-                }
-            })
+                val intent = Intent(this@MapsTambah, DestinationCreateActivity::class.java)
+                intent.putExtra(DestinationCreateActivity.EXTRA_CREATE, desti)
+                startActivity(intent)
+            }
         }
     }
 }

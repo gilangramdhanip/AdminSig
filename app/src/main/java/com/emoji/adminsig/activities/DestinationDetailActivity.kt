@@ -247,7 +247,7 @@ class DestinationDetailActivity : AppCompatActivity() {
                 map["jamtutup"] = createPartFromString(et_jamtutup.text.toString())
                 map["id_admin"] = createPartFromString(sessionManager.getId())
                 map["status"] = createPartFromString("1")
-                map["id_wisatawan"] = createPartFromString("")
+                map["id_wisatawan"] = createPartFromString(destination!!.id_wisatawan.toString())
 
 //                if(pickedImg==null){
 //                    Toast.makeText(applicationContext, "Image not selected!", Toast.LENGTH_LONG).show()

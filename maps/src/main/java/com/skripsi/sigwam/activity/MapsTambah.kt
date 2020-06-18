@@ -37,15 +37,10 @@ class MapsTambah : AppCompatActivity(), OnMapReadyCallback{
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationProviderClient = FusedLocationProviderClient(application)
-        supportActionBar?.hide()
+
         val toolbar: Toolbar? = findViewById<Toolbar>(R.id.profileToolbar)
         toolbar!!.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
-////        setSupportActionBar(toolbar)
-//        supportActionBar!!.hide()
-//        supportActionBar!!.title = "Smart Take Away"
-//        //  getSupportActionBar().setDisplayShowTitleEnabled(false);
-//        //  getSupportActionBar().setDisplayShowTitleEnabled(false);
-////        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+
         toolbar.setNavigationOnClickListener(View.OnClickListener { onBackPressed() })
 
     }
