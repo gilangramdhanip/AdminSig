@@ -6,6 +6,8 @@ import android.location.Geocoder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import androidx.appcompat.widget.Toolbar
 import com.emoji.adminsig.R
 import com.emoji.adminsig.models.Destination
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -36,7 +38,11 @@ class MapsUpdate : AppCompatActivity(), OnMapReadyCallback {
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
-        supportActionBar?.hide()
+        val toolbar: Toolbar? = findViewById<Toolbar>(R.id.profileToolbar)
+        toolbar!!.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
+        toolbar.setNavigationOnClickListener(View.OnClickListener {
+            onBackPressed()
+        })
 
         destination = intent.getParcelableExtra(EXTRA_UPDATE) as Destination
         destination.id_destination

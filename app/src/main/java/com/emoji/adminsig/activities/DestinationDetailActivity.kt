@@ -16,6 +16,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.loader.content.CursorLoader
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
@@ -71,7 +72,11 @@ class DestinationDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_destiny_detail)
         sessionManager = SessionManager(this)
         destination = intent.getParcelableExtra(EXTRA_DETAIl) as? Destination
-
+        val toolbar: Toolbar? = findViewById<Toolbar>(R.id.profileToolbar)
+        toolbar!!.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
+        toolbar.setNavigationOnClickListener(View.OnClickListener {
+            onBackPressed()
+        })
 
         initSpinnerKabupaten()
         initSpinnerCategory()

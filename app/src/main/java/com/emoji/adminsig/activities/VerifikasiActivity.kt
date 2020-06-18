@@ -17,6 +17,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -34,13 +35,13 @@ import com.karumi.dexter.PermissionToken
 import com.karumi.dexter.listener.PermissionDeniedResponse
 import com.karumi.dexter.listener.PermissionGrantedResponse
 import com.karumi.dexter.listener.single.PermissionListener
-import kotlinx.android.synthetic.main.activity_destiny_list.*
+import kotlinx.android.synthetic.main.activity_verifikasi.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class DestinationListActivity : AppCompatActivity(), PermissionListener {
+class VerifikasiActivity : AppCompatActivity(), PermissionListener {
 
     private val apiService = ServiceBuilder.create()
 
@@ -66,16 +67,21 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
         const val REQUEST_CHECK_SETTINGS = 43
     }
 
-	override fun onCreate(savedInstanceState: Bundle?) {
-		super.onCreate(savedInstanceState)
-		setContentView(R.layout.activity_destiny_list)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_verifikasi)
         sessionManager = SessionManager(this)
         val id = sessionManager.getId()
 
         Toast.makeText(baseContext, "$id", Toast.LENGTH_SHORT).show()
 
-		setSupportActionBar(toolbar)
-		toolbar.title = title
+        val toolbar: Toolbar? = findViewById<Toolbar>(R.id.toolbar)
+        toolbar!!.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
+        toolbar.setNavigationOnClickListener(View.OnClickListener {
+            val intent = Intent(this@VerifikasiActivity, DestinationListActivity::class.java)
+            startActivity(intent)
+            finishAffinity()
+        })
 
         fusedLocationProviderClient = FusedLocationProviderClient(application)
 
@@ -135,15 +141,10 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
                     destinationAdapter.filter.filter(kecamatan)
                     setKecamatan(kabupaten, kecamatan)
                 }
-                Toast.makeText(this@DestinationListActivity, " Kamu memilih spinner "+kecamatan, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@VerifikasiActivity, " Kamu memilih spinner "+kecamatan, Toast.LENGTH_SHORT).show()
             }
 
         }
-
-		fab.setOnClickListener {
-			val intent = Intent(this@DestinationListActivity, MapsTambah::class.java)
-			startActivity(intent)
-		}
 
     }
 
@@ -152,7 +153,7 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
     }
 
     private fun givePermission() {
-        Dexter.withActivity(this@DestinationListActivity)
+        Dexter.withActivity(this@VerifikasiActivity)
             .withPermission(android.Manifest.permission.ACCESS_FINE_LOCATION)
             .withListener(this)
             .check()
@@ -177,7 +178,7 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
     }
 
     override fun onPermissionDenied(response: PermissionDeniedResponse?) {
-        Toast.makeText(this@DestinationListActivity, "Permission required for showing location", Toast.LENGTH_LONG).show()
+        Toast.makeText(this@VerifikasiActivity, "Permission required for showing location", Toast.LENGTH_LONG).show()
         this?.finish()
     }
 
@@ -203,7 +204,7 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
                 when (exception.statusCode) {
                     LocationSettingsStatusCodes.RESOLUTION_REQUIRED -> try {
                         val resolvable = exception as ResolvableApiException
-                        resolvable.startResolutionForResult(this@DestinationListActivity,
+                        resolvable.startResolutionForResult(this@VerifikasiActivity,
                             MapsTambah.REQUEST_CHECK_SETTINGS
                         )
                     } catch (e: IntentSender.SendIntentException) {
@@ -220,9 +221,6 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
         if (item.itemId == R.id.keluar) {
             // Logout
             logout()
-        }else if (item.itemId == R.id.verifikasi){
-            val intent = Intent(this@DestinationListActivity, VerifikasiActivity::class.java)
-            startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
     }
@@ -263,7 +261,7 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
 
         showLoading(true)
 
-        mainViewModel.setDestination("1")
+        mainViewModel.setDestination("0")
         destiny_recycler_view.setHasFixedSize(true)
         destiny_recycler_view.layoutManager = LinearLayoutManager(applicationContext)
         destiny_recycler_view.adapter = destinationAdapter
@@ -273,37 +271,33 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
                 destinationAdapter.setData(destination)
                 txv_jumlah_destinasi.text = destinationAdapter.itemCount.toString()
 
-                    btn_cari.setOnClickListener {
-                        search_view.visibility = View.VISIBLE
-                        btn_cari.visibility = View.GONE
-                        bar.visibility = View.GONE
-                        fab.visibility = View.GONE
+                btn_cari.setOnClickListener {
+                    search_view.visibility = View.VISIBLE
+                    btn_cari.visibility = View.GONE
 
-                        val adapter = ArrayAdapter(baseContext, android.R.layout.simple_spinner_dropdown_item, destination)
-                        search_view.threshold=0
-                        search_view.setAdapter(adapter)
-                        search_view.setOnItemClickListener { adapterView, view, i, l ->
-                            val a = search_view.adapter.getItem(i) as Destination
-                            destinationAdapter.setFlter(a)
-                            txv_jumlah_destinasi.text = destinationAdapter.itemCount.toString()
+                    val adapter = ArrayAdapter(baseContext, android.R.layout.simple_spinner_dropdown_item, destination)
+                    search_view.threshold=0
+                    search_view.setAdapter(adapter)
+                    search_view.setOnItemClickListener { adapterView, view, i, l ->
+                        val a = search_view.adapter.getItem(i) as Destination
+                        destinationAdapter.setFlter(a)
+                        txv_jumlah_destinasi.text = destinationAdapter.itemCount.toString()
 
-                            if(search_view.text.equals("")){
+                        if(search_view.text.equals("")){
+                            btn_clear.visibility = View.GONE
+                        }else{
+                            btn_clear.visibility = View.VISIBLE
+                            btn_clear.setOnClickListener {
+                                search_view.text.clear()
+                                btn_cari.visibility = View.VISIBLE
+                                search_view.visibility = View.GONE
                                 btn_clear.visibility = View.GONE
-                            }else{
-                                btn_clear.visibility = View.VISIBLE
-                                btn_clear.setOnClickListener {
-                                    search_view.text.clear()
-                                    btn_cari.visibility = View.VISIBLE
-                                    search_view.visibility = View.GONE
-                                    btn_clear.visibility = View.GONE
-                                    bar.visibility = View.VISIBLE
-                                    fab.visibility = View.VISIBLE
-                                    val imm: InputMethodManager =
-                                        getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-                                    imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
-                                    initSpinnerKabupaten()
-                                }
+                                val imm: InputMethodManager =
+                                    getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                                imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
+                                initSpinnerKabupaten()
                             }
+                        }
                     }
                 }
 
@@ -317,7 +311,7 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
 
         apiService.getKabupaten().enqueue(object : Callback<KabupatenResponse>{
             override fun onFailure(call: Call<KabupatenResponse>, t: Throwable) {
-                Toast.makeText(this@DestinationListActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@VerifikasiActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -332,7 +326,7 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
                         listSpinner.add(it.name_kabupaten)
                     }
 
-                    val adapter = ArrayAdapter(this@DestinationListActivity, android.R.layout.simple_spinner_item, listSpinner)
+                    val adapter = ArrayAdapter(this@VerifikasiActivity, android.R.layout.simple_spinner_item, listSpinner)
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spin_kabupaten.adapter = adapter
                     txv_jumlah_destinasi.text = destinationAdapter.itemCount.toString()
@@ -341,7 +335,7 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
 
                 else{
                     Log.d("gagalresponse", response.toString())
-                    Toast.makeText(this@DestinationListActivity, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@VerifikasiActivity, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -352,7 +346,7 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
     private fun setKecamatanSpinner(idkabupaten: String){
         apiService.getKecamatan(idkabupaten).enqueue(object : Callback<KecamatanResponse>{
             override fun onFailure(call: Call<KecamatanResponse>, t: Throwable) {
-                Toast.makeText(this@DestinationListActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@VerifikasiActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -367,7 +361,7 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
                         listSpinner.add(it.name_kecamatan)
                     }
 
-                    val adapter = ArrayAdapter(this@DestinationListActivity, android.R.layout.simple_spinner_item, listSpinner)
+                    val adapter = ArrayAdapter(this@VerifikasiActivity, android.R.layout.simple_spinner_item, listSpinner)
                     adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spin_kecamatan.adapter = adapter
                     txv_jumlah_destinasi.text = destinationAdapter.itemCount.toString()
@@ -376,7 +370,7 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
 
                 else{
                     Log.d("gagalresponse", response.toString())
-                    Toast.makeText(this@DestinationListActivity, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@VerifikasiActivity, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -386,7 +380,7 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
     private fun setKecamatan(idkabupaten: String,idkecamatan: String){
         apiService.getKecamatanbyid(idkabupaten,idkecamatan).enqueue(object : Callback<KecamatanResponse>{
             override fun onFailure(call: Call<KecamatanResponse>, t: Throwable) {
-                Toast.makeText(this@DestinationListActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@VerifikasiActivity, "Koneksi internet bermasalah", Toast.LENGTH_SHORT).show()
             }
 
             override fun onResponse(
@@ -400,7 +394,7 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
 
                 else{
                     Log.d("gagalresponse", response.toString())
-                    Toast.makeText(this@DestinationListActivity, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@VerifikasiActivity, "Gagal mengambil spinner", Toast.LENGTH_SHORT).show()
                 }
             }
 
@@ -409,9 +403,9 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
 
     fun logout() {
         sessionManager.clearSession()
-                    val intent = Intent(applicationContext, LoginActivity::class.java)
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
-                    startActivity(intent)
+        val intent = Intent(applicationContext, LoginActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        startActivity(intent)
     }
 
     override fun onBackPressed() {

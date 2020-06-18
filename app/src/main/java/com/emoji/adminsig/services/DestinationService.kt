@@ -13,6 +13,9 @@ interface DestinationService {
     @GET("api/destination")
     fun getDestinationList(): Call<DestinationResponse>
 
+    @GET("api/destination")
+    fun getDestinationListByStatus(@Query("status") status: String ): Call<DestinationResponse>
+
     @Multipart
     @POST("api/destination")
     fun addDestination(

@@ -16,9 +16,9 @@ class MainViewModel : AndroidViewModel(Application()) {
     private val destination =  MutableLiveData<ArrayList<Destination>>()
     private val apiService = ServiceBuilder.create()
 
-    fun setDestination(){
+    fun setDestination(status : String ){
         val dataDestination = ArrayList<Destination>()
-        apiService.getDestinationList().enqueue(object : Callback<DestinationResponse> {
+        apiService.getDestinationListByStatus(status).enqueue(object : Callback<DestinationResponse> {
             override fun onFailure(call: Call<DestinationResponse>, t: Throwable) {
                 Log.d("FailureLog", t.message)
             }

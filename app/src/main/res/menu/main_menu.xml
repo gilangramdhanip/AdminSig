@@ -7,4 +7,10 @@
         android:title="Logout"
         android:icon="@drawable/exit_white"
         app:showAsAction="collapseActionView|ifRoom" />
+
+    <item
+        android:id="@+id/verifikasi"
+        android:title="Verifikasi"
+        android:icon="@drawable/ic_verified_user_black_24dp"
+        app:showAsAction="collapseActionView|ifRoom" />
 </menu>

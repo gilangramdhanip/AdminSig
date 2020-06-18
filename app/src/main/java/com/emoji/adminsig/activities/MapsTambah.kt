@@ -9,9 +9,11 @@ import android.location.Address
 import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import android.webkit.PermissionRequest
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.core.app.ActivityCompat
 import com.emoji.adminsig.R
 import com.google.android.gms.common.api.ApiException
@@ -51,7 +53,11 @@ class MapsTambah : AppCompatActivity(), OnMapReadyCallback{
             .findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
         fusedLocationProviderClient = FusedLocationProviderClient(application)
-        supportActionBar?.hide()
+        val toolbar: Toolbar? = findViewById<Toolbar>(R.id.profileToolbar)
+        toolbar!!.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
+        toolbar.setNavigationOnClickListener(View.OnClickListener {
+            onBackPressed()
+        })
     }
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
