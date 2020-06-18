@@ -35,7 +35,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         sessionManager = SessionManager(this)
-        Toast.makeText(this@MainActivity, sessionManager.getEmail(), Toast.LENGTH_SHORT).show()
 
         contextOfApp = applicationContext
 

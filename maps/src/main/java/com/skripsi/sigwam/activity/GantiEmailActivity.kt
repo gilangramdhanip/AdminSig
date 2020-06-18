@@ -12,20 +12,21 @@ import com.emoji.adminsig.preferencetools.SessionManager
 import com.google.android.material.snackbar.Snackbar
 import com.skripsi.sigwam.MainActivity
 import com.skripsi.sigwam.R
+import com.skripsi.sigwam.model.DestinationResponse
 import com.skripsi.sigwam.model.WisatawanResponse
 import com.skripsi.sigwam.service.ServiceBuilder
-import kotlinx.android.synthetic.main.activity_ganti_password.*
+import kotlinx.android.synthetic.main.activity_ganti_email.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class GantiPasswordActivity : AppCompatActivity() {
+class GantiEmailActivity : AppCompatActivity() {
 
     private lateinit var sessionManager : SessionManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_ganti_password)
+        setContentView(R.layout.activity_ganti_email)
         val toolbar: Toolbar? = findViewById<Toolbar>(R.id.profileToolbar)
         toolbar!!.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
 
@@ -34,14 +35,14 @@ class GantiPasswordActivity : AppCompatActivity() {
         sessionManager = SessionManager(this)
 
 
-        update_password.setOnClickListener {
-            if(Editable.Factory.getInstance().newEditable(pass_lama.text).toString() != sessionManager.getPassword()){
-                Toast.makeText(this@GantiPasswordActivity,"Password lama salah", Toast.LENGTH_LONG).show()
+        update_email.setOnClickListener {
+            if(Editable.Factory.getInstance().newEditable(email_lama.text).toString() != sessionManager.getEmail()){
+                Toast.makeText(this@GantiEmailActivity,"Email lama salah", Toast.LENGTH_LONG).show()
             }else{
-                val simpanEmailBaru = sessionManager.getEmail()
+                val simpanEmailBaru = email_baru.text.toString()
                 val id = sessionManager.getId()
                 val nama = sessionManager.getNama()
-                val password = pass_baru.text.toString()
+                val password = sessionManager.getPassword()
                 val destinationService = ServiceBuilder.create()
                 val requestCall = destinationService.updateWisatawan(id, simpanEmailBaru, nama, password)
 
@@ -56,7 +57,7 @@ class GantiPasswordActivity : AppCompatActivity() {
                                 nama,
                                 password
                             )
-                            val intent = Intent(this@GantiPasswordActivity, MainActivity::class.java)
+                            val intent = Intent(this@GantiEmailActivity, MainActivity::class.java)
                             startActivity(intent)
                             Snackbar.make(it, "Email Berhasil diubah", Snackbar.LENGTH_LONG).show()
                             finishAffinity()

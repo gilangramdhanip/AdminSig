@@ -36,6 +36,15 @@ interface DestinationService {
         @Query("id_kabupaten") id_kabupaten: String,
         @Query("id_kecamatan") id_kecamatan: String): Call<KecamatanResponse>
 
+    @FormUrlEncoded
+    @PUT("wisatawan")
+    fun updateWisatawan(
+        @Field("id_wisatawan") id_wisatawan: String,
+        @Field("email") email: String,
+        @Field("nama") nama: String,
+        @Field("password") password: String
+    ): Call<WisatawanResponse>
+
     @Multipart
     @POST("update")
     fun updateDestination(

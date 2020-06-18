@@ -76,8 +76,6 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
         toolbar!!.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
         toolbar.setNavigationOnClickListener(View.OnClickListener { onBackPressed() })
 
-        Toast.makeText(baseContext, "$id", Toast.LENGTH_SHORT).show()
-
         fusedLocationProviderClient = FusedLocationProviderClient(application)
 
         if (isPermissionGiven()){

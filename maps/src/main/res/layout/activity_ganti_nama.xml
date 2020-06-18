@@ -26,29 +26,15 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/pass_lama"
-                android:inputType="textPassword"
-                android:hint="Password lama"
+                android:id="@+id/nama_lama"
+                android:hint="Nama"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_height="wrap_content">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/pass_baru"
-                android:hint="Password Baru"
-                android:inputType="textPassword"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"/>
-        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/update_password"
+            android:id="@+id/update_nama"
             android:text="Update"
             android:layout_gravity="end"
             android:layout_width="wrap_content"
