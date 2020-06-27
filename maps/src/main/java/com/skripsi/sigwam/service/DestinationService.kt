@@ -66,6 +66,20 @@ interface DestinationService {
         @Field("email") email: String,
         @Field("password") password: String): Call<LoginResponse>
 
+    @FormUrlEncoded
+    @POST("lupapassword")
+    fun lupaPassword(
+        @Field("email") email: String
+    ): Call<WisatawanResponse>
+
+    @FormUrlEncoded
+    @PUT("lupapassword")
+    fun gantiPassword(
+        @Field("id_wisatawan") id_wisatawan: String,
+        @Field("email") email: String,
+        @Field("nama") nama: String,
+        @Field("password") password: String): Call<WisatawanResponse>
+
     @POST("registration")
     fun regisWisatawan(@Body newWisatawan: Wisatawan): Call<WisatawanResponse>
 

@@ -8,7 +8,7 @@ object ServiceBuilder {
     fun create(): DestinationService {
         val retrofit= Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("http://192.168.1.71/rest_api/rest-server-sig/api/")
+            .baseUrl("http://192.168.1.64/rest_api/rest-server-sig/api/")
             .build()
         return retrofit.create(DestinationService::class.java)
     }
