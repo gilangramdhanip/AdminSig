@@ -30,6 +30,7 @@ import com.skripsi.sigwam.model.KategoriResponse
 import id.zelory.compressor.Compressor
 import kotlinx.android.synthetic.main.activity_destiny_detail.*
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import pub.devrel.easypermissions.EasyPermissions
@@ -150,7 +151,7 @@ class DestinationDetailActivity : AppCompatActivity() {
             img_view.setImageResource(R.drawable.default_img)
         }else{
             Glide.with(applicationContext)
-                .load("http://192.168.43.73/rest_api/rest-server-sig/assets/foto/"+destination?.img_destination)
+                .load("https://siwita-lombok.000webhostapp.com/rest_api/rest-server-sig/assets/foto/"+destination?.img_destination)
                 .apply(RequestOptions().override(1280, 720))
                 .into(img_view)
         }
@@ -344,7 +345,7 @@ class DestinationDetailActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, "$pickedImg", Toast.LENGTH_SHORT).show()
 
                 if(!pickedImg.isNullOrEmpty()){
-                    val requestBody = RequestBody.create(MediaType.parse("multipart"), compressedImageFile)
+                    val requestBody = RequestBody.create("multipart".toMediaTypeOrNull(), compressedImageFile)
                     img_destination = MultipartBody.Part.createFormData("img_destination", compressedImageFile.name,requestBody)
                     Glide.with(this).load(pickedImg).into(img_view)
                 }else{

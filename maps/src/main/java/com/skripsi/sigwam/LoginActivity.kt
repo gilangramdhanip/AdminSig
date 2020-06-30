@@ -54,7 +54,7 @@ class LoginActivity : AppCompatActivity(){
             override fun onFailure(call: Call<LoginResponse>, t: Throwable) {
                 Toast.makeText(
                     this@LoginActivity,
-                    t.message,
+                    "Email atau Password anda salah",
                     Toast.LENGTH_SHORT
                 ).show()
             }
@@ -75,7 +75,7 @@ class LoginActivity : AppCompatActivity(){
                     startActivity(toLogin)
                 }
                 else{
-                    Toast.makeText(this@LoginActivity, "Anda Belum Terdaftar" , Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@LoginActivity, "Silahkan Cek Koneksi anda" , Toast.LENGTH_LONG).show()
                 }
             }
         })

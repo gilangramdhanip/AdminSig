@@ -37,6 +37,7 @@ import com.skripsi.sigwam.service.ServiceBuilder
 import id.zelory.compressor.Compressor
 import kotlinx.android.synthetic.main.activity_destiny_create.*
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import pub.devrel.easypermissions.EasyPermissions
@@ -444,7 +445,7 @@ fun createPartFromString(descriptionString : String) : RequestBody {
                     Toast.makeText(applicationContext, "$pickedImg", Toast.LENGTH_SHORT).show()
                     // membuat request body yang berisi file dari picked image.
                 if(!pickedImg.isNullOrEmpty()){
-                    val requestBody = RequestBody.create(MediaType.parse("multipart"), compressedImageFile)
+                    val requestBody = RequestBody.create("multipart".toMediaTypeOrNull(), compressedImageFile)
                     img_destination = MultipartBody.Part.createFormData("img_destination",
                         compressedImageFile.name,requestBody)
                     Toast.makeText(baseContext, "$compressedImageFile", Toast.LENGTH_SHORT ).show()

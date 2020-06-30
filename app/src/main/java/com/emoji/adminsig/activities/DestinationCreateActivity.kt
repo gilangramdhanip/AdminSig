@@ -23,6 +23,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.loader.content.CursorLoader
 import com.bumptech.glide.Glide
 import com.emoji.adminsig.R
@@ -37,6 +38,7 @@ import com.skripsi.sigwam.model.KategoriResponse
 import id.zelory.compressor.Compressor
 import kotlinx.android.synthetic.main.activity_destiny_create.*
 import okhttp3.MediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import pub.devrel.easypermissions.EasyPermissions
@@ -87,6 +89,10 @@ class DestinationCreateActivity : AppCompatActivity() {
         setContentView(R.layout.activity_destiny_create)
         sessionManager = SessionManager(this)
         val id = sessionManager.getId()
+
+        val toolbar: Toolbar? = findViewById<Toolbar>(R.id.profileToolbar)
+        toolbar!!.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
+        toolbar.setNavigationOnClickListener(View.OnClickListener { onBackPressed() })
 
 
         destination = intent.getParcelableExtra(EXTRA_CREATE) as Address
@@ -442,7 +448,7 @@ fun createPartFromString(descriptionString : String) : RequestBody {
                     Toast.makeText(applicationContext, "$pickedImg", Toast.LENGTH_SHORT).show()
                     // membuat request body yang berisi file dari picked image.
                 if(!pickedImg.isNullOrEmpty()){
-                    val requestBody = RequestBody.create(MediaType.parse("multipart"), compressedImageFile)
+                    val requestBody = RequestBody.create("multipart".toMediaTypeOrNull(), compressedImageFile)
                     img_destination = MultipartBody.Part.createFormData("img_destination",
                         compressedImageFile.name,requestBody)
                     Toast.makeText(baseContext, "$compressedImageFile", Toast.LENGTH_SHORT ).show()

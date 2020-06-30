@@ -105,14 +105,13 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
     override fun onMapReady(map: GoogleMap?) {
         googleMap = map?: return
 
-        val cameraPosition = CameraPosition.Builder()
-            .target(LatLng(-8.6064737,116.2000303))
-            .zoom(10f)
-            .build()
-
-        googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
-
         if (isPermissionGiven()){
+            val cameraPosition = CameraPosition.Builder()
+                .target(LatLng(-8.6064737,116.2000303))
+                .zoom(10f)
+                .build()
+
+            googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
             googleMap.setPadding(0,200,0,0)
             googleMap.isMyLocationEnabled = true
             googleMap.uiSettings.isMyLocationButtonEnabled = true
@@ -377,7 +376,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                         }
 
                     }
-                        googleMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
+                        googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
                     Log.d("onResponse", response.toString())
                 }
 
@@ -587,7 +586,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
                         }
 
                     }
-                    googleMap.mapType = GoogleMap.MAP_TYPE_SATELLITE
+                    googleMap.mapType = GoogleMap.MAP_TYPE_NORMAL
 
 
                     Log.d("onResponse", response.toString())

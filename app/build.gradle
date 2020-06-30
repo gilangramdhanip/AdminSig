@@ -70,4 +70,7 @@ dependencies {
     //circleimage
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
+    //interception
+    implementation("com.squareup.okhttp3:logging-interceptor:4.7.2")
+
 }

@@ -75,7 +75,7 @@ class DestinationAdapter(private val destinationList: ArrayList<Destination>): R
                     iv_home.setImageResource(R.drawable.default_img)
                 }else{
                     Glide.with(context)
-                        .load("http://192.168.43.73/rest_api/rest-server-sig/assets/foto/"+destination.img_destination)
+                        .load("https://siwita-lombok.000webhostapp.com/rest_api/rest-server-sig/assets/foto/"+destination.img_destination)
                         .apply(RequestOptions().override(500, 500))
                         .into(iv_home)
                 }

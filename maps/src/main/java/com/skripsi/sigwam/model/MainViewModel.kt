@@ -22,7 +22,7 @@ class MainViewModel : AndroidViewModel(Application()) {
         val dataDestination = ArrayList<Destination>()
         apiService.getDestinationList().enqueue(object : Callback<DestinationResponse> {
             override fun onFailure(call: Call<DestinationResponse>, t: Throwable) {
-                Log.d("FailureLog", t.message)
+                Log.d("FailureLog", t.toString())
             }
 
             override fun onResponse(call: Call<DestinationResponse>, response: Response<DestinationResponse>) {
