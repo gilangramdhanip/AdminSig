@@ -114,6 +114,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
             googleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
             googleMap.setPadding(0,200,0,0)
             googleMap.isMyLocationEnabled = true
+            googleMap.isTrafficEnabled = true
             googleMap.uiSettings.isMyLocationButtonEnabled = true
             googleMap.uiSettings.isZoomControlsEnabled = true
             getCurrentLocation()

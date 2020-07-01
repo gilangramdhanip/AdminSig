@@ -58,7 +58,7 @@ class PencarianAdapter(private val destinationList: ArrayList<Destination>): Rec
                     iv_home.setImageResource(R.drawable.undraw_journey_lwlj)
                 }else{
                     Glide.with(context)
-                        .load("https://siwita-lombok.000webhostapp.com/rest_api/rest-server-sig/assets/foto/"+destination.img_destination)
+                        .load("http://siwita-lombok.monster/rest_api/rest-server-sig/assets/foto/"+destination.img_destination)
                         .apply(RequestOptions().override(100, 100))
                         .into(iv_home)
                 }

@@ -75,7 +75,7 @@ class WisatawanDestinationAdapter(private val destinationList: ArrayList<Destina
                     iv_home.setImageResource(R.drawable.default_img)
                 }else{
                     Glide.with(context)
-                        .load("https://siwita-lombok.000webhostapp.com/rest_api/rest-server-sig/assets/foto/"+destination.img_destination)
+                        .load("http://siwita-lombok.monster/rest_api/rest-server-sig/assets/foto/"+destination.img_destination)
                         .apply(RequestOptions().override(500, 500))
                         .into(iv_home)
                 }

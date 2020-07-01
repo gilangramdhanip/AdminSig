@@ -84,7 +84,7 @@ interface DestinationService {
     fun regisWisatawan(@Body newWisatawan: Wisatawan): Call<WisatawanResponse>
 
     @FormUrlEncoded
-    @HTTP(  method = "DELETE", path = "api/destination", hasBody = true)
+    @HTTP(  method = "DELETE", path = "destination", hasBody = true)
     fun deleteDestination(
         @Field("id_destination") id_destination: Int
     ): Call<DeleteResponse>

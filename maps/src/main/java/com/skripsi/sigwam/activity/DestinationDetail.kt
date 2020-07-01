@@ -148,7 +148,7 @@ class DestinationDetail : AppCompatActivity() {
             img_view.setImageResource(R.drawable.default_img)
         }else{
             Glide.with(applicationContext)
-                .load("https://siwita-lombok.000webhostapp.com/rest_api/rest-server-sig/assets/foto/"+destination?.img_destination)
+                .load("http://siwita-lombok.monster/rest_api/rest-server-sig/assets/foto/"+destination?.img_destination)
                 .apply(RequestOptions().override(1280, 720))
                 .into(img_view)
         }

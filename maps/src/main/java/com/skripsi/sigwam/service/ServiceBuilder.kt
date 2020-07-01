@@ -23,7 +23,7 @@ object ServiceBuilder {
         val retrofit= Retrofit.Builder()
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create(gson))
-            .baseUrl("https://siwita-lombok.000webhostapp.com/rest_api/rest-server-sig/api/")
+            .baseUrl("http://siwita-lombok.monster/rest_api/rest-server-sig/api/")
             .build()
         return retrofit.create(DestinationService::class.java)
     }
