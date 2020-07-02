@@ -4,7 +4,10 @@ import android.content.Intent
 import android.location.Address
 import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.SearchView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import com.skripsi.sigwam.R
@@ -17,6 +20,7 @@ import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.Marker
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.activity_maps_tambah.*
 import java.io.IOException
 
 
@@ -42,6 +46,58 @@ class MapsTambah : AppCompatActivity(), OnMapReadyCallback{
         toolbar!!.setNavigationIcon(R.drawable.ic_arrow_back_black_24dp)
 
         toolbar.setNavigationOnClickListener(View.OnClickListener { onBackPressed() })
+
+        sv_location.setOnQueryTextListener(object  : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                val location = sv_location.query.toString()
+                var addressList : List<Address>? = null
+
+                if(location!=null || !location.equals("")){
+                    val geocoder : Geocoder = Geocoder(this@MapsTambah)
+                    try{
+                        addressList = geocoder.getFromLocationName(location, 10)
+
+                    }catch (e: IOException){
+                        e.printStackTrace()
+                        e.toString()
+                    }
+                    if(addressList!!.isNotEmpty()) {
+                        val address = addressList!![0]
+                        val latLng = LatLng(address.latitude, address.longitude)
+                        val options = MarkerOptions()
+                            .title("tambahkan $location")
+                            .position(
+                                LatLng(
+                                    latLng.latitude,
+                                    latLng.longitude
+                                )
+                            )
+                        val lokasi = address
+
+                        marker = mMap.addMarker(options)
+                        marker.tag = lokasi
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20F))
+
+                        mMap.setOnInfoWindowClickListener { p0 ->
+                            val desti = p0!!.tag as Address
+
+                            val intent = Intent(this@MapsTambah, DestinationCreateActivity::class.java)
+                            intent.putExtra(DestinationCreateActivity.EXTRA_CREATE, desti)
+                            intent.putExtra("NAMA", location)
+                            startActivity(intent)
+                        }
+                    }else{
+                        Toast.makeText(this@MapsTambah, "Data tidak ditemukan atau silahkan tulis lokasi dengan lengkap", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                return false
+            }
+
+        })
 
     }
     override fun onMapReady(googleMap: GoogleMap) {

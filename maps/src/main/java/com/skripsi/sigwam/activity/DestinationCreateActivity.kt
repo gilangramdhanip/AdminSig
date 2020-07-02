@@ -96,6 +96,7 @@ class DestinationCreateActivity : AppCompatActivity() {
         et_latitude.text =Editable.Factory.getInstance().newEditable(destination.latitude.toString())
         et_longitude.text = Editable.Factory.getInstance().newEditable(destination.longitude.toString())
         et_address.text = Editable.Factory.getInstance().newEditable(destination.getAddressLine(0).toString())
+        et_name.text = Editable.Factory.getInstance().newEditable(intent.getStringExtra("NAMA"))
 
 
         initSpinnerKabupaten()

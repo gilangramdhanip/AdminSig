@@ -1,17 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<fragment xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:map="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/map"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
+
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.MapsUpdate">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:map="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/profileToolbar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context=".activities.MapsTambah">
 
-    </androidx.appcompat.widget.Toolbar>
-</fragment>
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/profileToolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+        </androidx.appcompat.widget.Toolbar>
+    </fragment>
+
+    <SearchView
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginStart="50dp"
+        android:id="@+id/sv_location"
+        android:layout_width="match_parent"
+        android:queryHint="Cari lokasi..."
+        android:iconifiedByDefault="false"
+        android:elevation="5dp"
+        android:background="@drawable/bg_round"
+        android:layout_height="wrap_content"/>
+
+
+</RelativeLayout>
