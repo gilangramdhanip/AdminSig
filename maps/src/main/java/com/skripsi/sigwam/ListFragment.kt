@@ -200,8 +200,8 @@ class ListFragment : Fragment() {
                         listSpinner.add(it.name_kabupaten)
                     }
 
-                    val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listSpinner)
-                    adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                    val adapter = context?.let { ArrayAdapter(it, android.R.layout.simple_spinner_item, listSpinner) }
+                    adapter!!.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                     spin_kabupaten.adapter = adapter
 
                     Log.d("KabupatenResponse", response.toString())

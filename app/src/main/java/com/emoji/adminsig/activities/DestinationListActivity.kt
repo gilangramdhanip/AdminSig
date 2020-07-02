@@ -178,7 +178,6 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
 
     override fun onPermissionDenied(response: PermissionDeniedResponse?) {
         Toast.makeText(this@DestinationListActivity, "Permission required for showing location", Toast.LENGTH_LONG).show()
-        this?.finish()
     }
 
     private fun getCurrentLocation() {

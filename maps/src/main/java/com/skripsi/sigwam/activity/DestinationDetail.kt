@@ -488,7 +488,7 @@ class DestinationDetail : AppCompatActivity() {
     override fun onBackPressed() {
         MaterialAlertDialogBuilder(this)
             .setTitle("Alert!")
-            .setMessage("Yakin ingin keluar dari halaman ini? Jika anda keluar, data akan terhapus!")
+            .setMessage("Yakin ingin keluar dari halaman ini? Jika anda keluar, perubahan data yang dilakukan akan terhapus!")
             .setPositiveButton("Ya",
                 DialogInterface.OnClickListener { dialog, which ->
                     super.onBackPressed()

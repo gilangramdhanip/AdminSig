@@ -154,7 +154,6 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
 
     override fun onPermissionDenied(response: PermissionDeniedResponse?) {
         Toast.makeText(requireContext(), "Permission required for showing location", Toast.LENGTH_LONG).show()
-        activity?.finish()
     }
 
     private fun getCurrentLocation() {
@@ -203,7 +202,7 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener{
 
                     var address = "Alamat tidak ditemukan"
 
-                    val gcd = Geocoder(requireContext(), Locale.getDefault())
+                    val gcd = Geocoder(context, Locale.getDefault())
                     val addresses: List<Address>
                     try {
                         addresses = gcd.getFromLocation(mLastLocation!!.latitude, mLastLocation.longitude, 1)
