@@ -7,6 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.SearchView
+import android.widget.Toast
 import androidx.appcompat.widget.Toolbar
 import com.emoji.adminsig.R
 import com.emoji.adminsig.models.Destination
@@ -17,6 +19,7 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import kotlinx.android.synthetic.main.activity_maps_update.*
 import java.io.IOException
 
 class MapsUpdate : AppCompatActivity(), OnMapReadyCallback {
@@ -50,6 +53,58 @@ class MapsUpdate : AppCompatActivity(), OnMapReadyCallback {
         destination = intent.getParcelableExtra(EXTRA_UPDATE) as Destination
         destination.id_destination
         latlng = LatLng(destination.lat_destination!!.toDouble(), destination.lng_destination!!.toDouble())
+
+        sv_location.setOnQueryTextListener(object  : SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(p0: String?): Boolean {
+                val location = sv_location.query.toString()
+                var addressList : List<Address>? = null
+
+                if(location!=null || !location.equals("")){
+                    val geocoder : Geocoder = Geocoder(this@MapsUpdate)
+                    try{
+                        addressList = geocoder.getFromLocationName(location, 10)
+
+                    }catch (e: IOException){
+                        e.printStackTrace()
+                        e.toString()
+                    }
+                    if(addressList!!.isNotEmpty()) {
+                        val address = addressList!![0]
+                        val latLng = LatLng(address.latitude, address.longitude)
+                        val options = MarkerOptions()
+                            .title("tambahkan $location")
+                            .position(
+                                LatLng(
+                                    latLng.latitude,
+                                    latLng.longitude
+                                )
+                            )
+                        val lokasi = Destination(destination.id_destination, destination.name_destination,
+                            latLng.latitude.toString(), latLng.longitude.toString(), address.getAddressLine(0).toString(), destination.desc_destination, destination.id_kategori, destination.img_destination, destination.id_kabupaten, destination.id_kecamatan, destination.jambuka, destination.jamtutup)
+                        marker = mMap.addMarker(options)
+                        marker.tag = lokasi
+                        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 20F))
+
+                        mMap.setOnInfoWindowClickListener { p0 ->
+                            val desti = p0!!.tag as Destination
+                            Log.d("Response desti", desti.toString())
+
+                            val intent = Intent(this@MapsUpdate, DestinationDetailActivity::class.java)
+                            intent.putExtra(DestinationDetailActivity.EXTRA_DETAIl, desti)
+                            startActivity(intent)
+                        }
+                    }else{
+                        Toast.makeText(this@MapsUpdate, "Data tidak ditemukan atau silahkan tulis lokasi dengan lengkap", Toast.LENGTH_SHORT).show()
+                    }
+                }
+                return false
+            }
+
+            override fun onQueryTextChange(p0: String?): Boolean {
+                return false
+            }
+
+        })
     }
 
     override fun onMapReady(googleMap: GoogleMap) {
