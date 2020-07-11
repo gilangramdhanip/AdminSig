@@ -12,10 +12,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.webkit.PermissionRequest
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.lifecycle.Observer
@@ -24,6 +21,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.emoji.adminsig.R
 import com.emoji.adminsig.adapter.DestinationAdapter
 import com.emoji.adminsig.adapter.PencarianAdapter
+import com.emoji.adminsig.adapter.VerifikasiAdapter
 import com.emoji.adminsig.models.*
 import com.emoji.adminsig.services.ServiceBuilder
 import com.google.android.gms.common.api.ApiException
@@ -43,10 +41,14 @@ import retrofit2.Response
 class DestinationListActivity : AppCompatActivity(), PermissionListener {
 
     private val apiService = ServiceBuilder.create()
+    var textCartItemCount: TextView? = null
+    var mCartItemCount = 10
 
     private lateinit var destinationAdapter: DestinationAdapter
+    private lateinit var verifikasiAdapter: VerifikasiAdapter
     lateinit var pencarianAdapter: PencarianAdapter
     private lateinit var mainViewModel: MainViewModel
+    private lateinit var mainViewModelVerifikasi: MainViewModelVerifikasi
     private val destination = ArrayList<Destination>()
 
     private lateinit var kabupaten : String
@@ -216,12 +218,21 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == R.id.keluar) {
-            // Logout
-            logout()
-        }else if (item.itemId == R.id.verifikasi){
-            val intent = Intent(this@DestinationListActivity, VerifikasiActivity::class.java)
-            startActivity(intent)
+        when (item.itemId) {
+            R.id.verifikasi -> {
+                val intent = Intent(this@DestinationListActivity, VerifikasiActivity::class.java)
+                startActivity(intent)
+                // Do something
+                return true
+            }
+            R.id.keluar ->{
+                logout()
+            }
+
+            R.id.maps ->{
+                val intent = Intent(this@DestinationListActivity, MapsActivity::class.java)
+                startActivity(intent)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
@@ -229,6 +240,12 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         // Inflate the menu; this adds items to the action bar if it is present.
         menuInflater.inflate(R.menu.main_menu, menu)
+
+        val view : View = menu.findItem(R.id.verifikasi).actionView
+        val menuItem = menu.findItem(R.id.verifikasi)
+        textCartItemCount = view.findViewById<View>(R.id.cart_badge) as TextView
+        setupBadge()
+        view.setOnClickListener { onOptionsItemSelected(menuItem) }
         return true
     }
 
@@ -243,6 +260,7 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
 
     override fun onResume() {
         super.onResume()
+        setupBadge()
         val imm: InputMethodManager =
             getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0)
@@ -416,6 +434,36 @@ class DestinationListActivity : AppCompatActivity(), PermissionListener {
     override fun onBackPressed() {
         super.onBackPressed()
         finishAffinity()
+    }
+
+    private fun setupBadge() {
+
+        verifikasiAdapter = VerifikasiAdapter(destination)
+        verifikasiAdapter.notifyDataSetChanged()
+        mainViewModelVerifikasi = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
+            MainViewModelVerifikasi::class.java
+        )
+
+        mainViewModelVerifikasi.setDestination("0")
+
+        mainViewModelVerifikasi.getDestination().observe(this, Observer { destination ->
+            if(destination!=null){
+                verifikasiAdapter.setData(destination)
+
+                if (textCartItemCount != null) {
+                    if (mCartItemCount == 0) {
+                        if (textCartItemCount!!.visibility != View.GONE) {
+                            textCartItemCount!!.visibility = View.GONE
+                        }
+                    } else {
+                        textCartItemCount!!.text = verifikasiAdapter.itemCount.toString()
+                        if (textCartItemCount!!.visibility != View.VISIBLE) {
+                            textCartItemCount!!.visibility = View.VISIBLE
+                        }
+                    }
+                }
+            }
+        })
     }
 
 }

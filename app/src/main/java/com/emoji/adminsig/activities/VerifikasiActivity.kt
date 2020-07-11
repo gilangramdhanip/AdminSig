@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.emoji.adminsig.R
 import com.emoji.adminsig.adapter.DestinationAdapter
 import com.emoji.adminsig.adapter.PencarianAdapter
+import com.emoji.adminsig.adapter.VerifikasiAdapter
 import com.emoji.adminsig.models.*
 import com.emoji.adminsig.services.ServiceBuilder
 import com.google.android.gms.common.api.ApiException
@@ -45,9 +46,9 @@ class VerifikasiActivity : AppCompatActivity(), PermissionListener {
 
     private val apiService = ServiceBuilder.create()
 
-    private lateinit var destinationAdapter: DestinationAdapter
+    private lateinit var destinationAdapter: VerifikasiAdapter
     lateinit var pencarianAdapter: PencarianAdapter
-    private lateinit var mainViewModel: MainViewModel
+    private lateinit var mainViewModel: MainViewModelVerifikasi
     private val destination = ArrayList<Destination>()
 
     private lateinit var kabupaten : String
@@ -252,11 +253,11 @@ class VerifikasiActivity : AppCompatActivity(), PermissionListener {
 
     private fun loadDestination(){
 
-        destinationAdapter = DestinationAdapter(destination)
+        destinationAdapter = VerifikasiAdapter(destination)
         destinationAdapter.notifyDataSetChanged()
 
         mainViewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory()).get(
-            MainViewModel::class.java
+            MainViewModelVerifikasi::class.java
         )
 
         showLoading(true)
@@ -406,11 +407,6 @@ class VerifikasiActivity : AppCompatActivity(), PermissionListener {
         val intent = Intent(applicationContext, LoginActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
         startActivity(intent)
-    }
-
-    override fun onBackPressed() {
-        super.onBackPressed()
-        finishAffinity()
     }
 
 }

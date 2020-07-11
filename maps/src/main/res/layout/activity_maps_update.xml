@@ -12,27 +12,33 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".activities.MapsTambah">
+        tools:context=".activity.MapsUpdate">
+    </fragment>
+
+    <LinearLayout
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:layout_marginTop="15dp"
+        android:background="@drawable/bg_round"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
 
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/profileToolbar"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"/>
 
-        </androidx.appcompat.widget.Toolbar>
-    </fragment>
+        <SearchView
+            android:layout_marginTop="5dp"
+            android:layout_marginStart="-45dp"
+            android:id="@+id/sv_location"
+            android:layout_width="match_parent"
+            android:queryHint="Cari lokasi..."
+            android:iconifiedByDefault="false"
+            android:elevation="5dp"
+            android:layout_height="wrap_content"/>
 
-    <SearchView
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="50dp"
-        android:layout_marginStart="50dp"
-        android:id="@+id/sv_location"
-        android:layout_width="match_parent"
-        android:queryHint="Cari lokasi..."
-        android:iconifiedByDefault="false"
-        android:elevation="5dp"
-        android:background="@drawable/bg_round"
-        android:layout_height="wrap_content"/>
+    </LinearLayout>
 
 
 </RelativeLayout>

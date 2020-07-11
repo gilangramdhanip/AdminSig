@@ -12,6 +12,8 @@ interface DestinationService {
 
     @GET("api/destination")
     fun getDestinationList(): Call<DestinationResponse>
+    @GET("api/destination")
+    fun getFilterKategori(@Query("id_kategori") id_kategori: String): Call<DestinationResponse>
 
     @GET("api/destination")
     fun getDestinationListByStatus(@Query("status") status: String ): Call<DestinationResponse>
