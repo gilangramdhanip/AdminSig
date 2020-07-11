@@ -28,6 +28,7 @@ class AccountFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         sessionManager = SessionManager(requireContext())
+        nama_wisatawan.text = sessionManager.getNama()
 
         val simpanEmail = sessionManager.getEmail()
         val hasil = simpanEmail.replace(Regex("(?<=.{3}).(?=.*@)"), "*")

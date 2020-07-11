@@ -3,6 +3,7 @@ package com.skripsi.sigwam
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -34,7 +35,14 @@ class LoginActivity : AppCompatActivity(){
         button_masuk.setOnClickListener{
             val username = ed_email.text.toString()
             val password = ed_password.text.toString()
-            signin(username, password)
+            if(TextUtils.isEmpty(username)){
+                ed_email.error = "Email tidak boleh kosong"
+            }else if(TextUtils.isEmpty(password)){
+                ed_password.error = "Password tidak boleh kosong"
+            }else{
+                signin(username, password)
+            }
+
         }
 
         btn_daftar.setOnClickListener {

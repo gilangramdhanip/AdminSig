@@ -32,6 +32,10 @@ class GantiNamaActivity : AppCompatActivity() {
 
         nama_lama.setText(sessionManager.getNama())
         update_nama.setOnClickListener {
+
+            if(nama_lama.text.isNullOrEmpty()){
+                nama_lama.setError("Nama tidak boleh kosong")
+            }else{
                 val email = sessionManager.getEmail()
                 val id = sessionManager.getId()
                 val nama = nama_lama.text.toString()
@@ -67,6 +71,7 @@ class GantiNamaActivity : AppCompatActivity() {
                         Log.d("respon gagagal", t.message)
                     }
                 })
+            }
         }
     }
 }

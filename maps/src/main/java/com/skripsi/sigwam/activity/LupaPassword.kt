@@ -34,8 +34,8 @@ class LupaPassword : AppCompatActivity() {
         toolbar.setNavigationOnClickListener(View.OnClickListener { onBackPressed() })
 
         cek_email.setOnClickListener {
-            if(Editable.Factory.getInstance().newEditable(input_email.text).toString() == ""){
-                Toast.makeText(this@LupaPassword, "Anda belum memasukkan email", Toast.LENGTH_LONG).show()
+            if(input_email.text.isNullOrEmpty()){
+                input_email.setError("Email tidak boleh kosong")
             }else{
                 cekEmail(input_email.text.toString())
             }

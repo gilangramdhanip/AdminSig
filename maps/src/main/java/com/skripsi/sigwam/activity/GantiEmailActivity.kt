@@ -36,44 +36,68 @@ class GantiEmailActivity : AppCompatActivity() {
 
 
         update_email.setOnClickListener {
+            val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
             if(Editable.Factory.getInstance().newEditable(email_lama.text).toString() != sessionManager.getEmail()){
                 Toast.makeText(this@GantiEmailActivity,"Email lama salah", Toast.LENGTH_LONG).show()
+            }else if(email_lama.text.isNullOrEmpty() && email_baru.text.isNullOrEmpty()){
+                email_lama.setError("Email lama tidak boleh kosong")
+                email_baru.setError("Email baru tidak boleh kosong")
             }else{
-                val simpanEmailBaru = email_baru.text.toString()
-                val id = sessionManager.getId()
-                val nama = sessionManager.getNama()
-                val password = sessionManager.getPassword()
-                val destinationService = ServiceBuilder.create()
-                val requestCall = destinationService.updateWisatawan(id, simpanEmailBaru, nama, password)
+                if(email_baru.text.toString().trim().matches(emailPattern.toRegex())) {
+                    Toast.makeText(
+                        this@GantiEmailActivity,
+                        "Format email benar",
+                        Toast.LENGTH_SHORT
+                    ).show()
 
-                requestCall.enqueue(object: Callback<WisatawanResponse> {
+                    val simpanEmailBaru = email_baru.text.toString()
+                    val id = sessionManager.getId()
+                    val nama = sessionManager.getNama()
+                    val password = sessionManager.getPassword()
+                    val destinationService = ServiceBuilder.create()
+                    val requestCall =
+                        destinationService.updateWisatawan(id, simpanEmailBaru, nama, password)
 
-                    override fun onResponse(call: Call<WisatawanResponse>, response: Response<WisatawanResponse>) {
-                        if (response.isSuccessful) {
+                    requestCall.enqueue(object : Callback<WisatawanResponse> {
 
-                            sessionManager.saveData(
-                                id,
-                                simpanEmailBaru,
-                                nama,
-                                password
-                            )
-                            val intent = Intent(this@GantiEmailActivity, MainActivity::class.java)
-                            startActivity(intent)
-                            Snackbar.make(it, "Email Berhasil diubah", Snackbar.LENGTH_LONG).show()
-                            finishAffinity()
+                        override fun onResponse(
+                            call: Call<WisatawanResponse>,
+                            response: Response<WisatawanResponse>
+                        ) {
+                            if (response.isSuccessful) {
 
-                            Log.d("onResponse", response.toString())
-                        } else {
-                            Snackbar.make(it, "Data Gagal diubah", Snackbar.LENGTH_LONG).show()
-                            Log.d("respongagal", response.toString())
+                                sessionManager.saveData(
+                                    id,
+                                    simpanEmailBaru,
+                                    nama,
+                                    password
+                                )
+                                val intent =
+                                    Intent(this@GantiEmailActivity, MainActivity::class.java)
+                                startActivity(intent)
+                                Snackbar.make(it, "Email Berhasil diubah", Snackbar.LENGTH_LONG)
+                                    .show()
+                                finishAffinity()
+
+                                Log.d("onResponse", response.toString())
+                            } else {
+                                Snackbar.make(it, "Data Gagal diubah", Snackbar.LENGTH_LONG).show()
+                                Log.d("respongagal", response.toString())
+                            }
                         }
-                    }
 
-                    override fun onFailure(call: Call<WisatawanResponse>, t: Throwable) {
-                        Snackbar.make(it, "Data Gagal diubah bro", Snackbar.LENGTH_LONG).show()
-                        Log.d("respon gagagal", t.message)
-                    }
-                })
+                        override fun onFailure(call: Call<WisatawanResponse>, t: Throwable) {
+                            Snackbar.make(it, "Data Gagal diubah bro", Snackbar.LENGTH_LONG).show()
+                            Log.d("respon gagagal", t.message)
+                        }
+                    })
+                }else{
+                    Toast.makeText(
+                        this@GantiEmailActivity,
+                        "Format email salah",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
             }
         }
     }

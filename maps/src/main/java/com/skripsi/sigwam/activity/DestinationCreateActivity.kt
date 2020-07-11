@@ -229,61 +229,106 @@ class DestinationCreateActivity : AppCompatActivity() {
         }
 
                     btn_add.setOnClickListener {
+                        if(et_name.text.isNullOrEmpty()){
+                            et_name.setError("Field Tidak boleh kosong")
+                        }
+                        else if(et_latitude.text.isNullOrEmpty()){
+                            et_latitude.setError("Field Tidak boleh kosong")
+                        }
+                        else if(et_longitude.text.isNullOrEmpty()){
+                            et_longitude.setError("Field Tidak boleh kosong")
+                        }
+                        else if(et_address.text.isNullOrEmpty()){
+                            et_address.setError("Field Tidak boleh kosong")
+                        }else {
 
-                        MaterialAlertDialogBuilder(this)
-                            .setTitle("Alert!")
-                            .setMessage("Apakah Data Sudah benar?")
-                            .setPositiveButton("Ya",
-                                DialogInterface.OnClickListener { dialog, which ->
+                            MaterialAlertDialogBuilder(this)
+                                .setTitle("Alert!")
+                                .setMessage("Apakah Data Sudah benar?")
+                                .setPositiveButton("Ya",
+                                    DialogInterface.OnClickListener { dialog, which ->
 
-                                    Snackbar.make(it, "Harap Tunggu Sebentar", Snackbar.LENGTH_LONG).show()
-                        val map = HashMap<String, RequestBody>()
-                        map["name_destination"] = createPartFromString(et_name.text.toString())
-                        map["lat_destination"] = createPartFromString(et_latitude.text.toString())
-                        map["lng_destination"] = createPartFromString(et_longitude.text.toString())
-                        map["address_destination"] = createPartFromString(et_address.text.toString())
-                        map["desc_destination"] = createPartFromString(et_description.text.toString())
-                        map["id_kategori"] = createPartFromString(simpan)
-                        map["id_kabupaten"] = createPartFromString(kabupaten)
-                        map["id_kecamatan"] = createPartFromString(kecamatan)
-                        map["jambuka"] = createPartFromString(et_jambuka.text.toString())
-                        map["jamtutup"] = createPartFromString(et_jamtutup.text.toString())
-                        map["id_admin"] = createPartFromString("")
-                        map["status"] = createPartFromString("0")
-                        map["id_wisatawan"] = createPartFromString(sessionManager.getId())
+                                        Snackbar.make(
+                                            it,
+                                            "Harap Tunggu Sebentar",
+                                            Snackbar.LENGTH_LONG
+                                        ).show()
+                                        val map = HashMap<String, RequestBody>()
+                                        map["name_destination"] =
+                                            createPartFromString(et_name.text.toString())
+                                        map["lat_destination"] =
+                                            createPartFromString(et_latitude.text.toString())
+                                        map["lng_destination"] =
+                                            createPartFromString(et_longitude.text.toString())
+                                        map["address_destination"] =
+                                            createPartFromString(et_address.text.toString())
+                                        map["desc_destination"] =
+                                            createPartFromString(et_description.text.toString())
+                                        map["id_kategori"] = createPartFromString(simpan)
+                                        map["id_kabupaten"] = createPartFromString(kabupaten)
+                                        map["id_kecamatan"] = createPartFromString(kecamatan)
+                                        map["jambuka"] =
+                                            createPartFromString(et_jambuka.text.toString())
+                                        map["jamtutup"] =
+                                            createPartFromString(et_jamtutup.text.toString())
+                                        map["id_admin"] = createPartFromString("")
+                                        map["status"] = createPartFromString("0")
+                                        map["id_wisatawan"] =
+                                            createPartFromString(sessionManager.getId())
 
-                        val destinationService = ServiceBuilder.create()
-                        val requestCall = destinationService.addDestination(map, img_destination)
+                                        val destinationService = ServiceBuilder.create()
+                                        val requestCall =
+                                            destinationService.addDestination(map, img_destination)
 
-                        requestCall.enqueue(object : Callback<DestinationResponse> {
+                                        requestCall.enqueue(object : Callback<DestinationResponse> {
 
-                            override fun onResponse(
-                                call: Call<DestinationResponse>,
-                                response: Response<DestinationResponse>
-                            ) {
-                                if (response.isSuccessful) {
-                                    val intent = Intent(this@DestinationCreateActivity, MainActivity::class.java)
-                                    startActivity(intent)
-                                    Snackbar.make(it, "Data Berhasil ditambahkan", Snackbar.LENGTH_LONG).show()
-                                    finishAffinity()
-                                    var newlyCreatedDestination = response.body() // Use it or ignore it
-                                    Log.d("ResponseLog", response.toString())
-                                } else {
-                                    Snackbar.make(it, "Data Gagal ditambahkan", Snackbar.LENGTH_LONG).show()
-                                    Log.d("gagalLog", response.toString())
-                                }
-                            }
+                                            override fun onResponse(
+                                                call: Call<DestinationResponse>,
+                                                response: Response<DestinationResponse>
+                                            ) {
+                                                if (response.isSuccessful) {
+                                                    val intent = Intent(
+                                                        this@DestinationCreateActivity,
+                                                        MainActivity::class.java
+                                                    )
+                                                    startActivity(intent)
+                                                    Snackbar.make(
+                                                        it,
+                                                        "Data Berhasil ditambahkan",
+                                                        Snackbar.LENGTH_LONG
+                                                    ).show()
+                                                    finishAffinity()
+                                                    var newlyCreatedDestination =
+                                                        response.body() // Use it or ignore it
+                                                    Log.d("ResponseLog", response.toString())
+                                                } else {
+                                                    Snackbar.make(
+                                                        it,
+                                                        "Data Gagal ditambahkan",
+                                                        Snackbar.LENGTH_LONG
+                                                    ).show()
+                                                    Log.d("gagalLog", response.toString())
+                                                }
+                                            }
 
-                            override fun onFailure(call: Call<DestinationResponse>, t: Throwable) {
-                                Snackbar.make(it, "Data Gagal ditambahkan", Snackbar.LENGTH_LONG).show()
-                                Log.d("FailureLog", t.message)
-                            }
-                        })
+                                            override fun onFailure(
+                                                call: Call<DestinationResponse>,
+                                                t: Throwable
+                                            ) {
+                                                Snackbar.make(
+                                                    it,
+                                                    "Data Gagal ditambahkan",
+                                                    Snackbar.LENGTH_LONG
+                                                ).show()
+                                                Log.d("FailureLog", t.message)
+                                            }
+                                        })
 
-                                })
-                            .setNegativeButton("Kembali",null)
-                            .setIcon(R.drawable.personmarker)
-                            .show()
+                                    })
+                                .setNegativeButton("Kembali", null)
+                                .setIcon(R.drawable.personmarker)
+                                .show()
+                        }
                     }
     }
 

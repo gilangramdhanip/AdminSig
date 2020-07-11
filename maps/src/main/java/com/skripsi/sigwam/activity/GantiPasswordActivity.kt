@@ -35,8 +35,12 @@ class GantiPasswordActivity : AppCompatActivity() {
 
 
         update_password.setOnClickListener {
-            if(Editable.Factory.getInstance().newEditable(pass_lama.text).toString() != sessionManager.getPassword()){
+            if(pass_lama.text.isNullOrEmpty() && pass_baru.text.isNullOrEmpty()){
+                pass_lama.setError("Password lama tidak boleh kosong")
+                pass_baru.setError("Password Baru tidak boleh kosong")
+            }else if(Editable.Factory.getInstance().newEditable(pass_lama.text).toString() != sessionManager.getPassword()){
                 Toast.makeText(this@GantiPasswordActivity,"Password lama salah", Toast.LENGTH_LONG).show()
+
             }else{
                 val simpanEmailBaru = sessionManager.getEmail()
                 val id = sessionManager.getId()

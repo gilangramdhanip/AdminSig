@@ -21,47 +21,72 @@ class RegistrationActivity : AppCompatActivity() {
 
 
         button_daftar.setOnClickListener {
-            val newWisatawan = Wisatawan(taskId)
-            newWisatawan.email = edt_email_wis.text.toString()
-            newWisatawan.nama = edt_nama_wis.text.toString()
-            newWisatawan.password = edt_password_wis.text.toString()
 
-            val pembeliService = ServiceBuilder.create()
-            val requestCall = pembeliService.regisWisatawan(newWisatawan)
+            if(edt_email_wis.text.isNullOrEmpty() && edt_nama_wis.text.isNullOrEmpty() && edt_password_wis.text.isNullOrEmpty()){
+                edt_email_wis.setError("Email tidak boleh kosong")
+                edt_nama_wis.setError("Nama tidak boleh kosong")
+                edt_password_wis.setError("Password tidak boleh kosong")
+            }else{
+                val emailPattern = "[a-zA-Z0-9._-]+@[a-z]+\\.+[a-z]+"
 
-            requestCall.enqueue(object : Callback<WisatawanResponse> {
+                if(edt_email_wis.text.toString().trim().matches(emailPattern.toRegex())) {
 
-                override fun onResponse(
-                    call: Call<WisatawanResponse>,
-                    response: Response<WisatawanResponse>
-                ) {
-                    if (response.isSuccessful) {
-                        val intent = Intent(this@RegistrationActivity, LoginActivity::class.java) // Move back to BarangListActivity
-                        startActivity(intent)
-                        finish()
-                        var newlyCreatedPembeli = response.body() // Use it or ignore it
-                        Toast.makeText(
-                            this@RegistrationActivity,
-                            "Successfully Added",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        Log.d("ResponseLog", response.toString())
-                    } else {
-                        Toast.makeText(
-                            this@RegistrationActivity,
-                            "Email sudah terdaftar",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                        Log.d("gagalLog", response.toString())
-                    }
+                    val newWisatawan = Wisatawan(taskId)
+                    newWisatawan.email = edt_email_wis.text.toString()
+                    newWisatawan.nama = edt_nama_wis.text.toString()
+                    newWisatawan.password = edt_password_wis.text.toString()
+
+                    val pembeliService = ServiceBuilder.create()
+                    val requestCall = pembeliService.regisWisatawan(newWisatawan)
+
+                    requestCall.enqueue(object : Callback<WisatawanResponse> {
+
+                        override fun onResponse(
+                            call: Call<WisatawanResponse>,
+                            response: Response<WisatawanResponse>
+                        ) {
+                            if (response.isSuccessful) {
+                                val intent = Intent(
+                                    this@RegistrationActivity,
+                                    LoginActivity::class.java
+                                ) // Move back to BarangListActivity
+                                startActivity(intent)
+                                finish()
+                                var newlyCreatedPembeli = response.body() // Use it or ignore it
+                                Toast.makeText(
+                                    this@RegistrationActivity,
+                                    "Successfully Added",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                Log.d("ResponseLog", response.toString())
+                            } else {
+                                Toast.makeText(
+                                    this@RegistrationActivity,
+                                    "Email sudah terdaftar",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                Log.d("gagalLog", response.toString())
+                            }
+                        }
+
+                        override fun onFailure(call: Call<WisatawanResponse>, t: Throwable) {
+                            Toast.makeText(
+                                applicationContext,
+                                "Failed to add item",
+                                Toast.LENGTH_SHORT
+                            )
+                                .show()
+                            Log.d("FailureLog", t.message)
+                        }
+                    })
+                }else{
+                    Toast.makeText(
+                        this@RegistrationActivity,
+                        "Format email salah",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
-
-                override fun onFailure(call: Call<WisatawanResponse>, t: Throwable) {
-                    Toast.makeText(applicationContext, "Failed to add item", Toast.LENGTH_SHORT)
-                        .show()
-                    Log.d("FailureLog", t.message)
-                }
-            })
+            }
         }
     }
 }
