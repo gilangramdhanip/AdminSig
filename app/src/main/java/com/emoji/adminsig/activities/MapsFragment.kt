@@ -527,6 +527,20 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener {
                                 markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
                             }
                         }
+
+                        if(it.id_kategori=="Lainnya"){
+                            if(it.status == "1"){
+                                markerOption.position(latlng)
+                                markerOption.title(it.name_destination)
+                                markerOption.snippet("Sudah Terverifikasi")
+                                markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                            }else{
+                                markerOption.position(latlng)
+                                markerOption.title(it.name_destination)
+                                markerOption.snippet("Belum Terverifikasi")
+                                markerOption.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_CYAN))
+                            }
+                        }
                         val desti = Destination(id,it.name_destination, it.lat_destination,it.lng_destination, it.address_destination, it.desc_destination, it.id_kategori, it.img_destination, it.id_kabupaten, it.id_kecamatan, it.jambuka, it.jamtutup)
                         val m = googleMap.addMarker(markerOption)
                         m.tag = desti
