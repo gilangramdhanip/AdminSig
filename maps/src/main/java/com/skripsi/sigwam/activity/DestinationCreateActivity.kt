@@ -304,7 +304,7 @@ class DestinationCreateActivity : AppCompatActivity() {
                                                 } else {
                                                     Snackbar.make(
                                                         it,
-                                                        "Data Gagal ditambahkan",
+                                                        "Lokasi Sudah Terdaftar di aplikasi!",
                                                         Snackbar.LENGTH_LONG
                                                     ).show()
                                                     Log.d("gagalLog", response.toString())
