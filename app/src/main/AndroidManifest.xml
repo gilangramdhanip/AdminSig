@@ -37,6 +37,11 @@
             android:label="@string/title_activity_maps"
             android:theme="@style/AppTheme.NoActionBar.FullScreen"
             />
+
+        <activity
+            android:name=".activities.DetailMarker"
+            android:theme="@style/AppTheme.NoActionBar.FullScreen"
+            />
         <activity
             android:name=".activities.VerifikasiActivity"
             android:theme="@style/AppTheme.NoActionBar.FullScreen" />

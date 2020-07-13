@@ -327,8 +327,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener {
 
                                 val desti  = p0!!.tag as? Destination
 
-                                val intent = Intent(context, DestinationDetailActivity::class.java)
-                                intent.putExtra(DestinationDetailActivity.EXTRA_DETAIl, desti)
+                                val intent = Intent(context, DetailMarker::class.java)
+                                intent.putExtra(DetailMarker.EXTRA_DETAIl, desti)
                                 startActivity(intent)
                             }
                         })
@@ -550,8 +550,8 @@ class MapsFragment : Fragment(), OnMapReadyCallback, PermissionListener {
 
                                 val desti : Destination = p0!!.tag as Destination
 
-                                val intent = Intent(context, DestinationDetailActivity::class.java)
-                                intent.putExtra(DestinationDetailActivity.EXTRA_DETAIl, desti)
+                                val intent = Intent(context, DetailMarker::class.java)
+                                intent.putExtra(DetailMarker.EXTRA_DETAIl, desti)
                                 startActivity(intent)
 
                             }

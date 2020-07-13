@@ -1,0 +1,220 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".activities.DetailMarker">
+
+    <androidx.appcompat.widget.Toolbar
+        android:id="@+id/profileToolbar"
+        android:backgroundTint="@android:color/transparent"
+        android:background="@android:color/transparent"
+        app:theme="@style/Theme.Design.NoActionBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/toolbar_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:singleLine="true"
+            android:text="Toolbar Title"
+            android:textColor="@color/colorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <com.dmallcott.dismissibleimageview.DismissibleImageView
+                android:id="@+id/imv_destination"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:adjustViewBounds="true"
+                android:scaleType="fitCenter"
+                android:src="@drawable/default_img" />
+
+            <LinearLayout
+                android:layout_marginTop="-65dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="16dp"
+                android:background="#7F000000"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_weight="1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/txv_title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="8dp"
+                        android:text="nama destinasi"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+                        android:textColor="#fff" />
+
+                    <TextView
+                        android:id="@+id/txv_cat"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="5dp"
+                        android:paddingLeft="8dp"
+                        android:text="kategori"
+                        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+                        android:textColor="#fff" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_gravity="end"
+                    android:gravity="end"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent">
+
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/btn_share"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        app:backgroundTint="#9CD2F6"
+                        android:src="@drawable/sharebtn"
+                        android:layout_marginEnd="20dp"
+                        android:textColor="#B1B0B0"
+
+                        />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+            <TableLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:layout_marginRight="16dp"
+                android:layout_marginBottom="16dp">
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp">
+                    <TextView
+                        android:drawableLeft="@drawable/ic_person_pin_circle_black_24dp"
+                        android:text="Alamat"
+                        tools:text="Alamat" />
+
+                    <TextView
+                        android:id="@+id/txv_address"
+                        android:text="Alamat" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:drawableLeft="@drawable/description"
+                        android:text="Deskripsi"
+                        tools:text="Deskripsi" />
+
+                    <TextView
+                        android:id="@+id/txv_desc"
+                        android:text="Deskripsi" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:drawableLeft="@drawable/disctrict"
+                        android:text="Kabupaten"
+                        tools:text="Kabupaten" />
+
+                    <TextView
+                        android:id="@+id/txv_kabupaten"
+                        android:text="Kabupaten" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:drawableLeft="@drawable/disctrict"
+                        android:text="Kecamatan"
+                        tools:text="Kecamatan" />
+
+                    <TextView
+                        android:id="@+id/txv_kecamatan"
+                        android:text="Kecamatan" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:drawableLeft="@drawable/ic_access_time_black_24dp"
+                        android:text="Jam Buka"
+                        tools:text="Jam Buka" />
+
+                    <TextView
+                        android:id="@+id/txv_jambuka"
+                        android:text="Jam Buka" />
+                </TableRow>
+
+                <TableRow
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp">
+
+                    <TextView
+                        android:drawableLeft="@drawable/ic_access_time_black_24dp"
+                        android:text="Jam Tutup"
+                        tools:text="Jam Tutup" />
+
+                    <TextView
+                        android:id="@+id/txv_jamtutup"
+                        android:text="Jam Tutup" />
+                </TableRow>
+            </TableLayout>
+
+            <!--		<Button-->
+            <!--			android:id="@+id/btn_go_maps"-->
+            <!--			android:layout_width="match_parent"-->
+            <!--			android:layout_height="wrap_content"-->
+            <!--			android:layout_gravity="bottom"-->
+            <!--			android:layout_margin="10dp"-->
+            <!--			android:background="#03a9f4"-->
+            <!--			android:text="LIHAT PETA"-->
+            <!--			android:textColor="#fff"-->
+            <!--			android:textStyle="bold" />-->
+
+
+        </LinearLayout>
+
+    </ScrollView>
+</LinearLayout>
